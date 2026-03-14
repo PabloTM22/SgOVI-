@@ -43,6 +43,6 @@ public class SolicitudController {
         solicitud.setIdUsuario(USUARIO_ACTUAL);
         solicitud.setEstado("en revisión");
         solicitudDao.addSolicitud(solicitud);
-        return "redirect:/solicituds/lista";
+        return "redirect:/solicitudes/lista";
     }
 }
