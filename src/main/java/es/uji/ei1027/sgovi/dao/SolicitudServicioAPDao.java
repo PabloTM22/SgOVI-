@@ -21,9 +21,14 @@ public class SolicitudServicioAPDao {
 
     // Inserta una nueva solicitud. id_solicitud se genera automáticamente
     public void addSolicitud(SolicitudServicioAP solicitud) {
+        Integer nextId = jdbcTemplate.queryForObject(
+                "SELECT COALESCE(MAX(id_solicitud), 0) + 1 FROM solicitud_servicio_ap",
+                Integer.class
+        );
         jdbcTemplate.update(
-                "INSERT INTO solicitud_servicio_ap (id_usuario, tipo_asistencia, estado, preferencias) " +
-                        "VALUES (?, ?, ?, ?)",
+                "INSERT INTO solicitud_servicio_ap (id_solicitud, id_usuario, tipo_asistencia, estado, preferencias) " +
+                        "VALUES (?, ?, ?, ?, ?)",
+                nextId,
                 solicitud.getIdUsuario(),
                 solicitud.getTipoAsistencia(),
                 solicitud.getEstado(),
