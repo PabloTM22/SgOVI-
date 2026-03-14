@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SgOVI</title>
+</head>
+<body>
+
+<header>
+  <h1>SgOVI - Oficina per la Vida Independent</h1>
+  <nav>
+    <ul>
+      <li><a th:href="@{/}">Inici</a></li>
+      <li><a th:href="@{/usuaris}">Usuaris OVI</a></li>
+      <li><a th:href="@{/candidats}">Candidats PAP/PATI</a></li>
+      <li><a th:href="@{/solicituds}">Sol·licituds AP</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div layout:fragment="content">
+    <!-- El contenido de cada página va aquí -->
+  </div>
+</main>
+
+<footer>
+  <p>SgOVI - Oficina per la Vida Independent "Sole Arnau Ripollés" de Castelló</p>
+</footer>
+
+</body>
+</html>
