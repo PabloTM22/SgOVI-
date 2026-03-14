@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+  <title>Nueva Solicitud</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <h2>Nueva solicitud de asistencia personal</h2>
+
+  <form th:action="@{/solicitudes/nueva}" th:object="${solicitud}" method="post">
+
+    <label for="tipoAsistencia">Tipo de asistencia:</label>
+    <select id="tipoAsistencia" th:field="*{tipoAsistencia}">
+      <option value="PAP">PAP - Professional d'Assistència Personal</option>
+      <option value="PATI">PATI - Professional d'Assistència Terapèutica Infantil</option>
+    </select>
+
+    <br>
+
+    <label for="preferencias">Preferencias:</label>
+    <textarea id="preferencias" th:field="*{preferencias}" rows="4" cols="50"></textarea>
+
+    <br>
+
+    <button type="submit">Enviar solicitud</button>
+    <a th:href="@{/solicitudes/lista}">Cancelar</a>
+
+  </form>
+
+</div>
+</body>
+</html>

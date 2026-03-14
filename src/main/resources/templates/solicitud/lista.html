@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+  <title>Mis Solicitudes</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <h2>Mis solicitudes de asistencia personal</h2>
+  <p>Usuario: <span th:text="${idUsuario}"></span></p>
+
+  <a th:href="@{/solicitudes/nueva}">Nueva solicitud</a>
+
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Tipo</th>
+      <th>Estado</th>
+      <th>Fecha</th>
+      <th>Preferencias</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(solicitudes)}">
+      <td colspan="5">No hay solicitudes registradas.</td>
+    </tr>
+    <tr th:each="s : ${solicitudes}">
+      <td th:text="${s.idSolicitud}"></td>
+      <td th:text="${s.tipoAsistencia}"></td>
+      <td th:text="${s.estado}"></td>
+      <td th:text="${s.fechaSolicitud}"></td>
+      <td th:text="${s.preferencias}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+</body>
+</html>
