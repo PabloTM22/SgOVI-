@@ -1,4 +1,4 @@
-package es.uji.ei1027.sgovi.model;
+package es.uji.ei1027.sgovi;
 
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
