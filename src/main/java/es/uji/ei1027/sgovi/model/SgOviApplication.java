@@ -1,4 +1,4 @@
-package es.uji.ei1027.sgovi;
+package es.uji.ei1027.sgovi.model;
 
 import java.util.logging.Logger;
 
