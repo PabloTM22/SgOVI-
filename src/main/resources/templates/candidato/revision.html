@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Gestión de Candidatos - SgOVI</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <header>
+        <h2>Candidatos Pendientes de Validación</h2>
+        <p>Como técnico de la OVI, debe revisar el perfil de los aspirantes antes de incorporarlos a la bolsa pública.</p>
+    </header>
+
+    <table class="table" aria-describedby="tabla-instrucciones">
+        <caption id="tabla-instrucciones" style="display:none">Lista de candidatos que han solicitado el registro y esperan aprobación</caption>
+        <thead>
+        <tr>
+            <th scope="col">Nombre Completo</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Tipo de Asistente</th>
+            <th scope="col">Formación y Experiencia</th>
+            <th scope="col">Acciones de Revisión</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(candidatos)}">
+            <td colspan="5" style="text-align: center;">Actualmente no hay solicitudes pendientes.</td>
+        </tr>
+
+        <tr th:each="c : ${candidatos}">
+            <td th:text="${c.nombre} + ' ' + ${c.apellidos}"></td>
+            <td th:text="${c.dni}"></td>
+            <td>
+                <span th:text="${c.tipoAp}" class="badge"></span>
+            </td>
+            <td>
+                <details>
+                    <summary>Ver detalles profesionales</summary>
+                    <p><strong>Formación:</strong> <span th:text="${c.formacion}"></span></p>
+                    <p><strong>Experiencia:</strong> <span th:text="${c.experiencia}"></span></p>
+                </details>
+            </td>
+            <td>
+                <a th:href="@{/candidatos/aceptar/{id}(id=${c.idAp})}"
+                   class="btn btn-success"
+                   th:aria-label="'Aceptar a ' + ${c.nombre}">
+                    ✅ Aceptar
+                </a>
+
+                <a th:href="@{/candidatos/rechazar/{id}(id=${c.idAp})}"
+                   class="btn btn-danger"
+                   th:aria-label="'Rechazar y eliminar a ' + ${c.nombre}"
+                   onclick="return confirm('¿Está seguro de que desea eliminar definitivamente este perfil?')">
+                    ❌ Rechazar
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Navegación secundaria">
+        <p><a th:href="@{/}" class="back-link">Volver al Panel de Inicio</a></p>
+    </nav>
+</div>
+</body>
+</html>

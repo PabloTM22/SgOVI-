@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Registro de Candidatos - SgOVI</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section>
+        <h2>Registro de Nuevo Candidato</h2>
+        <p>Rellene el siguiente formulario para inscribirse en la bolsa de asistentes personales (PAP/PATI).</p>
+
+        <form th:action="@{/candidatos/registro}" th:object="${candidato}" method="post">
+
+            <fieldset>
+                <legend>Datos Personales</legend>
+
+                <div class="form-group">
+                    <label for="dni">DNI/NIE:</label>
+                    <input type="text" id="dni" th:field="*{dni}" required aria-required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" th:field="*{nombre}" required aria-required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" id="apellidos" th:field="*{apellidos}" required aria-required="true" />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Contacto y Seguridad</legend>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico:</label>
+                    <input type="email" id="email" th:field="*{email}" required aria-required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono" th:field="*{telefono}" />
+                </div>
+
+                <div class="form-group">
+                    <label for="contrasena">Contraseña de acceso:</label>
+                    <input type="password" id="contrasena" th:field="*{contrasena}" required aria-required="true" />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Perfil Profesional</legend>
+
+                <div class="form-group">
+                    <label for="tipoAp">Tipo de Asistente:</label>
+                    <select id="tipoAp" th:field="*{tipoAp}">
+                        <option value="PAP">PAP - Personal de Asistencia Personal</option>
+                        <option value="PATI">PATI - Asistencia Terapéutica Infantil</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="formacion">Formación Académica:</label>
+                    <textarea id="formacion" th:field="*{formacion}" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="experiencia">Experiencia Previa:</label>
+                    <textarea id="experiencia" th:field="*{experiencia}" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="disponibilidad">Disponibilidad Horaria:</label>
+                    <input type="text" id="disponibilidad" th:field="*{disponibilidad}" placeholder="Ej: Mañanas, Fines de semana..." />
+                </div>
+            </fieldset>
+
+            <div style="margin-top: 20px;">
+                <button type="submit">Finalizar Registro</button>
+                <a th:href="@{/}" class="button">Cancelar</a>
+            </div>
+        </form>
+    </section>
+</div>
+</body>
+</html>
