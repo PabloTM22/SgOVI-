@@ -5,6 +5,20 @@
       lang="es">
 <head>
     <title>Registro de Candidatos - SgOVI</title>
+    <style>
+        /* Estilo accesible para los mensajes de error (contraste WAVE) */
+        .error-msg {
+            color: #b00020;
+            font-size: 0.875em;
+            display: block;
+            margin-top: 0.25rem;
+        }
+        input[aria-invalid="true"],
+        select[aria-invalid="true"],
+        textarea[aria-invalid="true"] {
+            border-color: #b00020;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -12,24 +26,68 @@
         <h2>Registro de Nuevo Candidato</h2>
         <p>Rellene el siguiente formulario para inscribirse en la bolsa de asistentes personales (PAP/PATI).</p>
 
-        <form th:action="@{/candidatos/registro}" th:object="${candidato}" method="post">
+        <div th:if="${#fields.hasAnyErrors()}"
+             role="alert"
+             aria-live="assertive"
+             style="border: 2px solid #b00020; padding: 1rem; margin-bottom: 1rem; background-color: #fff3f3;">
+            <p><strong>Por favor, corrija los siguientes errores antes de continuar:</strong></p>
+            <ul>
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <form th:action="@{/candidatos/registro}" th:object="${candidato}" method="post"
+              novalidate>
+
 
             <fieldset>
                 <legend>Datos Personales</legend>
 
                 <div class="form-group">
-                    <label for="dni">DNI/NIE:</label>
-                    <input type="text" id="dni" th:field="*{dni}" required aria-required="true" />
+                    <label for="dni">DNI/NIE: <span aria-hidden="true">*</span></label>
+                    <input type="text"
+                           id="dni"
+                           th:field="*{dni}"
+                           th:aria-invalid="${#fields.hasErrors('dni')} ? 'true' : 'false'"
+                           aria-describedby="dni-error"
+                           aria-required="true" />
+                    <span id="dni-error"
+                          class="error-msg"
+                          th:if="${#fields.hasErrors('dni')}"
+                          th:errors="*{dni}"
+                          role="alert">
+                    </span>
                 </div>
 
                 <div class="form-group">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" th:field="*{nombre}" required aria-required="true" />
+                    <label for="nombre">Nombre: <span aria-hidden="true">*</span></label>
+                    <input type="text"
+                           id="nombre"
+                           th:field="*{nombre}"
+                           th:aria-invalid="${#fields.hasErrors('nombre')} ? 'true' : 'false'"
+                           aria-describedby="nombre-error"
+                           aria-required="true" />
+                    <span id="nombre-error"
+                          class="error-msg"
+                          th:if="${#fields.hasErrors('nombre')}"
+                          th:errors="*{nombre}"
+                          role="alert">
+                    </span>
                 </div>
-
                 <div class="form-group">
-                    <label for="apellidos">Apellidos:</label>
-                    <input type="text" id="apellidos" th:field="*{apellidos}" required aria-required="true" />
+                    <label for="apellidos">Apellidos: <span aria-hidden="true">*</span></label>
+                    <input type="text"
+                           id="apellidos"
+                           th:field="*{apellidos}"
+                           th:aria-invalid="${#fields.hasErrors('apellidos')} ? 'true' : 'false'"
+                           aria-describedby="apellidos-error"
+                           aria-required="true" />
+                    <span id="apellidos-error"
+                          class="error-msg"
+                          th:if="${#fields.hasErrors('apellidos')}"
+                          th:errors="*{apellidos}"
+                          role="alert">
+                    </span>
                 </div>
             </fieldset>
 
@@ -37,18 +95,42 @@
                 <legend>Contacto y Seguridad</legend>
 
                 <div class="form-group">
-                    <label for="email">Correo Electrónico:</label>
-                    <input type="email" id="email" th:field="*{email}" required aria-required="true" />
+                    <label for="email">Correo Electrónico: <span aria-hidden="true">*</span></label>
+                    <input type="email"
+                           id="email"
+                           th:field="*{email}"
+                           th:aria-invalid="${#fields.hasErrors('email')} ? 'true' : 'false'"
+                           aria-describedby="email-error"
+                           aria-required="true" />
+                    <span id="email-error"
+                          class="error-msg"
+                          th:if="${#fields.hasErrors('email')}"
+                          th:errors="*{email}"
+                          role="alert">
+                    </span>
                 </div>
 
                 <div class="form-group">
                     <label for="telefono">Teléfono:</label>
-                    <input type="tel" id="telefono" th:field="*{telefono}" />
+                    <input type="tel"
+                           id="telefono"
+                           th:field="*{telefono}" />
                 </div>
 
                 <div class="form-group">
-                    <label for="contrasena">Contraseña de acceso:</label>
-                    <input type="password" id="contrasena" th:field="*{contrasena}" required aria-required="true" />
+                    <label for="contrasena">Contraseña de acceso: <span aria-hidden="true">*</span></label>
+                    <input type="password"
+                           id="contrasena"
+                           th:field="*{contrasena}"
+                           th:aria-invalid="${#fields.hasErrors('contrasena')} ? 'true' : 'false'"
+                           aria-describedby="contrasena-error"
+                           aria-required="true" />
+                    <span id="contrasena-error"
+                          class="error-msg"
+                          th:if="${#fields.hasErrors('contrasena')}"
+                          th:errors="*{contrasena}"
+                          role="alert">
+                    </span>
                 </div>
             </fieldset>
 
@@ -75,9 +157,16 @@
 
                 <div class="form-group">
                     <label for="disponibilidad">Disponibilidad Horaria:</label>
-                    <input type="text" id="disponibilidad" th:field="*{disponibilidad}" placeholder="Ej: Mañanas, Fines de semana..." />
+                    <input type="text"
+                           id="disponibilidad"
+                           th:field="*{disponibilidad}"
+                           placeholder="Ej: Mañanas, Fines de semana..." />
                 </div>
             </fieldset>
+
+            <p style="margin-top: 0.5rem; font-size: 0.875em;">
+                <span aria-hidden="true">*</span> Campos obligatorios
+            </p>
 
             <div style="margin-top: 20px;">
                 <button type="submit">Finalizar Registro</button>
