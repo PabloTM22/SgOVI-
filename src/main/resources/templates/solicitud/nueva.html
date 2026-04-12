@@ -12,6 +12,8 @@
         <h2>Nueva solicitud de asistencia personal</h2>
         <p>Seleccione el tipo de asistencia que necesita y añada sus preferencias.</p>
 
+        <form th:action="@{/solicitudes/nueva}" th:object="${solicitud}" method="post" novalidate>
+
         <div th:if="${#fields.hasAnyErrors()}"
              role="alert"
              aria-live="assertive"
@@ -21,8 +23,6 @@
                 <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
             </ul>
         </div>
-
-        <form th:action="@{/solicitudes/nueva}" th:object="${solicitud}" method="post" novalidate>
 
             <div class="form-group">
                 <label for="tipoAsistencia">Tipo de asistencia: <span aria-hidden="true">*</span></label>

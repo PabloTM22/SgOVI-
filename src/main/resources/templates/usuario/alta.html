@@ -12,6 +12,8 @@
         <h2>Alta de Nuevo Usuario OVI</h2>
         <p>Rellene el siguiente formulario para registrar un nuevo usuario en el sistema.</p>
 
+        <form th:action="@{/usuarios/alta}" th:object="${usuario}" method="post" novalidate>
+
         <div th:if="${#fields.hasAnyErrors()}"
              role="alert"
              aria-live="assertive"
@@ -21,8 +23,6 @@
                 <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
             </ul>
         </div>
-
-        <form th:action="@{/usuarios/alta}" th:object="${usuario}" method="post" novalidate>
 
             <fieldset>
                 <legend>Datos Personales</legend>
