@@ -3,9 +3,11 @@ package es.uji.ei1027.sgovi.controller;
 import es.uji.ei1027.sgovi.dao.UsuarioOviDao;
 import es.uji.ei1027.sgovi.model.UsuarioOvi;
 import es.uji.ei1027.sgovi.service.UsuarioOviService;
+import es.uji.ei1027.sgovi.validator.UsuarioOviValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -37,7 +39,12 @@ public class UsuarioOviController {
 
     // Procesa el formulario de alta
     @PostMapping("/alta")
-    public String altaSubmit(@ModelAttribute UsuarioOvi usuario) {
+    public String altaSubmit(@ModelAttribute("usuario") UsuarioOvi usuario,
+                             BindingResult bindingResult) {
+        new UsuarioOviValidator().validate(usuario, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "usuario/alta";
+        }
         usuarioOviService.registrarUsuario(usuario);
         return "redirect:/usuarios";
     }
@@ -52,7 +59,13 @@ public class UsuarioOviController {
 
     // Procesa la edición
     @PostMapping("/editar/{idUsuario}")
-    public String editarSubmit(@PathVariable String idUsuario, @ModelAttribute UsuarioOvi usuario) {
+    public String editarSubmit(@PathVariable String idUsuario,
+                               @ModelAttribute("usuario") UsuarioOvi usuario,
+                               BindingResult bindingResult) {
+        new UsuarioOviValidator().validate(usuario, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "usuario/editar";
+        }
         usuario.setIdUsuario(idUsuario);
         usuarioOviDao.updateUsuario(usuario);
         return "redirect:/usuarios";

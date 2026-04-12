@@ -1,0 +1,82 @@
+/* =====================================================
+   SgOVI - Hoja de estilos propia
+   ===================================================== */
+
+/* --- Mensajes de error de validación --- */
+.error,
+.error-msg {
+    color: #b00020;
+    font-size: 0.875em;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+/* Resumen de errores en la parte superior del formulario */
+.error-summary {
+    border: 2px solid #b00020;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fff3f3;
+}
+
+/* Campos con error marcados con aria-invalid */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: #b00020;
+    outline-color: #b00020;
+}
+
+/* --- Grupos de campo del formulario --- */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* --- Fieldsets --- */
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+legend {
+    font-weight: bold;
+    padding: 0 0.5rem;
+}
+
+/* --- Botones --- */
+button[type="submit"] {
+    background-color: #0d6efd;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0b5ed7;
+}

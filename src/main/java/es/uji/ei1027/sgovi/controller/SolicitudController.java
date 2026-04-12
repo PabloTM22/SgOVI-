@@ -2,9 +2,11 @@ package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.SolicitudServicioAPDao;
 import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
+import es.uji.ei1027.sgovi.validator.SolicitudValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +41,12 @@ public class SolicitudController {
 
     // Procesa el formulario y guarda la solicitud
     @PostMapping("/nueva")
-    public String nuevaSubmit(@ModelAttribute SolicitudServicioAP solicitud) {
+    public String nuevaSubmit(@ModelAttribute("solicitud") SolicitudServicioAP solicitud,
+                              BindingResult bindingResult) {
+        new SolicitudValidator().validate(solicitud, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "solicitud/nueva";
+        }
         solicitud.setIdUsuario(USUARIO_ACTUAL);
         solicitud.setEstado("en revisión");
         solicitudDao.addSolicitud(solicitud);

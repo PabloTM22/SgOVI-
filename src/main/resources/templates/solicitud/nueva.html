@@ -4,33 +4,63 @@
       layout:decorate="~{layout}"
       lang="es">
 <head>
-  <title>Nueva Solicitud</title>
+    <title>Nueva Solicitud - SgOVI</title>
 </head>
 <body>
 <div layout:fragment="content">
+    <section>
+        <h2>Nueva solicitud de asistencia personal</h2>
+        <p>Seleccione el tipo de asistencia que necesita y añada sus preferencias.</p>
 
-  <h2>Nueva solicitud de asistencia personal</h2>
+        <div th:if="${#fields.hasAnyErrors()}"
+             role="alert"
+             aria-live="assertive"
+             class="error-summary">
+            <p><strong>Por favor, corrija los siguientes errores antes de continuar:</strong></p>
+            <ul>
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
 
-  <form th:action="@{/solicitudes/nueva}" th:object="${solicitud}" method="post">
+        <form th:action="@{/solicitudes/nueva}" th:object="${solicitud}" method="post" novalidate>
 
-    <label for="tipoAsistencia">Tipo de asistencia:</label>
-    <select id="tipoAsistencia" th:field="*{tipoAsistencia}">
-      <option value="PAP">PAP - Professional d'Assistència Personal</option>
-      <option value="PATI">PATI - Professional d'Assistència Terapèutica Infantil</option>
-    </select>
+            <div class="form-group">
+                <label for="tipoAsistencia">Tipo de asistencia: <span aria-hidden="true">*</span></label>
+                <select id="tipoAsistencia"
+                        th:field="*{tipoAsistencia}"
+                        th:aria-invalid="${#fields.hasErrors('tipoAsistencia')} ? 'true' : 'false'"
+                        aria-describedby="tipoAsistencia-error"
+                        aria-required="true">
+                    <option value="">-- Seleccione un tipo --</option>
+                    <option value="PAP">PAP - Professional d'Assistència Personal</option>
+                    <option value="PATI">PATI - Professional d'Assistència Terapèutica Infantil</option>
+                </select>
+                <span id="tipoAsistencia-error"
+                      class="error"
+                      th:if="${#fields.hasErrors('tipoAsistencia')}"
+                      th:errors="*{tipoAsistencia}"
+                      role="alert">
+                </span>
+            </div>
 
-    <br>
+            <div class="form-group">
+                <label for="preferencias">Preferencias:</label>
+                <textarea id="preferencias"
+                          th:field="*{preferencias}"
+                          rows="4"
+                          cols="50"
+                          placeholder="Indique sus preferencias horarias, ubicación, etc."></textarea>
+            </div>
 
-    <label for="preferencias">Preferencias:</label>
-    <textarea id="preferencias" th:field="*{preferencias}" rows="4" cols="50"></textarea>
+            <p style="font-size: 0.875em;"><span aria-hidden="true">*</span> Campos obligatorios</p>
 
-    <br>
+            <div style="margin-top: 20px;">
+                <button type="submit">Enviar solicitud</button>
+                <a th:href="@{/solicitudes/lista}">Cancelar</a>
+            </div>
 
-    <button type="submit">Enviar solicitud</button>
-    <a th:href="@{/solicitudes/lista}">Cancelar</a>
-
-  </form>
-
+        </form>
+    </section>
 </div>
 </body>
 </html>
