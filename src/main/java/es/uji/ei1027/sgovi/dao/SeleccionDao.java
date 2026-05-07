@@ -5,14 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class SeleccionDao {
-
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -21,13 +19,10 @@ public class SeleccionDao {
     }
 
     public void addSeleccion(Seleccion seleccion) {
-        Integer nextId = jdbcTemplate.queryForObject(
-                "SELECT COALESCE(MAX(id_seleccion), 0) + 1 FROM seleccion",
-                Integer.class
-        );
         jdbcTemplate.update(
-                "INSERT INTO seleccion (id_seleccion, id_solicitud, id_ap, estado) VALUES (?, ?, ?, ?)",
-                nextId, seleccion.getIdSolicitud(), seleccion.getIdAp(), seleccion.getEstado()
+                "INSERT INTO seleccion (id_solicitud, id_ap, id_tecnico, estado) VALUES (?, ?, ?, ?)",
+                seleccion.getIdSolicitud(), seleccion.getIdAp(),
+                seleccion.getIdTecnico(), seleccion.getEstado()
         );
     }
 
@@ -73,9 +68,9 @@ public class SeleccionDao {
 
     public void updateSeleccion(Seleccion seleccion) {
         jdbcTemplate.update(
-                "UPDATE seleccion SET id_solicitud = ?, id_ap = ?, estado = ? WHERE id_seleccion = ?",
+                "UPDATE seleccion SET id_solicitud = ?, id_ap = ?, id_tecnico = ?, estado = ? WHERE id_seleccion = ?",
                 seleccion.getIdSolicitud(), seleccion.getIdAp(),
-                seleccion.getEstado(), seleccion.getIdSeleccion()
+                seleccion.getIdTecnico(), seleccion.getEstado(), seleccion.getIdSeleccion()
         );
     }
 
