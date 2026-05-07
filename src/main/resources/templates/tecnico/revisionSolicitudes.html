@@ -7,45 +7,47 @@
     <title>Revisión de Solicitudes</title>
 </head>
 <body>
-<div layout:fragment="content">
+<section layout:fragment="content">
 
     <h2>Solicitudes pendientes de revisión</h2>
 
-    <table>
-        <thead>
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
         <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Tipo</th>
-            <th>Fecha</th>
-            <th>Preferencias</th>
-            <th>Acciones</th>
+            <th scope="col">ID</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Preferencias</th>
+            <th scope="col">Acciones</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${#lists.isEmpty(solicitudes)}">
-            <td colspan="6">No hay solicitudes pendientes de revisión.</td>
+            <td colspan="6" class="text-center">No hay solicitudes pendientes de revisión.</td>
         </tr>
         <tr th:each="s : ${solicitudes}">
             <td th:text="${s.idSolicitud}"></td>
             <td th:text="${s.idUsuario}"></td>
             <td th:text="${s.tipoAsistencia}"></td>
-            <td th:text="${s.fechaSolicitud}"></td>
+            <td th:text="${#temporals.format(s.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></td>
             <td th:text="${s.preferencias}"></td>
             <td>
-                <form th:action="@{/tecnico/solicitudes/{id}/aprobar(id=${s.idSolicitud})}" method="post">
-                    <button type="submit">Aprobar</button>
+                <form th:action="@{/tecnico/solicitudes/{id}/aprobar(id=${s.idSolicitud})}"
+                      method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-success">Aprobar</button>
                 </form>
-                <form th:action="@{/tecnico/solicitudes/{id}/rechazar(id=${s.idSolicitud})}" method="post">
-                    <button type="submit">Rechazar</button>
+                <form th:action="@{/tecnico/solicitudes/{id}/rechazar(id=${s.idSolicitud})}"
+                      method="post" style="display:inline">
+                    <button type="submit" class="btn btn-sm btn-danger">Rechazar</button>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a th:href="@{/}">Volver al inicio</a>
+    <a th:href="@{/}" class="btn btn-secondary">Volver al inicio</a>
 
-</div>
+</section>
 </body>
 </html>

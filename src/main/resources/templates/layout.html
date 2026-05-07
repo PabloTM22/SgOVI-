@@ -3,39 +3,34 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SgOVI</title>
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="/css/sgovi.css" th:href="@{/css/sgovi.css}"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/sgovi.css" th:href="@{/css/sgovi.css}"/>
+    <title layout:title-pattern="$CONTENT_TITLE - SgOVI">SgOVI</title>
 </head>
 <body>
+<main class="container">
 
-<header>
-  <h1>SgOVI - Oficina por la Vida Independiente</h1>
-  <nav>
-    <ul>
-        <li><a th:href="@{/}">Inici</a></li>
-        <li><a th:href="@{/usuarios}">Usuarios OVI</a></li>
-        <li><a th:href="@{/candidatos}">Candidatos PAP/PATI</a></li>
-        <li><a th:href="@{/solicitudes/lista}">Solicitudes AP</a></li>
-        <li><a th:href="@{/candidatos/registro}">Registrarse como Candidato</a></li>
-        <li><a th:href="@{/candidatos/revision}">Gestión Candidatos (Técnico)</a></li>
-        <li><a th:href="@{/tecnico/solicitudes}">Panel técnico</a></li>
-    </ul>
-  </nav>
-</header>
+    <header class="page-header">
+        <h1>SgOVI - Oficina por la Vida Independiente</h1>
+    </header>
 
-<main>
-  <div layout:fragment="content">
-    <!-- El contenido de cada página va aquí -->
-  </div>
+    <div th:replace="~{fragments/menu :: menu}"></div>
+    <div th:replace="~{fragments/logininfo :: logininfo}"></div>
+
+    <section layout:fragment="content">
+    </section>
+
+    <footer>
+        <hr/>
+        <p class="text-body-secondary">EI1027 - Disseny i Implementació de Sistemes d'Informació</p>
+    </footer>
+
 </main>
-
-<footer>
-  <p>SgOVI - Oficina por la Vida Independiente</p>
-</footer>
-
 </body>
 </html>
