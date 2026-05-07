@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+<nav th:fragment="menu" class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" th:href="@{/}">SgOVI</a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Inicio</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/candidatos/registro}">Registrarse como candidato</a>
+                </li>
+
+                <th:block th:if="${session.user != null and session.user.rol == 'USUARIO_OVI'}">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/solicitudes/lista}">Mis solicitudes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/solicitudes/nueva}">Nueva solicitud</a>
+                    </li>
+                </th:block>
+
+                <th:block th:if="${session.user != null and session.user.rol == 'TECNICO'}">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/usuarios}">Usuarios OVI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/candidatos/revision}">Candidatos PAP/PATI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/tecnico/solicitudes}">Panel técnico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/formadores}">Formadores</a>
+                    </li>
+                </th:block>
+
+            </ul>
+        </div>
+
+    </div>
+</nav>
+</body>
+</html>

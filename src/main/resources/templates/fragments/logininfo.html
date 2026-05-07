@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+<div th:fragment="logininfo" class="text-end small py-1">
+    <span th:if="${session.user == null}">
+        No autenticado <a th:href="@{/login}">Entrar</a>
+    </span>
+    <span th:unless="${session.user == null}">
+        Autenticado como <strong th:text="${session.user.username}"></strong>
+        (<span th:text="${session.user.rol}"></span>)
+        &nbsp;·&nbsp;
+        <a th:href="@{/logout}">Salir</a>
+    </span>
+</div>
+</body>
+</html>
