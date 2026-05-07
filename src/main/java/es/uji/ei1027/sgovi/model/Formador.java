@@ -1,13 +1,13 @@
 package es.uji.ei1027.sgovi.model;
 
 public class Formador {
-
     private int idFormador;
     private String dni;
     private String nombre;
     private String apellidos;
     private String email;
-    private String telefono;  // nullable
+    private String telefono;
+    private String contrasena;
 
     public Formador() {}
 
@@ -28,6 +28,9 @@ public class Formador {
 
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
     @Override
     public String toString() {

@@ -5,14 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class FormadorDao {
-
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -21,14 +19,10 @@ public class FormadorDao {
     }
 
     public void addFormador(Formador formador) {
-        Integer nextId = jdbcTemplate.queryForObject(
-                "SELECT COALESCE(MAX(id_formador), 0) + 1 FROM formador",
-                Integer.class
-        );
         jdbcTemplate.update(
-                "INSERT INTO formador (id_formador, dni, nombre, apellidos, email, telefono) VALUES (?, ?, ?, ?, ?, ?)",
-                nextId, formador.getDni(), formador.getNombre(),
-                formador.getApellidos(), formador.getEmail(), formador.getTelefono()
+                "INSERT INTO formador (dni, nombre, apellidos, email, telefono, contrasena) VALUES (?, ?, ?, ?, ?, ?)",
+                formador.getDni(), formador.getNombre(), formador.getApellidos(),
+                formador.getEmail(), formador.getTelefono(), formador.getContrasena()
         );
     }
 
@@ -56,9 +50,11 @@ public class FormadorDao {
 
     public void updateFormador(Formador formador) {
         jdbcTemplate.update(
-                "UPDATE formador SET dni = ?, nombre = ?, apellidos = ?, email = ?, telefono = ? WHERE id_formador = ?",
+                "UPDATE formador SET dni = ?, nombre = ?, apellidos = ?, email = ?, telefono = ?, contrasena = ? " +
+                        "WHERE id_formador = ?",
                 formador.getDni(), formador.getNombre(), formador.getApellidos(),
-                formador.getEmail(), formador.getTelefono(), formador.getIdFormador()
+                formador.getEmail(), formador.getTelefono(), formador.getContrasena(),
+                formador.getIdFormador()
         );
     }
 
@@ -66,4 +62,3 @@ public class FormadorDao {
         jdbcTemplate.update("DELETE FROM formador WHERE id_formador = ?", idFormador);
     }
 }
-
