@@ -3,11 +3,11 @@ package es.uji.ei1027.sgovi.model;
 import java.time.LocalDateTime;
 
 public class Seleccion {
-
     private int idSeleccion;
     private int idSolicitud;
     private String idAp;
-    private String estado; // "propuesta","contactada","aceptada","descartada"
+    private String idTecnico;
+    private String estado;
     private LocalDateTime fechaPropuesta;
 
     public Seleccion() {}
@@ -21,6 +21,9 @@ public class Seleccion {
     public String getIdAp() { return idAp; }
     public void setIdAp(String idAp) { this.idAp = idAp; }
 
+    public String getIdTecnico() { return idTecnico; }
+    public void setIdTecnico(String idTecnico) { this.idTecnico = idTecnico; }
+
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
 
@@ -33,6 +36,7 @@ public class Seleccion {
                 "idSeleccion=" + idSeleccion +
                 ", idSolicitud=" + idSolicitud +
                 ", idAp='" + idAp + '\'' +
+                ", idTecnico='" + idTecnico + '\'' +
                 ", estado='" + estado + '\'' +
                 ", fechaPropuesta=" + fechaPropuesta +
                 '}';
