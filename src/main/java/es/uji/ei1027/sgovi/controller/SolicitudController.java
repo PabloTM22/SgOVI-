@@ -2,15 +2,14 @@ package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.SolicitudServicioAPDao;
 import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
+import es.uji.ei1027.sgovi.model.UserDetails;
 import es.uji.ei1027.sgovi.validator.SolicitudValidator;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/solicitudes")
@@ -22,33 +21,41 @@ public class SolicitudController {
         this.solicitudDao = solicitudDao;
     }
 
-    // TODO: sustituir por usuario de sesión cuando se implemente el login
-    private static final String USUARIO_ACTUAL = "usr_nyom";
-
-    // Lista las solicitudes del usuario actual
     @GetMapping("/lista")
-    public String lista(Model model) {
-        model.addAttribute("solicitudes", solicitudDao.findByUsuario(USUARIO_ACTUAL));
-        model.addAttribute("idUsuario", USUARIO_ACTUAL);
+    public String lista(HttpSession session, Model model) {
+        if (session.getAttribute("user") == null) {
+            session.setAttribute("nextUrl", "/solicitudes/lista");
+            return "redirect:/login";
+        }
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        model.addAttribute("solicitudes", solicitudDao.findByUsuario(user.getUsername()));
         return "solicitud/lista";
     }
 
     @GetMapping("/nueva")
-    public String nuevaForm(Model model) {
+    public String nuevaForm(HttpSession session, Model model) {
+        if (session.getAttribute("user") == null) {
+            session.setAttribute("nextUrl", "/solicitudes/nueva");
+            return "redirect:/login";
+        }
         model.addAttribute("solicitud", new SolicitudServicioAP());
         return "solicitud/nueva";
     }
 
-    // Procesa el formulario y guarda la solicitud
     @PostMapping("/nueva")
     public String nuevaSubmit(@ModelAttribute("solicitud") SolicitudServicioAP solicitud,
-                              BindingResult bindingResult) {
+                              BindingResult bindingResult,
+                              HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
         new SolicitudValidator().validate(solicitud, bindingResult);
         if (bindingResult.hasErrors()) {
             return "solicitud/nueva";
         }
-        solicitud.setIdUsuario(USUARIO_ACTUAL);
-        solicitud.setEstado("en revisión");
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        solicitud.setIdUsuario(user.getUsername());
+        solicitud.setEstado("en revision");
         solicitudDao.addSolicitud(solicitud);
         return "redirect:/solicitudes/lista";
     }
