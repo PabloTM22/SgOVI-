@@ -1,3 +1,5 @@
+
+
 package es.uji.ei1027.sgovi.dao;
 
 import es.uji.ei1027.sgovi.model.RegistroContrato;
@@ -5,14 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class RegistroContratoDao {
-
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -21,15 +21,11 @@ public class RegistroContratoDao {
     }
 
     public void addContrato(RegistroContrato contrato) {
-        Integer nextId = jdbcTemplate.queryForObject(
-                "SELECT COALESCE(MAX(id_contrato), 0) + 1 FROM registrocontrato",
-                Integer.class
-        );
         jdbcTemplate.update(
-                "INSERT INTO registrocontrato (id_contrato, id_seleccion, fecha_inicio, fecha_fin, pdf_ruta) " +
+                "INSERT INTO registrocontrato (id_seleccion, id_tecnico, fecha_inicio, fecha_fin, pdf_ruta) " +
                         "VALUES (?, ?, ?, ?, ?)",
-                nextId, contrato.getIdSeleccion(), contrato.getFechaInicio(),
-                contrato.getFechaFin(), contrato.getPdfRuta()
+                contrato.getIdSeleccion(), contrato.getIdTecnico(),
+                contrato.getFechaInicio(), contrato.getFechaFin(), contrato.getPdfRuta()
         );
     }
 
@@ -68,9 +64,10 @@ public class RegistroContratoDao {
 
     public void updateContrato(RegistroContrato contrato) {
         jdbcTemplate.update(
-                "UPDATE registrocontrato SET fecha_inicio = ?, fecha_fin = ?, pdf_ruta = ? WHERE id_contrato = ?",
-                contrato.getFechaInicio(), contrato.getFechaFin(),
-                contrato.getPdfRuta(), contrato.getIdContrato()
+                "UPDATE registrocontrato SET id_tecnico = ?, fecha_inicio = ?, fecha_fin = ?, pdf_ruta = ? " +
+                        "WHERE id_contrato = ?",
+                contrato.getIdTecnico(), contrato.getFechaInicio(),
+                contrato.getFechaFin(), contrato.getPdfRuta(), contrato.getIdContrato()
         );
     }
 
@@ -78,3 +75,4 @@ public class RegistroContratoDao {
         jdbcTemplate.update("DELETE FROM registrocontrato WHERE id_contrato = ?", idContrato);
     }
 }
+
