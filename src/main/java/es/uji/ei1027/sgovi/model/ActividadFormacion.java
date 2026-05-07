@@ -3,15 +3,15 @@ package es.uji.ei1027.sgovi.model;
 import java.time.LocalDateTime;
 
 public class ActividadFormacion {
-
     private int idActividad;
     private int idFormador;
     private String tipoActividad;
     private String titulo;
-    private String descripcion;     // nullable
+    private String descripcion;
     private LocalDateTime fechaActividad;
-    private String lugar;           // nullable
-    private Integer plazas;         // nullable
+    private String lugar;
+    private Integer plazas;
+    private Integer numParticipantes;
 
     public ActividadFormacion() {}
 
@@ -39,6 +39,10 @@ public class ActividadFormacion {
     public Integer getPlazas() { return plazas; }
     public void setPlazas(Integer plazas) { this.plazas = plazas; }
 
+    public Integer getNumParticipantes() { return numParticipantes; }
+    public void setNumParticipantes(Integer numParticipantes) { this.numParticipantes = numParticipantes; }
+
+
     @Override
     public String toString() {
         return "ActividadFormacion{" +
@@ -49,6 +53,7 @@ public class ActividadFormacion {
                 ", fechaActividad=" + fechaActividad +
                 ", lugar='" + lugar + '\'' +
                 ", plazas=" + plazas +
+                ", numParticipantes=" + numParticipantes +
                 '}';
     }
 }

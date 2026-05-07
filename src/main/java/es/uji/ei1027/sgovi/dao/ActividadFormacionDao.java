@@ -5,14 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ActividadFormacionDao {
-
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -21,16 +19,12 @@ public class ActividadFormacionDao {
     }
 
     public void addActividad(ActividadFormacion actividad) {
-        Integer nextId = jdbcTemplate.queryForObject(
-                "SELECT COALESCE(MAX(id_actividad), 0) + 1 FROM actividadformacion",
-                Integer.class
-        );
         jdbcTemplate.update(
-                "INSERT INTO actividadformacion (id_actividad, id_formador, tipo_actividad, titulo, descripcion, fecha_actividad, lugar, plazas) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                nextId, actividad.getIdFormador(), actividad.getTipoActividad(),
-                actividad.getTitulo(), actividad.getDescripcion(), actividad.getFechaActividad(),
-                actividad.getLugar(), actividad.getPlazas()
+                "INSERT INTO actividadformacion (id_formador, tipo_actividad, titulo, descripcion, " +
+                        "fecha_actividad, lugar, plazas, num_participantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                actividad.getIdFormador(), actividad.getTipoActividad(), actividad.getTitulo(),
+                actividad.getDescripcion(), actividad.getFechaActividad(),
+                actividad.getLugar(), actividad.getPlazas(), actividad.getNumParticipantes()
         );
     }
 
@@ -70,10 +64,11 @@ public class ActividadFormacionDao {
     public void updateActividad(ActividadFormacion actividad) {
         jdbcTemplate.update(
                 "UPDATE actividadformacion SET id_formador = ?, tipo_actividad = ?, titulo = ?, descripcion = ?, " +
-                        "fecha_actividad = ?, lugar = ?, plazas = ? WHERE id_actividad = ?",
+                        "fecha_actividad = ?, lugar = ?, plazas = ?, num_participantes = ? WHERE id_actividad = ?",
                 actividad.getIdFormador(), actividad.getTipoActividad(), actividad.getTitulo(),
                 actividad.getDescripcion(), actividad.getFechaActividad(),
-                actividad.getLugar(), actividad.getPlazas(), actividad.getIdActividad()
+                actividad.getLugar(), actividad.getPlazas(), actividad.getNumParticipantes(),
+                actividad.getIdActividad()
         );
     }
 
@@ -81,4 +76,3 @@ public class ActividadFormacionDao {
         jdbcTemplate.update("DELETE FROM actividadformacion WHERE id_actividad = ?", idActividad);
     }
 }
-

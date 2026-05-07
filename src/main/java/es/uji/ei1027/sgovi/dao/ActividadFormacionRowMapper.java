@@ -19,7 +19,8 @@ public class ActividadFormacionRowMapper implements RowMapper<ActividadFormacion
         actividad.setDescripcion(rs.getString("descripcion"));
         actividad.setFechaActividad(rs.getObject("fecha_actividad", LocalDateTime.class));
         actividad.setLugar(rs.getString("lugar"));
-        actividad.setPlazas(rs.getObject("plazas", Integer.class));  // nullable
+        actividad.setPlazas(rs.getObject("plazas", Integer.class));
+        actividad.setNumParticipantes(rs.getObject("num_participantes", Integer.class));
         return actividad;
     }
 }
