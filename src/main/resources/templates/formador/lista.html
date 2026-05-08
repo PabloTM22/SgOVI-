@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Formadores</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Formadores</h2>
+
+    <p>
+        <a th:href="@{/formadores/alta}" class="btn btn-primary">Dar de alta nuevo formador</a>
+    </p>
+
+    <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}"></div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(formadores)}">
+            <td colspan="7" class="text-center">No hay formadores registrados.</td>
+        </tr>
+        <tr th:each="f : ${formadores}">
+            <td th:text="${f.idFormador}"></td>
+            <td th:text="${f.dni}"></td>
+            <td th:text="${f.nombre}"></td>
+            <td th:text="${f.apellidos}"></td>
+            <td th:text="${f.email}"></td>
+            <td th:text="${f.telefono}"></td>
+            <td>
+                <a th:href="@{/formadores/editar/{id}(id=${f.idFormador})}"
+                   class="btn btn-sm btn-outline-warning">Editar</a>
+                <a th:href="@{/formadores/borrar/{id}(id=${f.idFormador})}"
+                   class="btn btn-sm btn-outline-danger">Borrar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/}" class="btn btn-secondary">Volver al inicio</a>
+
+</section>
+</body>
+</html>
