@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Candidatos Propuestos</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Candidatos propuestos para la solicitud</h2>
+
+    <div class="mb-3">
+        <span class="fw-bold">Solicitud:</span>
+        <span th:text="${solicitud.idSolicitud}"></span>
+        &nbsp;·&nbsp;
+        <span class="fw-bold">Tipo:</span>
+        <span th:text="${solicitud.tipoAsistencia}"></span>
+        &nbsp;·&nbsp;
+        <span class="fw-bold">Usuario:</span>
+        <span th:text="${solicitud.idUsuario}"></span>
+    </div>
+
+    <p class="text-body-secondary">
+        Los candidatos se muestran ordenados por proximidad geográfica al usuario.
+    </p>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Disponibilidad</th>
+            <th scope="col">Formación</th>
+            <th scope="col">Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(candidatos)}">
+            <td colspan="6" class="text-center">
+                No hay candidatos aceptados disponibles para el tipo
+                <span th:text="${solicitud.tipoAsistencia}"></span>.
+            </td>
+        </tr>
+        <tr th:each="c : ${candidatos}">
+            <td th:text="${c.nombre}"></td>
+            <td th:text="${c.apellidos}"></td>
+            <td th:text="${c.tipoAp}"></td>
+            <td th:text="${c.disponibilidad}"></td>
+            <td th:text="${c.formacion}"></td>
+            <td>
+                <form th:action="@{/tecnico/solicitudes/{idS}/seleccionar/{idAp}(idS=${solicitud.idSolicitud},idAp=${c.idAp})}"
+                      method="post">
+                    <button type="submit" class="btn btn-sm btn-primary">Seleccionar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/tecnico/solicitudes}" class="btn btn-secondary">Volver al panel técnico</a>
+
+</section>
+</body>
+</html>

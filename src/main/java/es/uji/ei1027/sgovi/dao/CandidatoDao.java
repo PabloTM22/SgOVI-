@@ -101,4 +101,20 @@ public class CandidatoDao {
             return new ArrayList<>();
         }
     }
+
+    // Devuelve candidatos aceptados del tipo indicado, ordenados por proximidad
+    // al punto de referencia (latRef, lngRef) usando distancia euclidiana
+    public List<Candidato> findAceptadosPorTipo(String tipoAp, double latRef, double lngRef) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM AsistentePersonal " +
+                            "WHERE estado_aceptado = TRUE AND tipo_ap = ? AND latitud IS NOT NULL AND longitud IS NOT NULL " +
+                            "ORDER BY (latitud - ?)^2 + (longitud - ?)^2",
+                    new CandidatoRowMapper(),
+                    tipoAp, latRef, lngRef
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
 }
