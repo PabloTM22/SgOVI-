@@ -25,11 +25,12 @@
       <th scope="col">Estado</th>
       <th scope="col">Fecha</th>
       <th scope="col">Preferencias</th>
+      <th scope="col">Acciones</th>
     </tr>
     </thead>
     <tbody>
     <tr th:if="${#lists.isEmpty(solicitudes)}">
-      <td colspan="5" class="text-center">No tiene solicitudes registradas.</td>
+      <td colspan="6" class="text-center">No tiene solicitudes registradas.</td>
     </tr>
     <tr th:each="s : ${solicitudes}">
       <td th:text="${s.idSolicitud}"></td>
@@ -45,6 +46,10 @@
       </td>
       <td th:text="${#temporals.format(s.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></td>
       <td th:text="${s.preferencias}"></td>
+      <td>
+        <a th:href="@{/solicitudes/{id}(id=${s.idSolicitud})}"
+           class="btn btn-sm btn-outline-primary">Ver detalle</a>
+      </td>
     </tr>
     </tbody>
   </table>

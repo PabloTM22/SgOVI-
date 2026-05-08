@@ -59,4 +59,19 @@ public class SolicitudController {
         solicitudDao.addSolicitud(solicitud);
         return "redirect:/solicitudes/lista";
     }
+
+    @GetMapping("/{id}")
+    public String detalle(@PathVariable int id, HttpSession session, Model model) {
+        if (session.getAttribute("user") == null) {
+            session.setAttribute("nextUrl", "/solicitudes/" + id);
+            return "redirect:/login";
+        }
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
+        if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
+            return "redirect:/solicitudes/lista";
+        }
+        model.addAttribute("solicitud", solicitud);
+        return "solicitud/detalle";
+    }
 }
