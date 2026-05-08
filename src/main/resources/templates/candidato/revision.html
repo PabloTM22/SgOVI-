@@ -46,14 +46,14 @@
                 <a th:href="@{/candidatos/aceptar/{id}(id=${c.idAp})}"
                    class="btn btn-success"
                    th:aria-label="'Aceptar a ' + ${c.nombre}">
-                    ✅ Aceptar
+                     Aceptar
                 </a>
 
                 <a th:href="@{/candidatos/rechazar/{id}(id=${c.idAp})}"
                    class="btn btn-danger"
                    th:aria-label="'Rechazar y eliminar a ' + ${c.nombre}"
                    onclick="return confirm('¿Está seguro de que desea eliminar definitivamente este perfil?')">
-                    ❌ Rechazar
+                     Rechazar
                 </a>
             </td>
         </tr>
