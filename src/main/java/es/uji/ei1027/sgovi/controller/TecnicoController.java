@@ -1,6 +1,10 @@
 package es.uji.ei1027.sgovi.controller;
 
+import es.uji.ei1027.sgovi.dao.CandidatoDao;
+import es.uji.ei1027.sgovi.dao.SeleccionDao;
 import es.uji.ei1027.sgovi.dao.SolicitudServicioAPDao;
+import es.uji.ei1027.sgovi.model.Candidato;
+import es.uji.ei1027.sgovi.model.Seleccion;
 import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
 import es.uji.ei1027.sgovi.model.UserDetails;
 import jakarta.servlet.http.HttpSession;
@@ -9,14 +13,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/tecnico")
 public class TecnicoController {
     private SolicitudServicioAPDao solicitudDao;
+    private CandidatoDao candidatoDao;
+    private SeleccionDao seleccionDao;
 
     @Autowired
     public void setSolicitudDao(SolicitudServicioAPDao solicitudDao) {
         this.solicitudDao = solicitudDao;
+    }
+
+    @Autowired
+    public void setCandidatoDao(CandidatoDao candidatoDao) {
+        this.candidatoDao = candidatoDao;
+    }
+
+    @Autowired
+    public void setSeleccionDao(SeleccionDao seleccionDao) {
+        this.seleccionDao = seleccionDao;
     }
 
     private boolean esTecnico(HttpSession session) {
@@ -30,7 +48,7 @@ public class TecnicoController {
             session.setAttribute("nextUrl", "/tecnico/solicitudes");
             return "redirect:/login";
         }
-        model.addAttribute("solicitudes", solicitudDao.findByEstado("en revision"));
+        model.addAttribute("solicitudes", solicitudDao.getSolicitudes());
         return "tecnico/revisionSolicitudes";
     }
 
@@ -46,5 +64,39 @@ public class TecnicoController {
         if (!esTecnico(session)) return "redirect:/login";
         solicitudDao.updateEstado(id, "rechazada");
         return "redirect:/tecnico/solicitudes";
+    }
+
+    @GetMapping("/solicitudes/{id}/candidatos")
+    public String candidatosParaSolicitud(@PathVariable int id,
+                                          HttpSession session, Model model) {
+        if (!esTecnico(session)) {
+            session.setAttribute("nextUrl", "/tecnico/solicitudes/" + id + "/candidatos");
+            return "redirect:/login";
+        }
+        SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
+        if (solicitud == null || !"aprobada".equals(solicitud.getEstado())) {
+            return "redirect:/tecnico/solicitudes";
+        }
+        List<Candidato> candidatos = candidatoDao.findAceptadosPorTipo(
+                solicitud.getTipoAsistencia(), 39.9864, -0.0513
+        );
+        model.addAttribute("solicitud", solicitud);
+        model.addAttribute("candidatos", candidatos);
+        return "tecnico/candidatosParaSolicitud";
+    }
+
+    @PostMapping("/solicitudes/{idSolicitud}/seleccionar/{idAp}")
+    public String seleccionarCandidato(@PathVariable int idSolicitud,
+                                       @PathVariable String idAp,
+                                       HttpSession session) {
+        if (!esTecnico(session)) return "redirect:/login";
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        Seleccion seleccion = new Seleccion();
+        seleccion.setIdSolicitud(idSolicitud);
+        seleccion.setIdAp(idAp);
+        seleccion.setIdTecnico(user.getUsername());
+        seleccion.setEstado("propuesta");
+        seleccionDao.addSeleccion(seleccion);
+        return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
     }
 }
