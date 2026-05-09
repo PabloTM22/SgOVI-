@@ -18,35 +18,50 @@ public class UserDao {
 
     public UserDetails loadUserByUsername(String username, String password) {
         try {
-            jdbcTemplate.queryForObject(
-                    "SELECT id_tecnico FROM tecnico WHERE id_tecnico = ? AND contrasena = ? AND activo = TRUE",
-                    String.class, username, password
+            String id = jdbcTemplate.queryForObject(
+                    "SELECT id_tecnico FROM tecnico " +
+                            "WHERE (id_tecnico = ? OR email = ?) AND contrasena = ? AND activo = TRUE",
+                    String.class, username, username, password
             );
             UserDetails user = new UserDetails();
-            user.setUsername(username);
+            user.setUsername(id);
             user.setRol("TECNICO");
             return user;
         } catch (EmptyResultDataAccessException ignored) {}
 
         try {
-            jdbcTemplate.queryForObject(
-                    "SELECT id_usuario FROM usuarioovi WHERE id_usuario = ? AND contrasena = ? AND aceptado_tecnico = TRUE",
-                    String.class, username, password
+            String id = jdbcTemplate.queryForObject(
+                    "SELECT id_usuario FROM usuarioovi " +
+                            "WHERE (id_usuario = ? OR email = ?) AND contrasena = ? AND aceptado_tecnico = TRUE",
+                    String.class, username, username, password
             );
             UserDetails user = new UserDetails();
-            user.setUsername(username);
+            user.setUsername(id);
             user.setRol("USUARIO_OVI");
             return user;
         } catch (EmptyResultDataAccessException ignored) {}
 
         try {
-            jdbcTemplate.queryForObject(
-                    "SELECT id_ap FROM asistentepersonal WHERE id_ap = ? AND contrasena = ? AND activo = TRUE",
-                    String.class, username, password
+            String id = jdbcTemplate.queryForObject(
+                    "SELECT id_ap FROM asistentepersonal " +
+                            "WHERE (id_ap = ? OR email = ?) AND contrasena = ? AND activo = TRUE",
+                    String.class, username, username, password
             );
             UserDetails user = new UserDetails();
-            user.setUsername(username);
+            user.setUsername(id);
             user.setRol("ASISTENTE");
+            return user;
+        } catch (EmptyResultDataAccessException ignored) {}
+
+        try {
+            String id = jdbcTemplate.queryForObject(
+                    "SELECT CAST(id_formador AS VARCHAR) FROM formador " +
+                            "WHERE (CAST(id_formador AS VARCHAR) = ? OR email = ?) AND contrasena = ?",
+                    String.class, username, username, password
+            );
+            UserDetails user = new UserDetails();
+            user.setUsername(id);
+            user.setRol("FORMADOR");
             return user;
         } catch (EmptyResultDataAccessException ignored) {}
 

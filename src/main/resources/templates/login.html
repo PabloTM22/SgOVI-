@@ -15,7 +15,7 @@
             <form th:action="@{/login}" th:object="${user}" method="post" novalidate>
 
                 <div class="row mb-3">
-                    <label for="username" class="col-sm-4 col-form-label">Usuario:</label>
+                    <label for="username" class="col-sm-4 col-form-label">Usuario o email:</label>
                     <div class="col-sm-8">
                         <input type="text" id="username" th:field="*{username}"
                                class="form-control"
