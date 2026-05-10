@@ -88,7 +88,8 @@ public class TecnicoController {
     @PostMapping("/solicitudes/{idSolicitud}/seleccionar/{idAp}")
     public String seleccionarCandidato(@PathVariable int idSolicitud,
                                        @PathVariable String idAp,
-                                       HttpSession session) {
+                                       HttpSession session,
+                                       org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
         if (!esTecnico(session)) return "redirect:/login";
         UserDetails user = (UserDetails) session.getAttribute("user");
         Seleccion seleccion = new Seleccion();
@@ -96,7 +97,12 @@ public class TecnicoController {
         seleccion.setIdAp(idAp);
         seleccion.setIdTecnico(user.getUsername());
         seleccion.setEstado("propuesta");
-        seleccionDao.addSeleccion(seleccion);
+        try {
+            seleccionDao.addSeleccion(seleccion);
+            redirectAttributes.addFlashAttribute("mensajeExito", "Candidato seleccionado correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorSeleccion", "Error al seleccionar: " + e.getMessage());
+        }
         return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
     }
 }
