@@ -80,8 +80,13 @@ public class TecnicoController {
         List<Candidato> candidatos = candidatoDao.findAceptadosPorTipo(
                 solicitud.getTipoAsistencia(), 39.9864, -0.0513
         );
+        List<Seleccion> seleccionesExistentes = seleccionDao.findBySolicitud(id);
+        List<String> idsYaSeleccionados = seleccionesExistentes.stream()
+                .map(Seleccion::getIdAp)
+                .collect(java.util.stream.Collectors.toList());
         model.addAttribute("solicitud", solicitud);
         model.addAttribute("candidatos", candidatos);
+        model.addAttribute("idsYaSeleccionados", idsYaSeleccionados);
         return "tecnico/candidatosParaSolicitud";
     }
 
@@ -91,6 +96,14 @@ public class TecnicoController {
                                        HttpSession session,
                                        org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
         if (!esTecnico(session)) return "redirect:/login";
+        List<Seleccion> existentes = seleccionDao.findBySolicitud(idSolicitud);
+        boolean yaSeleccionado = existentes.stream()
+                .anyMatch(s -> idAp.equals(s.getIdAp()));
+        if (yaSeleccionado) {
+            redirectAttributes.addFlashAttribute("mensajeInfo",
+                    "Este candidato ya ha sido propuesto para esta solicitud.");
+            return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
+        }
         UserDetails user = (UserDetails) session.getAttribute("user");
         Seleccion seleccion = new Seleccion();
         seleccion.setIdSolicitud(idSolicitud);
