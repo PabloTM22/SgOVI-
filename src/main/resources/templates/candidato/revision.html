@@ -4,65 +4,49 @@
       layout:decorate="~{layout}"
       lang="es">
 <head>
-    <title>Gestión de Candidatos - SgOVI</title>
+    <title>Candidatos PAP/PATI</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <header>
-        <h2>Candidatos Pendientes de Validación</h2>
-        <p>Como técnico de la OVI, debe revisar el perfil de los aspirantes antes de incorporarlos a la bolsa pública.</p>
-    </header>
+<section layout:fragment="content">
 
-    <table class="table" aria-describedby="tabla-instrucciones">
-        <caption id="tabla-instrucciones" style="display:none">Lista de candidatos que han solicitado el registro y esperan aprobación</caption>
-        <thead>
+    <h2>Candidatos Pendientes de Validación</h2>
+    <p>Revise el perfil de los aspirantes antes de incorporarlos a la bolsa.</p>
+
+    <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}"></div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
         <tr>
-            <th scope="col">Nombre Completo</th>
+            <th scope="col">Nombre</th>
             <th scope="col">DNI</th>
-            <th scope="col">Tipo de Asistente</th>
-            <th scope="col">Formación y Experiencia</th>
-            <th scope="col">Acciones de Revisión</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Formación</th>
+            <th scope="col">Experiencia</th>
+            <th scope="col">Acciones</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${#lists.isEmpty(candidatos)}">
-            <td colspan="5" style="text-align: center;">Actualmente no hay solicitudes pendientes.</td>
+            <td colspan="6" class="text-center">No hay solicitudes pendientes.</td>
         </tr>
-
         <tr th:each="c : ${candidatos}">
             <td th:text="${c.nombre} + ' ' + ${c.apellidos}"></td>
             <td th:text="${c.dni}"></td>
-            <td>
-                <span th:text="${c.tipoAp}" class="badge"></span>
-            </td>
-            <td>
-                <details>
-                    <summary>Ver detalles profesionales</summary>
-                    <p><strong>Formación:</strong> <span th:text="${c.formacion}"></span></p>
-                    <p><strong>Experiencia:</strong> <span th:text="${c.experiencia}"></span></p>
-                </details>
-            </td>
+            <td th:text="${c.tipoAp}"></td>
+            <td th:text="${c.formacion}"></td>
+            <td th:text="${c.experiencia}"></td>
             <td>
                 <a th:href="@{/candidatos/aceptar/{id}(id=${c.idAp})}"
-                   class="btn btn-success"
-                   th:aria-label="'Aceptar a ' + ${c.nombre}">
-                     Aceptar
-                </a>
-
+                   class="btn btn-sm btn-success">Aceptar</a>
                 <a th:href="@{/candidatos/rechazar/{id}(id=${c.idAp})}"
-                   class="btn btn-danger"
-                   th:aria-label="'Rechazar y eliminar a ' + ${c.nombre}"
-                   onclick="return confirm('¿Está seguro de que desea eliminar definitivamente este perfil?')">
-                     Rechazar
-                </a>
+                   class="btn btn-sm btn-danger">Rechazar</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <nav aria-label="Navegación secundaria">
-        <p><a th:href="@{/}" class="back-link">Volver al Panel de Inicio</a></p>
-    </nav>
-</div>
+    <a th:href="@{/}" class="btn btn-secondary">Volver al inicio</a>
+
+</section>
 </body>
 </html>
