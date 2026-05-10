@@ -7,9 +7,119 @@
     <title>Inicio</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <h2>Bienvenido a SgOvi</h2>
-    <p>Sistema de Gestion de la Oficina por la Vida Independiente</p>
-</div>
+<section layout:fragment="content">
+
+    <div class="py-3">
+        <h2>Bienvenido a SgOVI</h2>
+        <p class="text-body-secondary">Sistema de Gestión de la Oficina por la Vida Independiente</p>
+        <hr/>
+    </div>
+
+    <!-- No autenticado -->
+    <div th:if="${session.user == null}">
+        <h5>¿Qué desea hacer?</h5>
+        <div class="row g-3 mt-1">
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Acceder al sistema</h6>
+                        <p class="card-text small">Si ya tiene una cuenta, entre con su usuario o email.</p>
+                        <a th:href="@{/login}" class="btn btn-primary btn-sm">Entrar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Inscribirse como candidato PAP/PATI</h6>
+                        <p class="card-text small">Regístrese como profesional de asistencia personal para aparecer en la bolsa de candidatos.</p>
+                        <a th:href="@{/candidatos/registro}" class="btn btn-outline-primary btn-sm">Registrarse como candidato</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usuario OVI autenticado -->
+    <div th:if="${session.user != null and session.user.rol == 'USUARIO_OVI'}">
+        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <div class="row g-3 mt-1">
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Mis solicitudes</h6>
+                        <p class="card-text small">Consulte el estado de sus solicitudes de asistencia personal.</p>
+                        <a th:href="@{/solicitudes/lista}" class="btn btn-primary btn-sm">Ver mis solicitudes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Nueva solicitud</h6>
+                        <p class="card-text small">Registre una nueva petición de asistencia personal (PAP o PATI).</p>
+                        <a th:href="@{/solicitudes/nueva}" class="btn btn-outline-primary btn-sm">Crear solicitud</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Técnico autenticado -->
+    <div th:if="${session.user != null and session.user.rol == 'TECNICO'}">
+        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <div class="row g-3 mt-1">
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Panel técnico</h6>
+                        <p class="card-text small">Gestione y revise las solicitudes de asistencia personal pendientes.</p>
+                        <a th:href="@{/tecnico/solicitudes}" class="btn btn-primary btn-sm">Ir al panel</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Candidatos PAP/PATI</h6>
+                        <p class="card-text small">Revise y acepte las solicitudes de nuevos candidatos.</p>
+                        <a th:href="@{/candidatos/revision}" class="btn btn-outline-primary btn-sm">Gestionar candidatos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Usuarios OVI</h6>
+                        <p class="card-text small">Alta, edición y gestión de los usuarios de la OVI.</p>
+                        <a th:href="@{/usuarios}" class="btn btn-outline-primary btn-sm">Gestionar usuarios</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Formadores</h6>
+                        <p class="card-text small">Gestione los formadores y ponentes de las actividades de la OVI.</p>
+                        <a th:href="@{/formadores}" class="btn btn-outline-primary btn-sm">Gestionar formadores</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Asistente personal autenticado -->
+    <div th:if="${session.user != null and session.user.rol == 'ASISTENTE'}">
+        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <p class="text-body-secondary">Su perfil está activo en la bolsa de candidatos de la OVI.</p>
+    </div>
+
+    <!-- Formador autenticado -->
+    <div th:if="${session.user != null and session.user.rol == 'FORMADOR'}">
+        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <p class="text-body-secondary">Acceda a las actividades de formación que imparte.</p>
+    </div>
+
+</section>
 </body>
 </html>
