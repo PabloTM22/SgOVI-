@@ -4,53 +4,54 @@
       layout:decorate="~{layout}"
       lang="es">
 <head>
-    <title>Usuarios OVI - SgOVI</title>
+    <title>Usuarios OVI</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <div class="container my-4">
+<section layout:fragment="content">
 
-        <h2>Usuarios OVI</h2>
-        <p>
-            <a th:href="@{/usuarios/alta}" class="btn btn-primary">Dar de alta nuevo usuario</a>
-        </p>
+    <h2>Usuarios OVI</h2>
 
-        <table class="table table-striped table-bordered">
-            <thead class="table-light">
-            <tr>
-                <th>ID Usuario</th>
-                <th>DNI</th>
-                <th>Nombre Completo</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                <th>Aceptado</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${#lists.isEmpty(usuarios)}">
-                <td colspan="7" class="text-center">No hay usuarios registrados en el sistema.</td>
-            </tr>
-            <tr th:each="u : ${usuarios}">
-                <td th:text="${u.idUsuario}"></td>
-                <td th:text="${u.dni}"></td>
-                <td th:text="${u.nombre} + ' ' + ${u.apellidos}"></td>
-                <td th:text="${u.email}"></td>
-                <td th:text="${u.telefono}"></td>
-                <td th:text="${u.aceptadoTecnico} ? 'Sí' : 'No'"></td>
-                <td>
-                    <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}"
-                       class="btn btn-sm btn-outline-primary">Editar</a>
-                    <a th:href="@{/usuarios/borrar/{id}(id=${u.idUsuario})}"
-                       class="btn btn-sm btn-outline-danger">Borrar</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}"></div>
 
-        <p><a th:href="@{/}">Volver al inicio</a></p>
+    <p>
+        <a th:href="@{/usuarios/alta}" class="btn btn-primary">Dar de alta nuevo usuario</a>
+    </p>
 
-    </div>
-</div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">ID Usuario</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Nombre Completo</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Aceptado</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(usuarios)}">
+            <td colspan="7" class="text-center">No hay usuarios registrados en el sistema.</td>
+        </tr>
+        <tr th:each="u : ${usuarios}">
+            <td th:text="${u.idUsuario}"></td>
+            <td th:text="${u.dni}"></td>
+            <td th:text="${u.nombre} + ' ' + ${u.apellidos}"></td>
+            <td th:text="${u.email}"></td>
+            <td th:text="${u.telefono}"></td>
+            <td th:text="${u.aceptadoTecnico} ? 'Sí' : 'No'"></td>
+            <td>
+                <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}"
+                   class="btn btn-sm btn-outline-warning">Editar</a>
+                <a th:href="@{/usuarios/borrar/{id}(id=${u.idUsuario})}"
+                   class="btn btn-sm btn-outline-danger">Borrar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/}" class="btn btn-secondary">Volver al inicio</a>
+
+</section>
 </body>
 </html>

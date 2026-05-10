@@ -4,129 +4,125 @@
       layout:decorate="~{layout}"
       lang="es">
 <head>
-    <title>Editar Usuario OVI - SgOVI</title>
+    <title>Editar Usuario OVI</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <div class="container my-4">
-        <h2>Editar Usuario OVI</h2>
+<section layout:fragment="content">
 
-        <form th:action="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}"
-              th:object="${usuario}"
-              method="post">
+    <h2>Editar Usuario OVI</h2>
 
-            <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
-                <p><strong>Por favor, corrija los siguientes errores antes de continuar:</strong></p>
-                <ul class="mb-0">
-                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
-                </ul>
+    <form th:action="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}"
+          th:object="${usuario}"
+          method="post"
+          novalidate>
+
+        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+            <p><strong>Por favor, corrija los siguientes errores antes de continuar:</strong></p>
+            <ul class="mb-0">
+                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <fieldset class="mb-3">
+            <legend>Datos Personales</legend>
+
+            <div class="row mb-3">
+                <label for="dni" class="col-sm-3 col-form-label">DNI/NIE: *</label>
+                <div class="col-sm-6">
+                    <input type="text" id="dni" th:field="*{dni}" maxlength="9"
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('dni')} ? 'is-invalid'"/>
+                    <div th:if="${#fields.hasErrors('dni')}"
+                         th:errors="*{dni}" class="error"></div>
+                </div>
             </div>
 
-            <fieldset class="mb-3">
-                <legend>Datos Personales</legend>
-
-                <div class="row mb-3">
-                    <label for="dni" class="col-sm-3 col-form-label">DNI/NIE: *</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="dni" th:field="*{dni}" maxlength="9"
-                               class="form-control"
-                               th:classappend="${#fields.hasErrors('dni')} ? 'is-invalid'" />
-                        <div class="invalid-feedback"
-                             th:if="${#fields.hasErrors('dni')}"
-                             th:errors="*{dni}"></div>
-                    </div>
+            <div class="row mb-3">
+                <label for="nombre" class="col-sm-3 col-form-label">Nombre: *</label>
+                <div class="col-sm-6">
+                    <input type="text" id="nombre" th:field="*{nombre}" maxlength="100"
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"/>
+                    <div th:if="${#fields.hasErrors('nombre')}"
+                         th:errors="*{nombre}" class="error"></div>
                 </div>
-
-                <div class="row mb-3">
-                    <label for="nombre" class="col-sm-3 col-form-label">Nombre: *</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="nombre" th:field="*{nombre}" maxlength="100"
-                               class="form-control"
-                               th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" />
-                        <div class="invalid-feedback"
-                             th:if="${#fields.hasErrors('nombre')}"
-                             th:errors="*{nombre}"></div>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="apellidos" class="col-sm-3 col-form-label">Apellidos: *</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="apellidos" th:field="*{apellidos}" maxlength="150"
-                               class="form-control"
-                               th:classappend="${#fields.hasErrors('apellidos')} ? 'is-invalid'" />
-                        <div class="invalid-feedback"
-                             th:if="${#fields.hasErrors('apellidos')}"
-                             th:errors="*{apellidos}"></div>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset class="mb-3">
-                <legend>Contacto y Acceso</legend>
-
-                <div class="row mb-3">
-                    <label for="email" class="col-sm-3 col-form-label">Correo Electrónico: *</label>
-                    <div class="col-sm-9">
-                        <input type="email" id="email" th:field="*{email}" maxlength="150"
-                               class="form-control"
-                               th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" />
-                        <div class="invalid-feedback"
-                             th:if="${#fields.hasErrors('email')}"
-                             th:errors="*{email}"></div>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="telefono" class="col-sm-3 col-form-label">Teléfono:</label>
-                    <div class="col-sm-9">
-                        <input type="tel" id="telefono" th:field="*{telefono}" maxlength="20"
-                               class="form-control" />
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="contrasena" class="col-sm-3 col-form-label">Contraseña de acceso: *</label>
-                    <div class="col-sm-9">
-                        <input type="password" id="contrasena" th:field="*{contrasena}"
-                               class="form-control"
-                               th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'" />
-                        <div class="invalid-feedback"
-                             th:if="${#fields.hasErrors('contrasena')}"
-                             th:errors="*{contrasena}"></div>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset class="mb-3">
-                <legend>Consentimiento y Estado</legend>
-
-                <div class="form-check">
-                    <input type="checkbox" id="consentimientoLopd"
-                           th:field="*{consentimientoLopd}" class="form-check-input" />
-                    <label for="consentimientoLopd" class="form-check-label">
-                        Acepto el tratamiento de mis datos conforme a la LOPD
-                    </label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" id="aceptadoTecnico"
-                           th:field="*{aceptadoTecnico}" class="form-check-input" />
-                    <label for="aceptadoTecnico" class="form-check-label">
-                        Aceptado por técnico OVI
-                    </label>
-                </div>
-            </fieldset>
-
-            <p class="small">* Campos obligatorios</p>
-
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                <a th:href="@{/usuarios}" class="btn btn-secondary">Cancelar</a>
             </div>
 
-        </form>
-    </div>
-</div>
+            <div class="row mb-3">
+                <label for="apellidos" class="col-sm-3 col-form-label">Apellidos: *</label>
+                <div class="col-sm-6">
+                    <input type="text" id="apellidos" th:field="*{apellidos}" maxlength="150"
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('apellidos')} ? 'is-invalid'"/>
+                    <div th:if="${#fields.hasErrors('apellidos')}"
+                         th:errors="*{apellidos}" class="error"></div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-3">
+            <legend>Contacto y Acceso</legend>
+
+            <div class="row mb-3">
+                <label for="email" class="col-sm-3 col-form-label">Correo Electrónico: *</label>
+                <div class="col-sm-6">
+                    <input type="email" id="email" th:field="*{email}" maxlength="150"
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"/>
+                    <div th:if="${#fields.hasErrors('email')}"
+                         th:errors="*{email}" class="error"></div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="telefono" class="col-sm-3 col-form-label">Teléfono:</label>
+                <div class="col-sm-6">
+                    <input type="tel" id="telefono" th:field="*{telefono}" maxlength="20"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="contrasena" class="col-sm-3 col-form-label">Contraseña de acceso: *</label>
+                <div class="col-sm-6">
+                    <input type="password" id="contrasena" th:field="*{contrasena}"
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'"/>
+                    <div th:if="${#fields.hasErrors('contrasena')}"
+                         th:errors="*{contrasena}" class="error"></div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-3">
+            <legend>Consentimiento y Estado</legend>
+
+            <div class="form-check">
+                <input type="checkbox" id="consentimientoLopd"
+                       th:field="*{consentimientoLopd}" class="form-check-input"/>
+                <label for="consentimientoLopd" class="form-check-label">
+                    Acepto el tratamiento de mis datos conforme a la LOPD
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" id="aceptadoTecnico"
+                       th:field="*{aceptadoTecnico}" class="form-check-input"/>
+                <label for="aceptadoTecnico" class="form-check-label">
+                    Aceptado por técnico OVI
+                </label>
+            </div>
+        </fieldset>
+
+        <p class="small">* Campos obligatorios</p>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a th:href="@{/usuarios}" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</section>
 </body>
 </html>
