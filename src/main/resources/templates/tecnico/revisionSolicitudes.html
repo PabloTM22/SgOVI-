@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -43,12 +45,12 @@
             <td>
                 <form th:if="${s.estado == 'en revision'}"
                       th:action="@{/tecnico/solicitudes/{id}/aprobar(id=${s.idSolicitud})}"
-                      method="post" style="display:inline">
+                      method="post" class="d-inline">
                     <button type="submit" class="btn btn-sm btn-success">Aprobar</button>
                 </form>
                 <form th:if="${s.estado == 'en revision'}"
                       th:action="@{/tecnico/solicitudes/{id}/rechazar(id=${s.idSolicitud})}"
-                      method="post" style="display:inline">
+                      method="post" class="d-inline">
                     <button type="submit" class="btn btn-sm btn-danger">Rechazar</button>
                 </form>
                 <a th:if="${s.estado == 'aprobada'}"
@@ -64,3 +66,4 @@
 </section>
 </body>
 </html>
+
