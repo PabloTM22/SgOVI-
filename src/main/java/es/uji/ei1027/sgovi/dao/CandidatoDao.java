@@ -118,4 +118,77 @@ public class CandidatoDao {
             return new ArrayList<>();
         }
     }
+
+    //FILTRO DINÁMICO PARA BUSCAR CANDIDATOS COMO USUARIO
+
+    public List<Candidato> buscar(String tipo,
+                                 String texto,
+                                 String disponibilidad,
+                                 String orden,
+                                 double latRef,
+                                 double lngRef) {
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT * FROM AsistentePersonal " +
+                        "WHERE estado_aceptado = TRUE AND activo = TRUE"
+        );
+        List<Object> params = new ArrayList<>();
+
+        // Filtro por tipo
+        if (tipo != null && !tipo.isBlank() && !"TODOS".equalsIgnoreCase(tipo)) {
+            sql.append(" AND tipo_ap = ?");
+            params.add(tipo);
+        }
+
+        // Búsqueda de texto libre (nombre, apellidos, formación, experiencia)
+        if (texto != null && !texto.isBlank()) {
+            sql.append(" AND (LOWER(nombre) LIKE ? " +
+                    " OR LOWER(apellidos) LIKE ? " +
+                    " OR LOWER(COALESCE(formacion,'')) LIKE ? " +
+                    " OR LOWER(COALESCE(experiencia,'')) LIKE ?)");
+            String like = "%" + texto.toLowerCase() + "%";
+            params.add(like);
+            params.add(like);
+            params.add(like);
+            params.add(like);
+        }
+
+        // Filtro por disponibilidad (búsqueda parcial sobre el campo de texto)
+        if (disponibilidad != null && !disponibilidad.isBlank()) {
+            sql.append(" AND LOWER(COALESCE(disponibilidad,'')) LIKE ?");
+            params.add("%" + disponibilidad.toLowerCase() + "%");
+        }
+
+        // Orden
+        if ("PROXIMIDAD".equalsIgnoreCase(orden)) {
+            // Los que tienen coordenadas primero, luego por distancia al
+            // cuadrado (suficiente para ordenar sin necesidad de sqrt).
+            sql.append(" ORDER BY " +
+                    "CASE WHEN latitud IS NULL OR longitud IS NULL THEN 1 ELSE 0 END, " +
+                    "(COALESCE(latitud,0) - ?)^2 + (COALESCE(longitud,0) - ?)^2");
+            params.add(latRef);
+            params.add(lngRef);
+        } else if ("EXPERIENCIA".equalsIgnoreCase(orden)) {
+            // Aproximación: la experiencia es texto libre, así que usamos
+            // la longitud del texto como heurística. Si tuvieras un campo
+            // "anios_experiencia", cámbialo aquí.
+            sql.append(" ORDER BY LENGTH(COALESCE(experiencia,'')) DESC, " +
+                    "apellidos ASC, nombre ASC");
+        } else {
+            // Por defecto, orden alfabético
+            sql.append(" ORDER BY apellidos ASC, nombre ASC");
+        }
+
+        try {
+            return jdbcTemplate.query(sql.toString(),
+                    new CandidatoRowMapper(),
+                    params.toArray());
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+
+
+
 }
