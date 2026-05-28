@@ -18,22 +18,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/tecnico")
 public class TecnicoController {
-    private SolicitudServicioAPDao solicitudDao;
-    private CandidatoDao candidatoDao;
-    private SeleccionDao seleccionDao;
+    private final SolicitudServicioAPDao solicitudDao;
+    private final CandidatoDao candidatoDao;
+    private final SeleccionDao seleccionDao;
 
     @Autowired
-    public void setSolicitudDao(SolicitudServicioAPDao solicitudDao) {
+    public TecnicoController(SolicitudServicioAPDao solicitudDao,
+                             CandidatoDao candidatoDao,
+                             SeleccionDao seleccionDao) {
         this.solicitudDao = solicitudDao;
-    }
-
-    @Autowired
-    public void setCandidatoDao(CandidatoDao candidatoDao) {
         this.candidatoDao = candidatoDao;
-    }
-
-    @Autowired
-    public void setSeleccionDao(SeleccionDao seleccionDao) {
         this.seleccionDao = seleccionDao;
     }
 

@@ -1,10 +1,12 @@
 package es.uji.ei1027.sgovi.validator;
 
 import es.uji.ei1027.sgovi.model.UsuarioOvi;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+@Component
 public class UsuarioOviValidator implements Validator {
 
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";

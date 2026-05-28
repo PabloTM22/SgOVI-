@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/solicitudes")
 public class SolicitudController {
-    private SolicitudServicioAPDao solicitudDao;
+    private final SolicitudServicioAPDao solicitudDao;
 
     @Autowired
-    public void setSolicitudDao(SolicitudServicioAPDao solicitudDao) {
+    public SolicitudController(SolicitudServicioAPDao solicitudDao) {
         this.solicitudDao = solicitudDao;
     }
 
