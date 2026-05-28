@@ -44,6 +44,18 @@ public class UsuarioOviDao {
         }
     }
 
+    public UsuarioOvi getUsuarioByDni(String dni) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM UsuarioOVI WHERE dni = ?",
+                    new UsuarioOviRowMapper(),
+                    dni
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     // R - READ ALL (Obtener todos los usuarios)
     public List<UsuarioOvi> getUsuarios() {
         try {
