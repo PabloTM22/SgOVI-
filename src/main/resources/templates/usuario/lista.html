@@ -43,8 +43,11 @@
             <td>
                 <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}"
                    class="btn btn-sm btn-outline-warning">Editar</a>
-                <a th:href="@{/usuarios/borrar/{id}(id=${u.idUsuario})}"
-                   class="btn btn-sm btn-outline-danger">Borrar</a>
+                <form th:action="@{/usuarios/borrar/{id}(id=${u.idUsuario})}"
+                      method="post" class="d-inline"
+                      th:onsubmit="'return confirm(\'¿Seguro que quieres eliminar al usuario ' + ${u.nombre} + '?\')'">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Borrar</button>
+                </form>
             </td>
         </tr>
         </tbody>

@@ -50,7 +50,6 @@ public class CandidatoController {
     @PostMapping("/registro")
     public String registrarCandidatoSubmit(@ModelAttribute("candidato") Candidato candidato,
                                            BindingResult bindingResult) {
-        candidatoValidator.validate(candidato, bindingResult);
         if (bindingResult.hasErrors()) {
             return "candidato/registro";
         }
@@ -68,14 +67,14 @@ public class CandidatoController {
         return "candidato/revision";
     }
 
-    @GetMapping("/aceptar/{idAp}")
+    @PostMapping("/aceptar/{idAp}")
     public String aceptarCandidato(@PathVariable String idAp, HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
         candidatoDao.updateStatus(idAp, true);
         return "redirect:/candidatos/revision";
     }
 
-    @GetMapping("/rechazar/{idAp}")
+    @PostMapping("/rechazar/{idAp}")
     public String rechazarCandidato(@PathVariable String idAp,
                                     HttpSession session,
                                     RedirectAttributes redirectAttributes) {

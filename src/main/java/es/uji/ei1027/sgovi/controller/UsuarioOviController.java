@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,11 +20,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UsuarioOviController {
     private final UsuarioOviService usuarioOviService;
     private final UsuarioOviDao usuarioOviDao;
+    private final UsuarioOviValidator usuarioOviValidator;
 
     @Autowired
-    public UsuarioOviController(UsuarioOviService usuarioOviService, UsuarioOviDao usuarioOviDao) {
+    public UsuarioOviController(UsuarioOviService usuarioOviService, UsuarioOviDao usuarioOviDao, UsuarioOviValidator usuarioOviValidator) {
         this.usuarioOviService = usuarioOviService;
         this.usuarioOviDao = usuarioOviDao;
+        this.usuarioOviValidator = usuarioOviValidator;
+    }
+
+    @InitBinder("usuario")
+    public void initBinder(WebDataBinder binder) {
+        binder.setValidator(usuarioOviValidator);
     }
 
     private boolean esTecnico(HttpSession session) {
@@ -56,7 +64,6 @@ public class UsuarioOviController {
                              BindingResult bindingResult,
                              HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
-        new UsuarioOviValidator().validate(usuario, bindingResult);
         if (bindingResult.hasErrors()) {
             return "usuario/alta";
         }
@@ -80,7 +87,6 @@ public class UsuarioOviController {
                                BindingResult bindingResult,
                                HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
-        new UsuarioOviValidator().validate(usuario, bindingResult);
         if (bindingResult.hasErrors()) {
             return "usuario/editar";
         }
@@ -89,7 +95,7 @@ public class UsuarioOviController {
         return "redirect:/usuarios";
     }
 
-    @GetMapping("/borrar/{idUsuario}")
+    @PostMapping("/borrar/{idUsuario}")
     public String borrar(@PathVariable String idUsuario,
                          HttpSession session,
                          RedirectAttributes redirectAttributes) {
