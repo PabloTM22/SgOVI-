@@ -15,7 +15,6 @@ public class Candidato {
     private Double latitud;
     private Double longitud;
     private boolean estadoAceptado;
-    private String contrasena;
     private boolean activo;
 
     public Candidato() {
@@ -61,9 +60,6 @@ public class Candidato {
     public boolean isEstadoAceptado() { return estadoAceptado; }
     public void setEstadoAceptado(boolean estadoAceptado) { this.estadoAceptado = estadoAceptado; }
 
-    public String getContrasena() { return contrasena; }
-    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
-
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }
 
@@ -83,7 +79,6 @@ public class Candidato {
                 ", latitud=" + latitud +
                 ", longitud=" + longitud +
                 ", estadoAceptado=" + estadoAceptado +
-                ", contrasena='" + contrasena + '\'' +
                 ", activo=" + activo +
                 '}';
     }

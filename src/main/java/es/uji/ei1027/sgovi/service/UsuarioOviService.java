@@ -22,13 +22,13 @@ public class UsuarioOviService {
         this.usuarioDao = usuarioDao;
     }
 
-    public void registrarUsuario(UsuarioOvi usuarioOvi) {
+    public void registrarUsuario(UsuarioOvi usuarioOvi, String contrasenaClaro) {
         String idUsuario = "usr_" + UUID.randomUUID().toString().substring(0, 8);
         usuarioOvi.setIdUsuario(idUsuario);
         usuarioOvi.setAceptadoTecnico(false);
 
         BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
-        String hash = encryptor.encryptPassword(usuarioOvi.getContrasena());
+        String hash = encryptor.encryptPassword(contrasenaClaro);
 
         Usuario credenciales = new Usuario();
         credenciales.setUsername(idUsuario);
@@ -37,18 +37,13 @@ public class UsuarioOviService {
         credenciales.setActivo(false);
         usuarioDao.addUsuario(credenciales);
 
-        usuarioOvi.setContrasena(hash);
         usuarioOviDao.addUsuario(usuarioOvi);
     }
 
-    public void actualizarUsuario(UsuarioOvi usuarioOvi) {
-        UsuarioOvi actual = usuarioOviDao.getUsuario(usuarioOvi.getIdUsuario());
-        if (usuarioOvi.getContrasena() == null || usuarioOvi.getContrasena().isBlank()) {
-            usuarioOvi.setContrasena(actual.getContrasena());
-        } else {
+    public void actualizarUsuario(UsuarioOvi usuarioOvi, String nuevaContrasena) {
+        if (nuevaContrasena != null && !nuevaContrasena.isBlank()) {
             BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
-            String hash = encryptor.encryptPassword(usuarioOvi.getContrasena());
-            usuarioOvi.setContrasena(hash);
+            String hash = encryptor.encryptPassword(nuevaContrasena);
             usuarioDao.updatePassword(usuarioOvi.getIdUsuario(), hash);
         }
         usuarioOviDao.updateUsuario(usuarioOvi);

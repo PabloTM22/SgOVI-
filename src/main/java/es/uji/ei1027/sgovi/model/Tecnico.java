@@ -7,7 +7,6 @@ public class Tecnico {
     private String apellidos;
     private String email;
     private String telefono;
-    private String contrasena;
     private boolean activo;
 
     public Tecnico() {}
@@ -29,9 +28,6 @@ public class Tecnico {
 
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
-
-    public String getContrasena() { return contrasena; }
-    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }

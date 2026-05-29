@@ -22,14 +22,14 @@ public class CandidatoService {
         this.usuarioDao = usuarioDao;
     }
 
-    public void registrarCandidato(Candidato candidato) {
+    public void registrarCandidato(Candidato candidato, String contrasenaClaro) {
         String idAp = "ap_" + UUID.randomUUID().toString().substring(0, 8);
         candidato.setIdAp(idAp);
         candidato.setEstadoAceptado(false);
         candidato.setActivo(true);
 
         BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
-        String hash = encryptor.encryptPassword(candidato.getContrasena());
+        String hash = encryptor.encryptPassword(contrasenaClaro);
 
         Usuario credenciales = new Usuario();
         credenciales.setUsername(idAp);
@@ -38,7 +38,6 @@ public class CandidatoService {
         credenciales.setActivo(false);
         usuarioDao.addUsuario(credenciales);
 
-        candidato.setContrasena(hash);
         candidatoDao.addCandidato(candidato);
     }
 }

@@ -19,7 +19,6 @@ public class UsuarioOviRowMapper implements RowMapper<UsuarioOvi> {
         usuario.setEmail(rs.getString("email"));
         usuario.setTelefono(rs.getString("telefono"));
         usuario.setConsentimientoLopd(rs.getBoolean("consentimiento_lopd"));
-        usuario.setContrasena(rs.getString("contrasena"));
         usuario.setAceptadoTecnico(rs.getBoolean("aceptado_tecnico"));
 
         return usuario;

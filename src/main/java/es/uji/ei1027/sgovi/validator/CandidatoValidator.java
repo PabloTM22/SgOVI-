@@ -9,40 +9,26 @@ import org.springframework.validation.Validator;
 @Component
 public class CandidatoValidator implements Validator {
 
-    // Expresión regular básica para validar formato de email
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 
-    /**
-     * Indica que este validador sólo soporta la clase Candidato.
-     */
     @Override
     public boolean supports(Class<?> clazz) {
         return Candidato.class.equals(clazz);
     }
 
-    /**
-     * Lógica de validación del formulario de registro.
-     * Se validan los campos obligatorios y el formato del email.
-     */
     @Override
     public void validate(Object target, Errors errors) {
         Candidato candidato = (Candidato) target;
 
-
-        // DNI/NIE: obligatorio
         ValidationUtils.rejectIfEmptyOrWhitespace(
                 errors, "dni", "required.candidato.dni", "El DNI/NIE es obligatorio.");
 
-        // Nombre: obligatorio
         ValidationUtils.rejectIfEmptyOrWhitespace(
                 errors, "nombre", "required.candidato.nombre", "El nombre es obligatorio.");
 
-        // Apellidos: obligatorio
         ValidationUtils.rejectIfEmptyOrWhitespace(
                 errors, "apellidos", "required.candidato.apellidos", "Los apellidos son obligatorios.");
 
-
-        // Email: obligatorio y con formato válido
         if (candidato.getEmail() == null || candidato.getEmail().trim().isEmpty()) {
             errors.rejectValue("email", "required.candidato.email",
                     "El correo electrónico es obligatorio.");
@@ -50,9 +36,5 @@ public class CandidatoValidator implements Validator {
             errors.rejectValue("email", "invalid.candidato.email",
                     "El formato del correo electrónico no es válido.");
         }
-
-        // Contraseña: obligatoria
-        ValidationUtils.rejectIfEmptyOrWhitespace(
-                errors, "contrasena", "required.candidato.contrasena", "La contraseña es obligatoria.");
     }
 }

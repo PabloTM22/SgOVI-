@@ -23,11 +23,10 @@ public class UsuarioOviDao {
     // C - CREATE (Añadir un usuario OVI)
     public void addUsuario(UsuarioOvi usuario) {
         jdbcTemplate.update(
-                "INSERT INTO UsuarioOVI (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, contrasena, aceptado_tecnico) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO UsuarioOVI (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, aceptado_tecnico) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 usuario.getIdUsuario(), usuario.getDni(), usuario.getNombre(), usuario.getApellidos(),
-                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(),
-                usuario.getContrasena(), usuario.isAceptadoTecnico()
+                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(), usuario.isAceptadoTecnico()
         );
     }
 
@@ -71,11 +70,10 @@ public class UsuarioOviDao {
     // U - UPDATE (Actualizar todos los datos de un usuario)
     public void updateUsuario(UsuarioOvi usuario) {
         jdbcTemplate.update(
-                "UPDATE UsuarioOVI SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, consentimiento_lopd=?, contrasena=?, aceptado_tecnico=? " +
+                "UPDATE UsuarioOVI SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, consentimiento_lopd=?, aceptado_tecnico=? " +
                         "WHERE id_usuario=?",
                 usuario.getDni(), usuario.getNombre(), usuario.getApellidos(),
-                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(),
-                usuario.getContrasena(), usuario.isAceptadoTecnico(),
+                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(), usuario.isAceptadoTecnico(),
                 usuario.getIdUsuario()
         );
     }

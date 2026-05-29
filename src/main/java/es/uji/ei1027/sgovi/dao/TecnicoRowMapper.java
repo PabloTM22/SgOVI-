@@ -15,7 +15,6 @@ public class TecnicoRowMapper implements RowMapper<Tecnico> {
         tecnico.setApellidos(rs.getString("apellidos"));
         tecnico.setEmail(rs.getString("email"));
         tecnico.setTelefono(rs.getString("telefono"));
-        tecnico.setContrasena(rs.getString("contrasena"));
         tecnico.setActivo(rs.getBoolean("activo"));
         return tecnico;
     }

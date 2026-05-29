@@ -30,17 +30,6 @@ public class TecnicoDao {
         }
     }
 
-    public Tecnico login(String idTecnico, String contrasena) {
-        try {
-            return jdbcTemplate.queryForObject(
-                    "SELECT * FROM tecnico WHERE id_tecnico = ? AND contrasena = ? AND activo = TRUE",
-                    new TecnicoRowMapper(), idTecnico, contrasena
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
     public List<Tecnico> getTecnicos() {
         try {
             return jdbcTemplate.query(
@@ -54,20 +43,20 @@ public class TecnicoDao {
 
     public void addTecnico(Tecnico tecnico) {
         jdbcTemplate.update(
-                "INSERT INTO tecnico (id_tecnico, dni, nombre, apellidos, email, telefono, contrasena, activo) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO tecnico (id_tecnico, dni, nombre, apellidos, email, telefono, activo) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)",
                 tecnico.getIdTecnico(), tecnico.getDni(), tecnico.getNombre(),
                 tecnico.getApellidos(), tecnico.getEmail(), tecnico.getTelefono(),
-                tecnico.getContrasena(), tecnico.isActivo()
+                tecnico.isActivo()
         );
     }
 
     public void updateTecnico(Tecnico tecnico) {
         jdbcTemplate.update(
                 "UPDATE tecnico SET dni = ?, nombre = ?, apellidos = ?, email = ?, telefono = ?, " +
-                        "contrasena = ?, activo = ? WHERE id_tecnico = ?",
+                        "activo = ? WHERE id_tecnico = ?",
                 tecnico.getDni(), tecnico.getNombre(), tecnico.getApellidos(),
-                tecnico.getEmail(), tecnico.getTelefono(), tecnico.getContrasena(),
+                tecnico.getEmail(), tecnico.getTelefono(),
                 tecnico.isActivo(), tecnico.getIdTecnico()
         );
     }

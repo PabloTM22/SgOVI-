@@ -8,7 +8,6 @@ public class UsuarioOvi {
     private String email;
     private String telefono;
     private boolean consentimientoLopd;
-    private String contrasena;
     private boolean aceptadoTecnico;
 
     public UsuarioOvi() {}
@@ -67,14 +66,6 @@ public class UsuarioOvi {
 
     public void setConsentimientoLopd(boolean consentimientoLopd) {
         this.consentimientoLopd = consentimientoLopd;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
     }
 
     public boolean isAceptadoTecnico() {

@@ -62,12 +62,13 @@ public class UsuarioOviController {
     @PostMapping("/alta")
     public String altaSubmit(@ModelAttribute("usuario") UsuarioOvi usuario,
                              BindingResult bindingResult,
+                             @RequestParam("contrasena") String contrasena,
                              HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
         if (bindingResult.hasErrors()) {
             return "usuario/alta";
         }
-        usuarioOviService.registrarUsuario(usuario);
+        usuarioOviService.registrarUsuario(usuario, contrasena);
         return "redirect:/usuarios";
     }
 
@@ -85,13 +86,14 @@ public class UsuarioOviController {
     public String editarSubmit(@PathVariable String idUsuario,
                                @ModelAttribute("usuario") UsuarioOvi usuario,
                                BindingResult bindingResult,
+                               @RequestParam("contrasena") String contrasena,
                                HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
         if (bindingResult.hasErrors()) {
             return "usuario/editar";
         }
         usuario.setIdUsuario(idUsuario);
-        usuarioOviService.actualizarUsuario(usuario);
+        usuarioOviService.actualizarUsuario(usuario, contrasena);
         return "redirect:/usuarios";
     }
 

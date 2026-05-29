@@ -49,11 +49,12 @@ public class CandidatoController {
 
     @PostMapping("/registro")
     public String registrarCandidatoSubmit(@ModelAttribute("candidato") Candidato candidato,
-                                           BindingResult bindingResult) {
+                                           BindingResult bindingResult,
+                                           @RequestParam("contrasena") String contrasena) {
         if (bindingResult.hasErrors()) {
             return "candidato/registro";
         }
-        candidatoService.registrarCandidato(candidato);
+        candidatoService.registrarCandidato(candidato, contrasena);
         return "redirect:/";
     }
 
