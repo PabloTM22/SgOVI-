@@ -47,7 +47,7 @@ public class BusquedaAsistenteController {
         UserDetails user = (UserDetails) session.getAttribute("user");
         if (user == null) return false;
         String rol = user.getRol();
-        return "USUARIO".equals(rol) || "TECNICO".equals(rol);
+        return "USUARIO_OVI".equals(rol) || "TECNICO".equals(rol);
     }
 
     @GetMapping("/buscar")
