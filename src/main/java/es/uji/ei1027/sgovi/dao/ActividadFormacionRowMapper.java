@@ -13,7 +13,7 @@ public class ActividadFormacionRowMapper implements RowMapper<ActividadFormacion
     public ActividadFormacion mapRow(ResultSet rs, int rowNum) throws SQLException {
         ActividadFormacion actividad = new ActividadFormacion();
         actividad.setIdActividad(rs.getInt("id_actividad"));
-        actividad.setIdFormador(rs.getInt("id_formador"));
+        actividad.setIdFormador(rs.getString("id_formador"));
         actividad.setTipoActividad(rs.getString("tipo_actividad"));
         actividad.setTitulo(rs.getString("titulo"));
         actividad.setDescripcion(rs.getString("descripcion"));

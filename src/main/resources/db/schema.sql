@@ -63,13 +63,12 @@ CREATE TABLE asistentepersonal (
 );
 
 CREATE TABLE formador (
-    id_formador  SERIAL       PRIMARY KEY,
+    id_formador  VARCHAR(50)  PRIMARY KEY,
     dni          VARCHAR(15)  UNIQUE NOT NULL,
     nombre       VARCHAR(100) NOT NULL,
     apellidos    VARCHAR(150) NOT NULL,
     email        VARCHAR(150) UNIQUE NOT NULL,
-    telefono     VARCHAR(20),
-    contrasena   VARCHAR(255) NOT NULL
+    telefono     VARCHAR(20)
 );
 
 -- ---------------------------------------------------------------------
@@ -186,7 +185,7 @@ ALTER TABLE registrocontrato
 
 CREATE TABLE actividadformacion (
     id_actividad       SERIAL        PRIMARY KEY,
-    id_formador        INT           NOT NULL,
+    id_formador        VARCHAR(50)   NOT NULL,
     tipo_actividad     VARCHAR(20)   NOT NULL,
     titulo             VARCHAR(150)  NOT NULL,
     descripcion        TEXT,

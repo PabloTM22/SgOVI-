@@ -86,11 +86,8 @@
             <div class="row mb-3">
                 <label for="contrasena" class="col-sm-3 col-form-label">Contraseña de acceso: *</label>
                 <div class="col-sm-6">
-                    <input type="password" id="contrasena" th:field="*{contrasena}"
-                           class="form-control"
-                           th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'"/>
-                    <div th:if="${#fields.hasErrors('contrasena')}"
-                         th:errors="*{contrasena}" class="error" role="alert"></div>
+                    <input type="password" id="contrasena" name="contrasena"
+                           class="form-control" autocomplete="new-password"/>
                 </div>
             </div>
         </fieldset>

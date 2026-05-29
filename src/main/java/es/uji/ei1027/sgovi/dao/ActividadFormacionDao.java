@@ -50,7 +50,7 @@ public class ActividadFormacionDao {
         }
     }
 
-    public List<ActividadFormacion> findByFormador(int idFormador) {
+    public List<ActividadFormacion> findByFormador(String idFormador) {
         try {
             return jdbcTemplate.query(
                     "SELECT * FROM actividadformacion WHERE id_formador = ? ORDER BY fecha_actividad DESC",

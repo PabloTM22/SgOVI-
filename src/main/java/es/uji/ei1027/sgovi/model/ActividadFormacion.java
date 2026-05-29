@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class ActividadFormacion {
     private int idActividad;
-    private int idFormador;
+    private String idFormador;
     private String tipoActividad;
     private String titulo;
     private String descripcion;
@@ -18,8 +18,8 @@ public class ActividadFormacion {
     public int getIdActividad() { return idActividad; }
     public void setIdActividad(int idActividad) { this.idActividad = idActividad; }
 
-    public int getIdFormador() { return idFormador; }
-    public void setIdFormador(int idFormador) { this.idFormador = idFormador; }
+    public String getIdFormador() { return idFormador; }
+    public void setIdFormador(String idFormador) { this.idFormador = idFormador; }
 
     public String getTipoActividad() { return tipoActividad; }
     public void setTipoActividad(String tipoActividad) { this.tipoActividad = tipoActividad; }
@@ -47,7 +47,7 @@ public class ActividadFormacion {
     public String toString() {
         return "ActividadFormacion{" +
                 "idActividad=" + idActividad +
-                ", idFormador=" + idFormador +
+                ", idFormador='" + idFormador + '\'' +
                 ", tipoActividad='" + tipoActividad + '\'' +
                 ", titulo='" + titulo + '\'' +
                 ", fechaActividad=" + fechaActividad +

@@ -20,13 +20,13 @@ public class FormadorDao {
 
     public void addFormador(Formador formador) {
         jdbcTemplate.update(
-                "INSERT INTO formador (dni, nombre, apellidos, email, telefono, contrasena) VALUES (?, ?, ?, ?, ?, ?)",
-                formador.getDni(), formador.getNombre(), formador.getApellidos(),
-                formador.getEmail(), formador.getTelefono(), formador.getContrasena()
+                "INSERT INTO formador (id_formador, dni, nombre, apellidos, email, telefono) VALUES (?, ?, ?, ?, ?, ?)",
+                formador.getIdFormador(), formador.getDni(), formador.getNombre(),
+                formador.getApellidos(), formador.getEmail(), formador.getTelefono()
         );
     }
 
-    public Formador getFormador(int idFormador) {
+    public Formador getFormador(String idFormador) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM formador WHERE id_formador = ?",
@@ -50,15 +50,15 @@ public class FormadorDao {
 
     public void updateFormador(Formador formador) {
         jdbcTemplate.update(
-                "UPDATE formador SET dni = ?, nombre = ?, apellidos = ?, email = ?, telefono = ?, contrasena = ? " +
+                "UPDATE formador SET dni = ?, nombre = ?, apellidos = ?, email = ?, telefono = ? " +
                         "WHERE id_formador = ?",
                 formador.getDni(), formador.getNombre(), formador.getApellidos(),
-                formador.getEmail(), formador.getTelefono(), formador.getContrasena(),
+                formador.getEmail(), formador.getTelefono(),
                 formador.getIdFormador()
         );
     }
 
-    public void deleteFormador(int idFormador) {
+    public void deleteFormador(String idFormador) {
         jdbcTemplate.update("DELETE FROM formador WHERE id_formador = ?", idFormador);
     }
 }

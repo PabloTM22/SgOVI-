@@ -1,18 +1,17 @@
 package es.uji.ei1027.sgovi.model;
 
 public class Formador {
-    private int idFormador;
+    private String idFormador;
     private String dni;
     private String nombre;
     private String apellidos;
     private String email;
     private String telefono;
-    private String contrasena;
 
     public Formador() {}
 
-    public int getIdFormador() { return idFormador; }
-    public void setIdFormador(int idFormador) { this.idFormador = idFormador; }
+    public String getIdFormador() { return idFormador; }
+    public void setIdFormador(String idFormador) { this.idFormador = idFormador; }
 
     public String getDni() { return dni; }
     public void setDni(String dni) { this.dni = dni; }
@@ -29,13 +28,10 @@ public class Formador {
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public String getContrasena() { return contrasena; }
-    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
-
     @Override
     public String toString() {
         return "Formador{" +
-                "idFormador=" + idFormador +
+                "idFormador='" + idFormador + '\'' +
                 ", dni='" + dni + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", apellidos='" + apellidos + '\'' +

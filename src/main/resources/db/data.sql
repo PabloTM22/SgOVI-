@@ -36,9 +36,8 @@ INSERT INTO asistentepersonal (id_ap, dni, nombre, apellidos, email, telefono, t
 -- ---------------------------------------------------------------------
 -- Formadores
 -- ---------------------------------------------------------------------
-INSERT INTO formador (dni, nombre, apellidos, email, telefono, contrasena) VALUES
-('66666666F', 'Pablo', 'Navarro Gomez', 'pablo.navarro@test', '600666666', 'tFZKBlIKxhB832hhkxodb5YWpnIaGNFu');
-
+INSERT INTO formador (id_formador, dni, nombre, apellidos, email, telefono) VALUES
+    ('frm_pablo01', '66666666F', 'Pablo', 'Navarro Gomez', 'pablo.navarro@test', '600666666');
 -- ---------------------------------------------------------------------
 -- Solicitudes (una en revision, una aprobada)
 -- ---------------------------------------------------------------------
@@ -59,9 +58,9 @@ INSERT INTO seleccion (id_solicitud, id_ap, id_tecnico, estado) VALUES
 -- NOTA: el formador se anyadira cuando id_formador pase a VARCHAR
 -- ---------------------------------------------------------------------
 INSERT INTO usuario (username, password, rol, activo) VALUES
-('tec_admin',    'EIaH2EW8ahPgasBvEkjGFZhvHE/NGJIy', 'TECNICO',     TRUE),
-('usr_carlos01', 'Rj4v6490+H09GTCAUO5ErCmRYufSwih3', 'USUARIO_OVI', TRUE),
-('usr_lucia02',  'dXeixdvomvLSk/2BKgEWODJEunR5iHIo', 'USUARIO_OVI', TRUE),
-('ap_marta01',   'PYzKxla7faXF5nVi4mCoQRoqpePhwxWy', 'CANDIDATO',   TRUE),
-('ap_jorge02',   'HNmHw8/H8narWF8t1PS7qfN1tR7DOY/D', 'CANDIDATO',   TRUE);
-
+    ('tec_admin',    'EIaH2EW8ahPgasBvEkjGFZhvHE/NGJIy', 'TECNICO',     TRUE),
+    ('usr_carlos01', 'Rj4v6490+H09GTCAUO5ErCmRYufSwih3', 'USUARIO_OVI', TRUE),
+    ('usr_lucia02',  'dXeixdvomvLSk/2BKgEWODJEunR5iHIo', 'USUARIO_OVI', FALSE),
+    ('ap_marta01',   'PYzKxla7faXF5nVi4mCoQRoqpePhwxWy', 'CANDIDATO',   TRUE),
+    ('ap_jorge02',   'HNmHw8/H8narWF8t1PS7qfN1tR7DOY/D', 'CANDIDATO',   FALSE),
+    ('frm_pablo01',  'tFZKBlIKxhB832hhkxodb5YWpnIaGNFu', 'FORMADOR',    TRUE);

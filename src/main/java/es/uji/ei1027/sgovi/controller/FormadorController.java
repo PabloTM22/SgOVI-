@@ -64,17 +64,22 @@ public class FormadorController {
     @PostMapping("/alta")
     public String altaSubmit(@ModelAttribute("formador") @Valid Formador formador,
                              BindingResult bindingResult,
+                             @RequestParam("contrasena") String contrasena,
                              HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
+        if (contrasena == null || contrasena.isBlank()) {
+            bindingResult.rejectValue("dni", "required.contrasena",
+                    "La contraseña es obligatoria.");
+        }
         if (bindingResult.hasErrors()) {
             return "formador/alta";
         }
-        formadorDao.addFormador(formador);
+        formadorService.registrarFormador(formador, contrasena);
         return "redirect:/formadores";
     }
 
     @GetMapping("/editar/{id}")
-    public String editarForm(@PathVariable int id, HttpSession session, Model model) {
+    public String editarForm(@PathVariable String id, HttpSession session, Model model) {
         if (!esTecnico(session)) {
             session.setAttribute("nextUrl", "/formadores/editar/" + id);
             return "redirect:/login";
@@ -84,21 +89,22 @@ public class FormadorController {
     }
 
     @PostMapping("/editar/{id}")
-    public String editarSubmit(@PathVariable int id,
+    public String editarSubmit(@PathVariable String id,
                                @ModelAttribute("formador") @Valid Formador formador,
                                BindingResult bindingResult,
+                               @RequestParam("contrasena") String contrasena,
                                HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
         if (bindingResult.hasErrors()) {
             return "formador/editar";
         }
         formador.setIdFormador(id);
-        formadorService.actualizarFormador(formador);
+        formadorService.actualizarFormador(formador, contrasena);
         return "redirect:/formadores";
     }
 
     @GetMapping("/borrar/{id}")
-    public String borrar(@PathVariable int id,
+    public String borrar(@PathVariable String id,
                          HttpSession session,
                          RedirectAttributes redirectAttributes) {
         if (!esTecnico(session)) return "redirect:/login";
