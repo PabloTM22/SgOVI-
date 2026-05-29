@@ -17,12 +17,12 @@
 
     <!-- No autenticado -->
     <div th:if="${session.user == null}">
-        <h5>¿Qué desea hacer?</h5>
+        <h3>¿Qué desea hacer?</h3>
         <div class="row g-3 mt-1">
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Acceder al sistema</h6>
+                        <h4 class="card-title">Acceder al sistema</h4>
                         <p class="card-text small">Si ya tiene una cuenta, entre con su usuario o email.</p>
                         <a th:href="@{/login}" class="btn btn-primary btn-sm">Entrar</a>
                     </div>
@@ -31,7 +31,7 @@
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Inscribirse como candidato PAP/PATI</h6>
+                        <h4 class="card-title">Inscribirse como candidato PAP/PATI</h4>
                         <p class="card-text small">Regístrese como profesional de asistencia personal para aparecer en la bolsa de candidatos.</p>
                         <a th:href="@{/candidatos/registro}" class="btn btn-outline-primary btn-sm">Registrarse como candidato</a>
                     </div>
@@ -47,7 +47,7 @@
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Mis solicitudes</h6>
+                        <h4 class="card-title">Mis solicitudes</h4>
                         <p class="card-text small">Consulte el estado de sus solicitudes de asistencia personal.</p>
                         <a th:href="@{/solicitudes/lista}" class="btn btn-primary btn-sm">Ver mis solicitudes</a>
                     </div>
@@ -56,7 +56,7 @@
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Nueva solicitud</h6>
+                        <h4 class="card-title">Nueva solicitud</h4>
                         <p class="card-text small">Registre una nueva petición de asistencia personal (PAP o PATI).</p>
                         <a th:href="@{/solicitudes/nueva}" class="btn btn-outline-primary btn-sm">Crear solicitud</a>
                     </div>
@@ -67,12 +67,12 @@
 
     <!-- Técnico autenticado -->
     <div th:if="${session.user != null and session.user.rol == 'TECNICO'}">
-        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <h3 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h3>
         <div class="row g-3 mt-1">
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Panel técnico</h6>
+                        <h4 class="card-title">Panel técnico</h4>
                         <p class="card-text small">Gestione y revise las solicitudes de asistencia personal pendientes.</p>
                         <a th:href="@{/tecnico/solicitudes}" class="btn btn-primary btn-sm">Ir al panel</a>
                     </div>
@@ -81,7 +81,7 @@
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Candidatos PAP/PATI</h6>
+                        <h4 class="card-title">Candidatos PAP/PATI</h4>
                         <p class="card-text small">Revise y acepte las solicitudes de nuevos candidatos.</p>
                         <a th:href="@{/candidatos/revision}" class="btn btn-outline-primary btn-sm">Gestionar candidatos</a>
                     </div>
@@ -90,7 +90,7 @@
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Usuarios OVI</h6>
+                        <h4 class="card-title">Usuarios OVI</h4>
                         <p class="card-text small">Alta, edición y gestión de los usuarios de la OVI.</p>
                         <a th:href="@{/usuarios}" class="btn btn-outline-primary btn-sm">Gestionar usuarios</a>
                     </div>
@@ -99,7 +99,7 @@
             <div class="col-sm-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-title">Formadores</h6>
+                        <h4 class="card-title">Formadores</h4>
                         <p class="card-text small">Gestione los formadores y ponentes de las actividades de la OVI.</p>
                         <a th:href="@{/formadores}" class="btn btn-outline-primary btn-sm">Gestionar formadores</a>
                     </div>
@@ -110,13 +110,13 @@
 
     <!-- Asistente personal autenticado -->
     <div th:if="${session.user != null and session.user.rol == 'ASISTENTE'}">
-        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <h3 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h3>
         <p class="text-body-secondary">Su perfil está activo en la bolsa de candidatos de la OVI.</p>
     </div>
 
     <!-- Formador autenticado -->
     <div th:if="${session.user != null and session.user.rol == 'FORMADOR'}">
-        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <h3 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h3>
         <p class="text-body-secondary">Acceda a las actividades de formación que imparte.</p>
     </div>
 

@@ -15,7 +15,7 @@
     <a th:href="@{/solicitudes/nueva}" class="btn btn-primary">Nueva solicitud</a>
   </p>
 
-  <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}"></div>
+  <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}" role="alert"></div>
 
   <table class="table table-striped table-bordered">
     <thead class="table-light">

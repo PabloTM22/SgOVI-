@@ -14,7 +14,7 @@
 
     <form th:action="@{/usuarios/alta}" th:object="${usuario}" method="post" novalidate>
 
-        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert">
             <p><strong>Por favor, corrija los siguientes errores antes de continuar:</strong></p>
             <ul class="mb-0">
                 <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
@@ -31,7 +31,7 @@
                            class="form-control"
                            th:classappend="${#fields.hasErrors('dni')} ? 'is-invalid'"/>
                     <div th:if="${#fields.hasErrors('dni')}"
-                         th:errors="*{dni}" class="error"></div>
+                         th:errors="*{dni}" class="error" role="alert"></div>
                 </div>
             </div>
 
@@ -42,7 +42,7 @@
                            class="form-control"
                            th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"/>
                     <div th:if="${#fields.hasErrors('nombre')}"
-                         th:errors="*{nombre}" class="error"></div>
+                         th:errors="*{nombre}" class="error" role="alert"></div>
                 </div>
             </div>
 
@@ -53,7 +53,7 @@
                            class="form-control"
                            th:classappend="${#fields.hasErrors('apellidos')} ? 'is-invalid'"/>
                     <div th:if="${#fields.hasErrors('apellidos')}"
-                         th:errors="*{apellidos}" class="error"></div>
+                         th:errors="*{apellidos}" class="error" role="alert"></div>
                 </div>
             </div>
         </fieldset>
@@ -68,7 +68,7 @@
                            class="form-control"
                            th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"/>
                     <div th:if="${#fields.hasErrors('email')}"
-                         th:errors="*{email}" class="error"></div>
+                         th:errors="*{email}" class="error" role="alert"></div>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@
                            class="form-control"
                            th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'"/>
                     <div th:if="${#fields.hasErrors('contrasena')}"
-                         th:errors="*{contrasena}" class="error"></div>
+                         th:errors="*{contrasena}" class="error" role="alert"></div>
                 </div>
             </div>
         </fieldset>

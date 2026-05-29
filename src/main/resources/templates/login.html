@@ -22,7 +22,7 @@
                                th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"/>
                         <div th:if="${#fields.hasErrors('username')}"
                              th:errors="*{username}"
-                             class="error"></div>
+                             class="error" role="alert"></div>
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
                                th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"/>
                         <div th:if="${#fields.hasErrors('password')}"
                              th:errors="*{password}"
-                             class="error"></div>
+                             class="error" role="alert"></div>
                     </div>
                 </div>
 

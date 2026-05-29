@@ -11,7 +11,7 @@
 
     <h2>Usuarios OVI</h2>
 
-    <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}"></div>
+    <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}" role="alert"></div>
 
     <p>
         <a th:href="@{/usuarios/alta}" class="btn btn-primary">Dar de alta nuevo usuario</a>
