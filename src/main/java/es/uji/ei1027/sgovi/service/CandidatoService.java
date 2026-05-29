@@ -1,7 +1,9 @@
 package es.uji.ei1027.sgovi.service;
 
 import es.uji.ei1027.sgovi.dao.CandidatoDao;
+import es.uji.ei1027.sgovi.dao.UsuarioDao;
 import es.uji.ei1027.sgovi.model.Candidato;
+import es.uji.ei1027.sgovi.model.Usuario;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,21 +14,31 @@ import java.util.UUID;
 public class CandidatoService {
 
     private final CandidatoDao candidatoDao;
+    private final UsuarioDao usuarioDao;
 
     @Autowired
-    public CandidatoService(CandidatoDao candidatoDao) {
+    public CandidatoService(CandidatoDao candidatoDao, UsuarioDao usuarioDao) {
         this.candidatoDao = candidatoDao;
+        this.usuarioDao = usuarioDao;
     }
 
     public void registrarCandidato(Candidato candidato) {
-        String idAp = "AP-" + UUID.randomUUID().toString().substring(0, 8);
+        String idAp = "ap_" + UUID.randomUUID().toString().substring(0, 8);
         candidato.setIdAp(idAp);
         candidato.setEstadoAceptado(false);
         candidato.setActivo(true);
 
         BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
-        candidato.setContrasena(encryptor.encryptPassword(candidato.getContrasena()));
+        String hash = encryptor.encryptPassword(candidato.getContrasena());
 
+        Usuario credenciales = new Usuario();
+        credenciales.setUsername(idAp);
+        credenciales.setPassword(hash);
+        credenciales.setRol("CANDIDATO");
+        credenciales.setActivo(false);
+        usuarioDao.addUsuario(credenciales);
+
+        candidato.setContrasena(hash);
         candidatoDao.addCandidato(candidato);
     }
 }
