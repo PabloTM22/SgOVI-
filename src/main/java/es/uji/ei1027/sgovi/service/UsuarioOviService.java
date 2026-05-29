@@ -28,4 +28,15 @@ public class UsuarioOviService {
 
         usuarioOviDao.addUsuario(usuario);
     }
+
+    public void actualizarUsuario(UsuarioOvi usuario) {
+        UsuarioOvi actual = usuarioOviDao.getUsuario(usuario.getIdUsuario());
+        if (usuario.getContrasena() == null || usuario.getContrasena().isBlank()) {
+            usuario.setContrasena(actual.getContrasena());
+        } else {
+            BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
+            usuario.setContrasena(encryptor.encryptPassword(usuario.getContrasena()));
+        }
+        usuarioOviDao.updateUsuario(usuario);
+    }
 }
