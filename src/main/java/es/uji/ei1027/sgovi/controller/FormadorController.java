@@ -3,6 +3,7 @@ package es.uji.ei1027.sgovi.controller;
 import es.uji.ei1027.sgovi.dao.FormadorDao;
 import es.uji.ei1027.sgovi.model.Formador;
 import es.uji.ei1027.sgovi.model.UserDetails;
+import es.uji.ei1027.sgovi.service.FormadorService;
 import es.uji.ei1027.sgovi.validator.FormadorValidator;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ public class FormadorController {
 
     private final FormadorDao formadorDao;
     private final FormadorValidator formadorValidator;
+    private final FormadorService formadorService;
 
     @Autowired
-    public FormadorController(FormadorDao formadorDao, FormadorValidator formadorValidator) {
+    public FormadorController(FormadorDao formadorDao, FormadorValidator formadorValidator, FormadorService formadorService) {
         this.formadorDao = formadorDao;
         this.formadorValidator = formadorValidator;
+        this.formadorService = formadorService;
     }
 
     @InitBinder("formador")
@@ -89,7 +92,7 @@ public class FormadorController {
             return "formador/editar";
         }
         formador.setIdFormador(id);
-        formadorDao.updateFormador(formador);
+        formadorService.actualizarFormador(formador);
         return "redirect:/formadores";
     }
 
