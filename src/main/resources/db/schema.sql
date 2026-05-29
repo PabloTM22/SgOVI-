@@ -45,20 +45,20 @@ CREATE TABLE usuarioovi (
 );
 
 CREATE TABLE asistentepersonal (
-    id_ap            VARCHAR(50)    PRIMARY KEY,
-    dni              VARCHAR(15)    UNIQUE NOT NULL,
-    nombre           VARCHAR(100)   NOT NULL,
-    apellidos        VARCHAR(150)   NOT NULL,
-    email            VARCHAR(150)   UNIQUE NOT NULL,
-    telefono         VARCHAR(20),
-    tipo_ap          VARCHAR(10)    NOT NULL,
-    formacion        TEXT,
-    experiencia      TEXT,
-    disponibilidad   TEXT,
-    latitud          DECIMAL(9,6),
-    longitud         DECIMAL(9,6),
-    estado_aceptado  BOOLEAN        DEFAULT FALSE,
-    activo           BOOLEAN        DEFAULT TRUE,
+    id_ap                VARCHAR(50)    PRIMARY KEY,
+    dni                  VARCHAR(15)    UNIQUE NOT NULL,
+    nombre               VARCHAR(100)   NOT NULL,
+    apellidos            VARCHAR(150)   NOT NULL,
+    email                VARCHAR(150)   UNIQUE NOT NULL,
+    telefono             VARCHAR(20),
+    tipo_ap              VARCHAR(10)    NOT NULL,
+    formacion            TEXT,
+    experiencia          TEXT,
+    disponibilidad       TEXT,
+    latitud              DECIMAL(9,6),
+    longitud             DECIMAL(9,6),
+    consentimiento_lopd  BOOLEAN        NOT NULL DEFAULT FALSE,
+    activo               BOOLEAN        DEFAULT TRUE,
     CHECK (tipo_ap IN ('PAP', 'PATI'))
 );
 

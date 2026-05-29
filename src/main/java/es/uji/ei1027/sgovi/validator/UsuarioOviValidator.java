@@ -53,6 +53,10 @@ public class UsuarioOviValidator implements Validator {
                     "El formato del correo electrónico no es válido.");
         }
 
+        if (!usuario.isConsentimientoLopd()) {
+            errors.rejectValue("consentimientoLopd", "required.usuario.lopd",
+                    "Debe aceptar el tratamiento de datos conforme a la LOPD/RGPD.");
+        }
 
     }
 }

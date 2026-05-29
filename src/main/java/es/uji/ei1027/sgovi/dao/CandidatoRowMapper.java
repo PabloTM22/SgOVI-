@@ -30,6 +30,7 @@ public class CandidatoRowMapper implements RowMapper<Candidato> {
 
         candidato.setEstadoAceptado(rs.getBoolean("estado_aceptado"));
         candidato.setActivo(rs.getBoolean("activo"));
+        candidato.setConsentimientoLopd(rs.getBoolean("consentimiento_lopd"));
 
         return candidato;
     }

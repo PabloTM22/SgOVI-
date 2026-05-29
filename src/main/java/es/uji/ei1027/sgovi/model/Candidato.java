@@ -16,6 +16,7 @@ public class Candidato {
     private Double longitud;
     private boolean estadoAceptado;
     private boolean activo;
+    private boolean consentimientoLopd;
 
     public Candidato() {
     }
@@ -63,6 +64,9 @@ public class Candidato {
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }
 
+    public boolean isConsentimientoLopd() { return consentimientoLopd; }
+    public void setConsentimientoLopd(boolean consentimientoLopd) { this.consentimientoLopd = consentimientoLopd; }
+
     @Override
     public String toString() {
         return "Candidato{" +
@@ -80,6 +84,7 @@ public class Candidato {
                 ", longitud=" + longitud +
                 ", estadoAceptado=" + estadoAceptado +
                 ", activo=" + activo +
+                ", consentimientoLopd=" + consentimientoLopd +
                 '}';
     }
 }

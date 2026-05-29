@@ -21,14 +21,15 @@ public class CandidatoDao {
     }
 
     // C - CREATE (Añadir un candidato)
+    // C - CREATE (Añadir un candidato)
     public void addCandidato(Candidato candidato) {
         jdbcTemplate.update(
-                "INSERT INTO AsistentePersonal (id_ap, dni, nombre, apellidos, email, telefono, tipo_ap, formacion, experiencia, disponibilidad, latitud, longitud, estado_aceptado, activo) " +
+                "INSERT INTO AsistentePersonal (id_ap, dni, nombre, apellidos, email, telefono, tipo_ap, formacion, experiencia, disponibilidad, latitud, longitud, consentimiento_lopd, activo) " +
                         "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 candidato.getIdAp(), candidato.getDni(), candidato.getNombre(), candidato.getApellidos(),
                 candidato.getEmail(), candidato.getTelefono(), candidato.getTipoAp(), candidato.getFormacion(),
                 candidato.getExperiencia(), candidato.getDisponibilidad(), candidato.getLatitud(),
-                candidato.getLongitud(), candidato.isEstadoAceptado(), candidato.isActivo()
+                candidato.getLongitud(), candidato.isConsentimientoLopd(), candidato.isActivo()
         );
     }
 
@@ -58,15 +59,16 @@ public class CandidatoDao {
     }
 
     // U - UPDATE (Actualizar todos los datos de un candidato)
+    // U - UPDATE (Actualizar todos los datos de un candidato)
     public void updateCandidato(Candidato candidato) {
         jdbcTemplate.update(
-                "UPDATE AsistentePersonal SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, tipo_ap=?, formacion=?, experiencia=?, disponibilidad=?, latitud=?, longitud=?, estado_aceptado=?,  activo=? " +
+                "UPDATE AsistentePersonal SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, tipo_ap=?, formacion=?, experiencia=?, disponibilidad=?, latitud=?, longitud=?, consentimiento_lopd=?, activo=? " +
                         "WHERE id_ap=?",
                 candidato.getDni(), candidato.getNombre(), candidato.getApellidos(),
                 candidato.getEmail(), candidato.getTelefono(), candidato.getTipoAp(), candidato.getFormacion(),
                 candidato.getExperiencia(), candidato.getDisponibilidad(), candidato.getLatitud(),
-                candidato.getLongitud(), candidato.isEstadoAceptado(), candidato.isActivo(),
-                candidato.getIdAp() // El ID va al final para el WHERE
+                candidato.getLongitud(), candidato.isConsentimientoLopd(), candidato.isActivo(),
+                candidato.getIdAp()
         );
     }
 

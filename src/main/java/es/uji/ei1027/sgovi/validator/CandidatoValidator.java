@@ -36,5 +36,10 @@ public class CandidatoValidator implements Validator {
             errors.rejectValue("email", "invalid.candidato.email",
                     "El formato del correo electrónico no es válido.");
         }
+
+        if (!candidato.isConsentimientoLopd()) {
+            errors.rejectValue("consentimientoLopd", "required.candidato.lopd",
+                    "Debe aceptar el tratamiento de datos conforme a la LOPD/RGPD.");
+        }
     }
 }
