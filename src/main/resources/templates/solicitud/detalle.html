@@ -55,6 +55,14 @@
            class="text-success">
             Su solicitud ha sido aprobada. El equipo técnico le propondrá próximamente
             los candidatos más adecuados a sus necesidades.
+            <!-- En solicitud/detalle.html, dentro del bloque th:if estado == 'aprobada' -->
+        <p class="text-success">
+            Su solicitud ha sido aprobada. Puede explorar la bolsa de asistentes
+            y encontrar el perfil que mejor se adapte a sus necesidades.
+        </p>
+        <a th:href="@{/asistentes/buscar}" class="btn btn-success mt-2">
+            Buscar mi asistente personal →
+        </a>
         </p>
         <p th:if="${solicitud.estado == 'rechazada'}"
            class="text-danger">
