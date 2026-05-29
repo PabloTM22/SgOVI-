@@ -6,6 +6,7 @@ import es.uji.ei1027.sgovi.model.UserDetails;
 import es.uji.ei1027.sgovi.service.CandidatoService;
 import es.uji.ei1027.sgovi.validator.CandidatoValidator;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -48,9 +49,13 @@ public class CandidatoController {
     }
 
     @PostMapping("/registro")
-    public String registrarCandidatoSubmit(@ModelAttribute("candidato") Candidato candidato,
+    public String registrarCandidatoSubmit(@ModelAttribute("candidato") @Valid Candidato candidato,
                                            BindingResult bindingResult,
                                            @RequestParam("contrasena") String contrasena) {
+        if (contrasena == null || contrasena.isBlank()) {
+            bindingResult.rejectValue("dni", "required.contrasena",
+                    "La contraseña es obligatoria.");
+        }
         if (bindingResult.hasErrors()) {
             return "candidato/registro";
         }

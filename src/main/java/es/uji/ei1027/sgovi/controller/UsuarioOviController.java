@@ -6,6 +6,7 @@ import es.uji.ei1027.sgovi.model.UsuarioOvi;
 import es.uji.ei1027.sgovi.service.UsuarioOviService;
 import es.uji.ei1027.sgovi.validator.UsuarioOviValidator;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -60,11 +61,15 @@ public class UsuarioOviController {
     }
 
     @PostMapping("/alta")
-    public String altaSubmit(@ModelAttribute("usuario") UsuarioOvi usuario,
+    public String altaSubmit(@ModelAttribute("usuario") @Valid UsuarioOvi usuario,
                              BindingResult bindingResult,
                              @RequestParam("contrasena") String contrasena,
                              HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
+        if (contrasena == null || contrasena.isBlank()) {
+            bindingResult.rejectValue("dni", "required.contrasena",
+                    "La contraseña es obligatoria.");
+        }
         if (bindingResult.hasErrors()) {
             return "usuario/alta";
         }
@@ -84,7 +89,7 @@ public class UsuarioOviController {
 
     @PostMapping("/editar/{idUsuario}")
     public String editarSubmit(@PathVariable String idUsuario,
-                               @ModelAttribute("usuario") UsuarioOvi usuario,
+                               @ModelAttribute("usuario") @Valid UsuarioOvi usuario,
                                BindingResult bindingResult,
                                @RequestParam("contrasena") String contrasena,
                                HttpSession session) {

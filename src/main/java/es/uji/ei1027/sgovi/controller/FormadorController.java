@@ -6,6 +6,7 @@ import es.uji.ei1027.sgovi.model.UserDetails;
 import es.uji.ei1027.sgovi.service.FormadorService;
 import es.uji.ei1027.sgovi.validator.FormadorValidator;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -61,7 +62,7 @@ public class FormadorController {
     }
 
     @PostMapping("/alta")
-    public String altaSubmit(@ModelAttribute("formador") Formador formador,
+    public String altaSubmit(@ModelAttribute("formador") @Valid Formador formador,
                              BindingResult bindingResult,
                              HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
@@ -84,7 +85,7 @@ public class FormadorController {
 
     @PostMapping("/editar/{id}")
     public String editarSubmit(@PathVariable int id,
-                               @ModelAttribute("formador") Formador formador,
+                               @ModelAttribute("formador") @Valid Formador formador,
                                BindingResult bindingResult,
                                HttpSession session) {
         if (!esTecnico(session)) return "redirect:/login";
