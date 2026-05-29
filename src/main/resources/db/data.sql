@@ -52,10 +52,7 @@ INSERT INTO seleccion (id_solicitud, id_ap, id_tecnico, estado) VALUES
 (2, 'ap_marta01', 'tec_admin', 'propuesta');
 
 -- ---------------------------------------------------------------------
--- Usuario: copia centralizada de credenciales
--- (coexiste con contrasena en las tablas de dominio; el refactor real
--- ocurre en pasos siguientes)
--- NOTA: el formador se anyadira cuando id_formador pase a VARCHAR
+-- Credenciales centralizadas (fuente unica de autenticacion)
 -- ---------------------------------------------------------------------
 INSERT INTO usuario (username, password, rol, activo) VALUES
     ('tec_admin',    'EIaH2EW8ahPgasBvEkjGFZhvHE/NGJIy', 'TECNICO',     TRUE),
