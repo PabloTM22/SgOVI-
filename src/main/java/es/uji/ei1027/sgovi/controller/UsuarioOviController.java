@@ -91,7 +91,7 @@ public class UsuarioOviController {
             return "usuario/editar";
         }
         usuario.setIdUsuario(idUsuario);
-        usuarioOviDao.updateUsuario(usuario);
+        usuarioOviService.actualizarUsuario(usuario);
         return "redirect:/usuarios";
     }
 
