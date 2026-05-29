@@ -21,10 +21,9 @@ INSERT INTO tecnico (id_tecnico, dni, nombre, apellidos, email, telefono, activo
 -- ---------------------------------------------------------------------
 -- Usuarios OVI (uno aceptado para hacer login, otro pendiente)
 -- ---------------------------------------------------------------------
-INSERT INTO usuarioovi (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, aceptado_tecnico) VALUES
-('usr_carlos01', '22222222B', 'Carlos', 'Martinez Ruiz',  'carlos.martinez@test', '600222222', TRUE, TRUE),
-('usr_lucia02',  '33333333C', 'Lucia',  'Fernandez Gil',  'lucia.fernandez@test', '600333333', TRUE, FALSE);
-
+INSERT INTO usuarioovi (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, estado) VALUES
+('usr_carlos01', '22222222B', 'Carlos', 'Martinez Ruiz',  'carlos.martinez@test', '600222222', TRUE, 'aceptado'),
+('usr_lucia02',  '33333333C', 'Lucia',  'Fernandez Gil',  'lucia.fernandez@test', '600333333', TRUE, 'pendiente');
 -- ---------------------------------------------------------------------
 -- Candidatos PAP/PATI (uno aceptado, otro pendiente)
 -- Coordenadas: Castellon de la Plana (39.9864, -0.0513)

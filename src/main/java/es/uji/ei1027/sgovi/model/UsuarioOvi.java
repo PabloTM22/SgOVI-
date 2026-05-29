@@ -8,7 +8,7 @@ public class UsuarioOvi {
     private String email;
     private String telefono;
     private boolean consentimientoLopd;
-    private boolean aceptadoTecnico;
+    private String estado;
 
     public UsuarioOvi() {}
 
@@ -68,13 +68,9 @@ public class UsuarioOvi {
         this.consentimientoLopd = consentimientoLopd;
     }
 
-    public boolean isAceptadoTecnico() {
-        return aceptadoTecnico;
-    }
+    public String getEstado() { return estado; }
 
-    public void setAceptadoTecnico(boolean aceptadoTecnico) {
-        this.aceptadoTecnico = aceptadoTecnico;
-    }
+    public void setEstado(String estado) { this.estado = estado; }
 
     public String toString() {
         return "UsuarioOVI{" +
@@ -85,7 +81,7 @@ public class UsuarioOvi {
                 ", email='" + email + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", consentimientoLopd=" + consentimientoLopd +
-                ", aceptadoTecnico=" + aceptadoTecnico +
+                ", estado='" + estado + '\'' +
                 '}';
     }
 }

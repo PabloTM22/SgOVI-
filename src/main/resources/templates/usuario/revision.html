@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Usuarios pendientes de revisión</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Usuarios OVI pendientes de revisión</h2>
+
+    <div th:if="${mensajeExito}" class="alert alert-success" role="alert"
+         th:text="${mensajeExito}"></div>
+
+    <p th:if="${#lists.isEmpty(usuarios)}">No hay usuarios pendientes de revisión.</p>
+
+    <table th:unless="${#lists.isEmpty(usuarios)}" class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">DNI/NIE</th>
+            <th scope="col">Email</th>
+            <th scope="col">LOPD</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${usuarios}">
+            <td th:text="${u.nombre + ' ' + u.apellidos}"></td>
+            <td th:text="${u.dni}"></td>
+            <td th:text="${u.email}"></td>
+            <td th:text="${u.consentimientoLopd} ? 'Sí' : 'No'"></td>
+            <td>
+                <a th:href="@{/usuarios/detalle/{id}(id=${u.idUsuario})}"
+                   class="btn btn-sm btn-outline-primary">Ver y revisar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/usuarios}" class="btn btn-secondary">Volver al listado completo</a>
+
+</section>
+</body>
+</html>

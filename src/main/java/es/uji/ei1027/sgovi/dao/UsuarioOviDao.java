@@ -20,17 +20,15 @@ public class UsuarioOviDao {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    // C - CREATE (Añadir un usuario OVI)
     public void addUsuario(UsuarioOvi usuario) {
         jdbcTemplate.update(
-                "INSERT INTO UsuarioOVI (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, aceptado_tecnico) " +
+                "INSERT INTO UsuarioOVI (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, estado) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 usuario.getIdUsuario(), usuario.getDni(), usuario.getNombre(), usuario.getApellidos(),
-                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(), usuario.isAceptadoTecnico()
+                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(), usuario.getEstado()
         );
     }
 
-    // R - READ (Obtener un usuario por su ID)
     public UsuarioOvi getUsuario(String idUsuario) {
         try {
             return jdbcTemplate.queryForObject(
@@ -55,7 +53,6 @@ public class UsuarioOviDao {
         }
     }
 
-    // R - READ ALL (Obtener todos los usuarios)
     public List<UsuarioOvi> getUsuarios() {
         try {
             return jdbcTemplate.query(
@@ -67,18 +64,16 @@ public class UsuarioOviDao {
         }
     }
 
-    // U - UPDATE (Actualizar todos los datos de un usuario)
     public void updateUsuario(UsuarioOvi usuario) {
         jdbcTemplate.update(
-                "UPDATE UsuarioOVI SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, consentimiento_lopd=?, aceptado_tecnico=? " +
+                "UPDATE UsuarioOVI SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, consentimiento_lopd=?, estado=? " +
                         "WHERE id_usuario=?",
                 usuario.getDni(), usuario.getNombre(), usuario.getApellidos(),
-                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(), usuario.isAceptadoTecnico(),
+                usuario.getEmail(), usuario.getTelefono(), usuario.isConsentimientoLopd(), usuario.getEstado(),
                 usuario.getIdUsuario()
         );
     }
 
-    // D - DELETE (Borrar un usuario)
     public void deleteUsuario(String idUsuario) {
         jdbcTemplate.update(
                 "DELETE FROM UsuarioOVI WHERE id_usuario = ?",
@@ -86,24 +81,22 @@ public class UsuarioOviDao {
         );
     }
 
-    // Busca usuarios filtrando por si han sido aceptados por el técnico
-    public List<UsuarioOvi> findByAceptado(boolean aceptadoTecnico) {
+    public List<UsuarioOvi> findByEstado(String estado) {
         try {
             return jdbcTemplate.query(
-                    "SELECT * FROM UsuarioOVI WHERE aceptado_tecnico = ?",
+                    "SELECT * FROM UsuarioOVI WHERE estado = ? ORDER BY apellidos, nombre",
                     new UsuarioOviRowMapper(),
-                    aceptadoTecnico
+                    estado
             );
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
     }
 
-    // Actualiza SOLO el campo aceptado_tecnico
-    public void updateAceptado(String idUsuario, boolean aceptadoTecnico) {
+    public void updateEstado(String idUsuario, String estado) {
         jdbcTemplate.update(
-                "UPDATE UsuarioOVI SET aceptado_tecnico = ? WHERE id_usuario = ?",
-                aceptadoTecnico,
+                "UPDATE UsuarioOVI SET estado = ? WHERE id_usuario = ?",
+                estado,
                 idUsuario
         );
     }

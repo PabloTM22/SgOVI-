@@ -41,7 +41,8 @@ CREATE TABLE usuarioovi (
     email                VARCHAR(150) UNIQUE NOT NULL,
     telefono             VARCHAR(20),
     consentimiento_lopd  BOOLEAN      NOT NULL DEFAULT FALSE,
-    aceptado_tecnico     BOOLEAN      DEFAULT FALSE
+    estado               VARCHAR(20)  NOT NULL DEFAULT 'pendiente',
+    CHECK (estado IN ('pendiente', 'aceptado', 'rechazado'))
 );
 
 CREATE TABLE asistentepersonal (

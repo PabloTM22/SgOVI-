@@ -25,8 +25,7 @@ public class UsuarioOviService {
     public void registrarUsuario(UsuarioOvi usuarioOvi, String contrasenaClaro) {
         String idUsuario = "usr_" + UUID.randomUUID().toString().substring(0, 8);
         usuarioOvi.setIdUsuario(idUsuario);
-        usuarioOvi.setAceptadoTecnico(false);
-
+        usuarioOvi.setEstado("pendiente");
         BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
         String hash = encryptor.encryptPassword(contrasenaClaro);
 
@@ -47,5 +46,15 @@ public class UsuarioOviService {
             usuarioDao.updatePassword(usuarioOvi.getIdUsuario(), hash);
         }
         usuarioOviDao.updateUsuario(usuarioOvi);
+    }
+
+    public void aceptarUsuario(String idUsuario) {
+        usuarioOviDao.updateEstado(idUsuario, "aceptado");
+        usuarioDao.updateActivo(idUsuario, true);
+    }
+
+    public void rechazarUsuario(String idUsuario) {
+        usuarioOviDao.updateEstado(idUsuario, "rechazado");
+        usuarioDao.updateActivo(idUsuario, false);
     }
 }

@@ -102,6 +102,52 @@ public class UsuarioOviController {
         return "redirect:/usuarios";
     }
 
+    @GetMapping("/revision")
+    public String revision(HttpSession session, Model model) {
+        if (!esTecnico(session)) {
+            session.setAttribute("nextUrl", "/usuarios/revision");
+            return "redirect:/login";
+        }
+        model.addAttribute("usuarios", usuarioOviDao.findByEstado("pendiente"));
+        return "usuario/revision";
+    }
+
+    @GetMapping("/detalle/{idUsuario}")
+    public String detalle(@PathVariable String idUsuario, HttpSession session, Model model) {
+        if (!esTecnico(session)) {
+            session.setAttribute("nextUrl", "/usuarios/detalle/" + idUsuario);
+            return "redirect:/login";
+        }
+        UsuarioOvi usuario = usuarioOviDao.getUsuario(idUsuario);
+        if (usuario == null) {
+            return "redirect:/usuarios/revision";
+        }
+        model.addAttribute("usuario", usuario);
+        return "usuario/detalle";
+    }
+
+    @PostMapping("/aceptar/{idUsuario}")
+    public String aceptar(@PathVariable String idUsuario,
+                          HttpSession session,
+                          RedirectAttributes redirectAttributes) {
+        if (!esTecnico(session)) return "redirect:/login";
+        usuarioOviService.aceptarUsuario(idUsuario);
+        redirectAttributes.addFlashAttribute("mensajeExito",
+                "Usuario aceptado correctamente.");
+        return "redirect:/usuarios/revision";
+    }
+
+    @PostMapping("/rechazar/{idUsuario}")
+    public String rechazar(@PathVariable String idUsuario,
+                           HttpSession session,
+                           RedirectAttributes redirectAttributes) {
+        if (!esTecnico(session)) return "redirect:/login";
+        usuarioOviService.rechazarUsuario(idUsuario);
+        redirectAttributes.addFlashAttribute("mensajeExito",
+                "Usuario rechazado.");
+        return "redirect:/usuarios/revision";
+    }
+
     @PostMapping("/borrar/{idUsuario}")
     public String borrar(@PathVariable String idUsuario,
                          HttpSession session,
