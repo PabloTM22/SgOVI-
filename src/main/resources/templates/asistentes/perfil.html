@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+    RUTA DESTINO: src/main/resources/templates/asistente/perfil.html
+
+    Página de detalle de un asistente personal aceptado y activo.
+    Solo accesible para roles USUARIO_OVI y TECNICO (el controlador ya lo
+    comprueba y redirige a /login si no hay sesión válida).
+
+    Variable que llega del controlador (BusquedaAsistenteController):
+      - asistente : Candidato
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+  <title th:text="${asistente.nombre + ' ' + asistente.apellidos + ' — Perfil'}"
+         th:if="${asistente != null}">
+    Perfil asistente
+  </title>
+  <style>
+    /* ---- Tarjeta de perfil grande ---- */
+    .perfil-card {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: .6rem;
+        padding: 2rem 2.25rem;
+        max-width: 720px;
+    }
+
+    /* Cabecera: avatar + datos básicos */
+    .perfil-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .avatar-lg {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: #0d6efd;
+        color: #fff;
+        font-size: 1.6rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        letter-spacing: .03em;
+    }
+    .avatar-lg--pati {
+        background: #6f42c1;
+    }
+    .perfil-nombre {
+        font-size: 1.45rem;
+        font-weight: 700;
+        margin: 0 0 .2rem;
+        line-height: 1.15;
+    }
+    .perfil-tipo {
+        font-size: .875rem;
+        color: #6c757d;
+        margin: 0;
+    }
+
+    /* Sección de dato */
+    .perfil-section {
+        margin-bottom: 1.25rem;
+    }
+    .perfil-section h3 {
+        font-size: .75rem;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: #6c757d;
+        margin-bottom: .35rem;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: .25rem;
+    }
+    .perfil-section p {
+        font-size: .9rem;
+        color: #212529;
+        margin: 0;
+        white-space: pre-line;   /* respeta saltos de línea del texto libre */
+    }
+    .perfil-section .text-muted-italic {
+        font-style: italic;
+        color: #adb5bd;
+    }
+
+    /* Píldora tipo */
+    .tipo-badge {
+        display: inline-block;
+        padding: .3em .8em;
+        border-radius: 2rem;
+        font-size: .8rem;
+        font-weight: 600;
+        color: #fff;
+    }
+    .tipo-badge--pap  { background: #0d6efd; }
+    .tipo-badge--pati { background: #6f42c1; }
+  </style>
+</head>
+<body>
+<section layout:fragment="content">
+
+  <!-- Enlace de vuelta a la búsqueda -->
+  <div class="mb-3">
+    <a th:href="@{/asistentes/buscar}" class="btn btn-outline-secondary btn-sm">
+      ← Volver a la búsqueda
+    </a>
+  </div>
+
+  <!-- Tarjeta de perfil -->
+  <div class="perfil-card" th:if="${asistente != null}">
+
+    <!-- Cabecera -->
+    <header class="perfil-header">
+      <div class="avatar-lg"
+           th:classappend="${asistente.tipoAp == 'PATI'} ? ' avatar-lg--pati'"
+           aria-hidden="true"
+           th:text="${#strings.substring(asistente.nombre,0,1)
+                          + #strings.substring(asistente.apellidos,0,1)}">
+        AB
+      </div>
+      <div>
+        <p class="perfil-nombre"
+           th:text="${asistente.nombre + ' ' + asistente.apellidos}">
+          Nombre Apellido
+        </p>
+        <p class="perfil-tipo">
+                    <span class="tipo-badge"
+                          th:classappend="${asistente.tipoAp == 'PAP'} ? 'tipo-badge--pap' : 'tipo-badge--pati'"
+                          th:text="${asistente.tipoAp}">
+                        PAP
+                    </span>
+          — Asistente personal aceptado por la OVI
+        </p>
+      </div>
+    </header>
+
+    <!-- Disponibilidad -->
+    <div class="perfil-section">
+      <h3>Disponibilidad horaria</h3>
+      <p th:if="${asistente.disponibilidad != null and not #strings.isEmpty(asistente.disponibilidad)}"
+         th:text="${asistente.disponibilidad}">—</p>
+      <p class="text-muted-italic"
+         th:if="${asistente.disponibilidad == null or #strings.isEmpty(asistente.disponibilidad)}">
+        No especificada
+      </p>
+    </div>
+
+    <!-- Formación -->
+    <div class="perfil-section">
+      <h3>Formación académica</h3>
+      <p th:if="${asistente.formacion != null and not #strings.isEmpty(asistente.formacion)}"
+         th:text="${asistente.formacion}">—</p>
+      <p class="text-muted-italic"
+         th:if="${asistente.formacion == null or #strings.isEmpty(asistente.formacion)}">
+        No indicada
+      </p>
+    </div>
+
+    <!-- Experiencia -->
+    <div class="perfil-section">
+      <h3>Experiencia previa</h3>
+      <p th:if="${asistente.experiencia != null and not #strings.isEmpty(asistente.experiencia)}"
+         th:text="${asistente.experiencia}">—</p>
+      <p class="text-muted-italic"
+         th:if="${asistente.experiencia == null or #strings.isEmpty(asistente.experiencia)}">
+        No indicada
+      </p>
+    </div>
+
+    <!-- Localización (solo si tiene coordenadas) -->
+    <div class="perfil-section"
+         th:if="${asistente.latitud != null and asistente.longitud != null}">
+      <h3>Zona geográfica</h3>
+      <p>📍 Ubicación registrada (coordenadas disponibles para el sistema de propuesta)</p>
+    </div>
+
+    <!-- Nota de contacto: el usuario no puede contactar directamente,
+         el proceso va siempre a través de la OVI vía solicitud. -->
+    <div class="alert alert-info mt-3" role="note">
+      <strong>¿Te interesa este asistente?</strong>
+      Presenta una solicitud de asistencia personal y el personal técnico
+      de la OVI valorará a los candidatos más adecuados para tu caso.
+      <a th:href="@{/solicitudes/nueva}" class="alert-link ms-1">Presentar solicitud →</a>
+    </div>
+
+  </div>
+  <!-- fin tarjeta -->
+
+  <!-- Fallback si por alguna razón asistente fuera null (no debería ocurrir) -->
+  <div th:if="${asistente == null}" class="alert alert-warning">
+    No se ha podido cargar el perfil del asistente.
+    <a th:href="@{/asistentes/buscar}">Volver a la búsqueda</a>
+  </div>
+
+</section>
+</body>
+</html>
