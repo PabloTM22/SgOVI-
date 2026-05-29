@@ -83,13 +83,14 @@
             </div>
 
             <div class="row mb-3">
-                <label for="contrasena" class="col-sm-3 col-form-label">Contraseña de acceso: *</label>
+                <label for="contrasena" class="col-sm-3 col-form-label">Nueva contraseña:</label>
                 <div class="col-sm-6">
-                    <input type="password" id="contrasena" th:field="*{contrasena}"
-                           class="form-control"
-                           th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'"/>
-                    <div th:if="${#fields.hasErrors('contrasena')}"
-                         th:errors="*{contrasena}" class="error" role="alert"></div>
+                    <input type="password" id="contrasena" name="contrasena"
+                           class="form-control" autocomplete="new-password"
+                           aria-describedby="contrasenaHelp"/>
+                    <div id="contrasenaHelp" class="form-text">
+                        Déjelo en blanco para mantener la contraseña actual.
+                    </div>
                 </div>
             </div>
         </fieldset>

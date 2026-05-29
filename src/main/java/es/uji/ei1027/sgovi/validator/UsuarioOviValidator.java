@@ -53,7 +53,6 @@ public class UsuarioOviValidator implements Validator {
                     "El formato del correo electrónico no es válido.");
         }
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(
-                errors, "contrasena", "required.usuario.contrasena", "La contraseña es obligatoria.");
+
     }
 }
