@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS formador CASCADE;
 DROP TABLE IF EXISTS asistentepersonal CASCADE;
 DROP TABLE IF EXISTS usuarioovi CASCADE;
 DROP TABLE IF EXISTS tecnico CASCADE;
+DROP TABLE IF EXISTS usuario CASCADE;
 
 -- ---------------------------------------------------------------------
 -- Personas con cuenta de acceso
@@ -75,7 +76,7 @@ CREATE TABLE formador (
 );
 
 -- ---------------------------------------------------------------------
--- Sol·licituds de servei d'AP y selección de candidatos
+-- Sol·licituds de servei d'AP y seleccion de candidatos
 -- ---------------------------------------------------------------------
 
 CREATE TABLE solicitud_servicio_ap (
@@ -121,7 +122,7 @@ ALTER TABLE seleccion
     ON UPDATE CASCADE ON DELETE SET NULL;
 
 -- ---------------------------------------------------------------------
--- Comunicaciones del proceso de selección
+-- Comunicaciones del proceso de seleccion
 -- ---------------------------------------------------------------------
 
 CREATE TABLE comunicacionusuario (
@@ -160,7 +161,7 @@ ALTER TABLE comunicacionusuario
     ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- ---------------------------------------------------------------------
--- Contratos resultado de una selección aceptada
+-- Contratos resultado de una seleccion aceptada
 -- ---------------------------------------------------------------------
 
 CREATE TABLE registrocontrato (
@@ -183,7 +184,7 @@ ALTER TABLE registrocontrato
     ON UPDATE CASCADE ON DELETE SET NULL;
 
 -- ---------------------------------------------------------------------
--- Activitats de formació i divulgació
+-- Activitats de formacio i divulgacio
 -- ---------------------------------------------------------------------
 
 CREATE TABLE actividadformacion (
@@ -231,4 +232,18 @@ ALTER TABLE asistenciaformacion
     ADD CONSTRAINT asistenciaformacion_id_ap_fkey
     FOREIGN KEY (id_ap) REFERENCES asistentepersonal(id_ap)
     ON UPDATE CASCADE ON DELETE RESTRICT;
+
+-- ---------------------------------------------------------------------
+-- Tabla centralizada de credenciales
+-- (coexiste de momento con contrasena en las tablas de dominio;
+-- los pasos siguientes del refactor eliminaran la duplicacion)
+-- ---------------------------------------------------------------------
+
+CREATE TABLE usuario (
+    username   VARCHAR(50)  PRIMARY KEY,
+    password   VARCHAR(255) NOT NULL,
+    rol        VARCHAR(20)  NOT NULL,
+    activo     BOOLEAN      DEFAULT TRUE,
+    CHECK (rol IN ('TECNICO', 'USUARIO_OVI', 'CANDIDATO', 'FORMADOR'))
+);
 

@@ -52,3 +52,16 @@ INSERT INTO solicitud_servicio_ap (id_usuario, tipo_asistencia, estado, preferen
 INSERT INTO seleccion (id_solicitud, id_ap, id_tecnico, estado) VALUES
 (2, 'ap_marta01', 'tec_admin', 'propuesta');
 
+-- ---------------------------------------------------------------------
+-- Usuario: copia centralizada de credenciales
+-- (coexiste con contrasena en las tablas de dominio; el refactor real
+-- ocurre en pasos siguientes)
+-- NOTA: el formador se anyadira cuando id_formador pase a VARCHAR
+-- ---------------------------------------------------------------------
+INSERT INTO usuario (username, password, rol, activo) VALUES
+('tec_admin',    'EIaH2EW8ahPgasBvEkjGFZhvHE/NGJIy', 'TECNICO',     TRUE),
+('usr_carlos01', 'Rj4v6490+H09GTCAUO5ErCmRYufSwih3', 'USUARIO_OVI', TRUE),
+('usr_lucia02',  'dXeixdvomvLSk/2BKgEWODJEunR5iHIo', 'USUARIO_OVI', TRUE),
+('ap_marta01',   'PYzKxla7faXF5nVi4mCoQRoqpePhwxWy', 'CANDIDATO',   TRUE),
+('ap_jorge02',   'HNmHw8/H8narWF8t1PS7qfN1tR7DOY/D', 'CANDIDATO',   TRUE);
+
