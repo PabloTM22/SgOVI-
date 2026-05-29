@@ -29,10 +29,9 @@ INSERT INTO usuarioovi (id_usuario, dni, nombre, apellidos, email, telefono, con
 -- Candidatos PAP/PATI (uno aceptado, otro pendiente)
 -- Coordenadas: Castellon de la Plana (39.9864, -0.0513)
 -- ---------------------------------------------------------------------
-INSERT INTO asistentepersonal (id_ap, dni, nombre, apellidos, email, telefono, tipo_ap, formacion, experiencia, disponibilidad, latitud, longitud, consentimiento_lopd, activo) VALUES
-    ('ap_marta01', '44444444D', 'Marta', 'Lopez Sanchez', 'marta.lopez@test',  '600444444', 'PAP',  'Grado en Trabajo Social',  '3 anyos en residencias',          'Mananas L-V', 39.9864, -0.0513, TRUE, TRUE),
-    ('ap_jorge02', '55555555E', 'Jorge', 'Ruiz Vidal',    'jorge.ruiz@test',   '600555555', 'PATI', 'Tecnico en Atencion Infantil', '1 anyo en centro educativo', 'Tardes L-V', 39.9700, -0.0400, TRUE, TRUE);
--- ---------------------------------------------------------------------
+INSERT INTO asistentepersonal (id_ap, dni, nombre, apellidos, email, telefono, tipo_ap, formacion, experiencia, disponibilidad, latitud, longitud, consentimiento_lopd, estado_aceptado, activo) VALUES
+    ('ap_marta01', '44444444D', 'Marta', 'Lopez Sanchez', 'marta.lopez@test',  '600444444', 'PAP',  'Grado en Trabajo Social',  '3 anyos en residencias',          'Mananas L-V', 39.9864, -0.0513, TRUE, TRUE,  TRUE),
+    ('ap_jorge02', '55555555E', 'Jorge', 'Ruiz Vidal',    'jorge.ruiz@test',   '600555555', 'PATI', 'Tecnico en Atencion Infantil', '1 anyo en centro educativo', 'Tardes L-V', 39.9700, -0.0400, TRUE, FALSE, TRUE);-- ---------------------------------------------------------------------
 -- Formadores
 -- ---------------------------------------------------------------------
 INSERT INTO formador (id_formador, dni, nombre, apellidos, email, telefono) VALUES

@@ -58,6 +58,7 @@ CREATE TABLE asistentepersonal (
     latitud              DECIMAL(9,6),
     longitud             DECIMAL(9,6),
     consentimiento_lopd  BOOLEAN        NOT NULL DEFAULT FALSE,
+    estado_aceptado      BOOLEAN        DEFAULT FALSE,
     activo               BOOLEAN        DEFAULT TRUE,
     CHECK (tipo_ap IN ('PAP', 'PATI'))
 );
