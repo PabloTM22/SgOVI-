@@ -80,3 +80,248 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #0b5ed7;
 }
+
+/* =====================================================
+   Bolsa de asistentes — buscador y perfil
+   ===================================================== */
+
+/* --- Barra de filtros --- */
+.filtros-card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: .5rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.filtros-card legend,
+.filtros-card summary {
+    font-weight: 600;
+    font-size: .9rem;
+    color: #495057;
+    cursor: pointer;
+}
+
+/* Triángulo del <details> nativo */
+.filtros-card details summary {
+    list-style: none;
+    user-select: none;
+}
+
+.filtros-card details summary::before {
+    content: '▸ ';
+}
+
+.filtros-card details[open] summary::before {
+    content: '▾ ';
+}
+
+/* --- Contador de resultados --- */
+.resultado-count {
+    font-size: .875rem;
+    color: #6c757d;
+    margin-bottom: .75rem;
+}
+
+/* --- Grid de tarjetas --- */
+.asistente-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+/* --- Tarjeta individual --- */
+.asistente-card {
+    border: 1px solid #dee2e6;
+    border-radius: .5rem;
+    padding: 1.1rem 1.25rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    transition: box-shadow .15s;
+}
+
+.asistente-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .1);
+}
+
+/* Cabecera de la tarjeta: avatar + nombre */
+.asistente-card__header {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+}
+
+/* Avatar circular con iniciales — buscador (48px) */
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: .03em;
+}
+
+.avatar--pati {
+    background: #6f42c1;
+}
+
+.asistente-card__nombre {
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.asistente-card__subtitulo {
+    font-size: .8rem;
+    color: #6c757d;
+    margin: .1rem 0 0;
+}
+
+/* Píldoras de la tarjeta */
+.asistente-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+
+/* Lista de datos clave */
+.asistente-card__datos {
+    font-size: .85rem;
+    color: #495057;
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.asistente-card__datos li + li {
+    margin-top: .1rem;
+}
+
+/* Enlace "Ver perfil" al pie de la tarjeta */
+.asistente-card__cta {
+    margin-top: auto;
+    font-size: .875rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: #0d6efd;
+    align-self: flex-start;
+}
+
+.asistente-card__cta:hover {
+    text-decoration: underline;
+}
+
+/* --- Estado vacío (sin resultados) --- */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-top: .5rem;
+}
+
+/* =====================================================
+   Perfil detalle de asistente
+   ===================================================== */
+
+.perfil-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .6rem;
+    padding: 2rem 2.25rem;
+    max-width: 720px;
+}
+
+/* Cabecera perfil: avatar grande + datos básicos */
+.perfil-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Avatar perfil (72px) */
+.avatar-lg {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: .03em;
+}
+
+.avatar-lg--pati {
+    background: #6f42c1;
+}
+
+.perfil-nombre {
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin: 0 0 .2rem;
+    line-height: 1.15;
+}
+
+.perfil-tipo {
+    font-size: .875rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Secciones de datos del perfil */
+.perfil-section {
+    margin-bottom: 1.25rem;
+}
+
+.perfil-section h3 {
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #6c757d;
+    margin-bottom: .35rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: .25rem;
+}
+
+.perfil-section p {
+    font-size: .9rem;
+    color: #212529;
+    margin: 0;
+    white-space: pre-line;
+}
+
+.perfil-section .text-muted-italic {
+    font-style: italic;
+    color: #adb5bd;
+}
+
+/* Píldora de tipo en el perfil */
+.tipo-badge {
+    display: inline-block;
+    padding: .3em .8em;
+    border-radius: 2rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.tipo-badge--pap  { background: #0d6efd; }
+.tipo-badge--pati { background: #6f42c1; }
+
