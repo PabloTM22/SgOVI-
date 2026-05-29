@@ -15,23 +15,23 @@
 -- ---------------------------------------------------------------------
 -- Tecnicos
 -- ---------------------------------------------------------------------
-INSERT INTO tecnico (id_tecnico, dni, nombre, apellidos, email, telefono, contrasena, activo) VALUES
-('tec_admin', '11111111A', 'Ana', 'Garcia Lopez', 'ana.garcia@ovi.test', '964111111', 'EIaH2EW8ahPgasBvEkjGFZhvHE/NGJIy', TRUE);
+INSERT INTO tecnico (id_tecnico, dni, nombre, apellidos, email, telefono, activo) VALUES
+    ('tec_admin', '11111111A', 'Ana', 'Garcia Lopez', 'ana.garcia@ovi.test', '964111111', TRUE);
 
 -- ---------------------------------------------------------------------
 -- Usuarios OVI (uno aceptado para hacer login, otro pendiente)
 -- ---------------------------------------------------------------------
-INSERT INTO usuarioovi (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, contrasena, aceptado_tecnico) VALUES
-('usr_carlos01', '22222222B', 'Carlos', 'Martinez Ruiz',  'carlos.martinez@test', '600222222', TRUE, 'Rj4v6490+H09GTCAUO5ErCmRYufSwih3', TRUE),
-('usr_lucia02',  '33333333C', 'Lucia',  'Fernandez Gil',  'lucia.fernandez@test', '600333333', TRUE, 'dXeixdvomvLSk/2BKgEWODJEunR5iHIo', FALSE);
+INSERT INTO usuarioovi (id_usuario, dni, nombre, apellidos, email, telefono, consentimiento_lopd, aceptado_tecnico) VALUES
+('usr_carlos01', '22222222B', 'Carlos', 'Martinez Ruiz',  'carlos.martinez@test', '600222222', TRUE, TRUE),
+('usr_lucia02',  '33333333C', 'Lucia',  'Fernandez Gil',  'lucia.fernandez@test', '600333333', TRUE, FALSE);
 
 -- ---------------------------------------------------------------------
 -- Candidatos PAP/PATI (uno aceptado, otro pendiente)
 -- Coordenadas: Castellon de la Plana (39.9864, -0.0513)
 -- ---------------------------------------------------------------------
-INSERT INTO asistentepersonal (id_ap, dni, nombre, apellidos, email, telefono, tipo_ap, formacion, experiencia, disponibilidad, latitud, longitud, estado_aceptado, contrasena, activo) VALUES
-('ap_marta01', '44444444D', 'Marta', 'Lopez Sanchez', 'marta.lopez@test',  '600444444', 'PAP',  'Grado en Trabajo Social',  '3 anyos en residencias',          'Mananas L-V', 39.9864, -0.0513, TRUE,  'PYzKxla7faXF5nVi4mCoQRoqpePhwxWy', TRUE),
-('ap_jorge02', '55555555E', 'Jorge', 'Ruiz Vidal',    'jorge.ruiz@test',   '600555555', 'PATI', 'Tecnico en Atencion Infantil', '1 anyo en centro educativo', 'Tardes L-V', 39.9700, -0.0400, FALSE, 'HNmHw8/H8narWF8t1PS7qfN1tR7DOY/D', TRUE);
+INSERT INTO asistentepersonal (id_ap, dni, nombre, apellidos, email, telefono, tipo_ap, formacion, experiencia, disponibilidad, latitud, longitud, estado_aceptado, activo) VALUES
+('ap_marta01', '44444444D', 'Marta', 'Lopez Sanchez', 'marta.lopez@test',  '600444444', 'PAP',  'Grado en Trabajo Social',  '3 anyos en residencias', 'Mananas L-V', 39.9864, -0.0513, TRUE,  TRUE),
+('ap_jorge02', '55555555E', 'Jorge', 'Ruiz Vidal',    'jorge.ruiz@test',   '600555555', 'PATI', 'Tecnico en Atencion Infantil', '1 anyo en centro educativo', 'Tardes L-V', 39.9700, -0.0400, FALSE, TRUE);
 
 -- ---------------------------------------------------------------------
 -- Formadores

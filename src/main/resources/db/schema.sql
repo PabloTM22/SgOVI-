@@ -30,7 +30,6 @@ CREATE TABLE tecnico (
     apellidos    VARCHAR(150) NOT NULL,
     email        VARCHAR(150) UNIQUE NOT NULL,
     telefono     VARCHAR(20),
-    contrasena   VARCHAR(255) NOT NULL,
     activo       BOOLEAN      DEFAULT TRUE
 );
 
@@ -42,7 +41,6 @@ CREATE TABLE usuarioovi (
     email                VARCHAR(150) UNIQUE NOT NULL,
     telefono             VARCHAR(20),
     consentimiento_lopd  BOOLEAN      NOT NULL DEFAULT FALSE,
-    contrasena           VARCHAR(255) NOT NULL,
     aceptado_tecnico     BOOLEAN      DEFAULT FALSE
 );
 
@@ -60,7 +58,6 @@ CREATE TABLE asistentepersonal (
     latitud          DECIMAL(9,6),
     longitud         DECIMAL(9,6),
     estado_aceptado  BOOLEAN        DEFAULT FALSE,
-    contrasena       VARCHAR(255)   NOT NULL,
     activo           BOOLEAN        DEFAULT TRUE,
     CHECK (tipo_ap IN ('PAP', 'PATI'))
 );
