@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Editar contrato</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Editar fecha de fin del contrato</h2>
+
+    <p class="text-body-secondary">
+        Asistente: <span th:text="${candidato != null ? candidato.nombre + ' ' + candidato.apellidos : 'No disponible'}"></span>
+        &nbsp;·&nbsp;
+        Inicio: <span th:text="${#temporals.format(contrato.fechaInicio, 'dd/MM/yyyy')}"></span>
+    </p>
+
+    <div th:if="${errorContrato}" class="alert alert-danger" role="alert" th:text="${errorContrato}"></div>
+
+    <form th:action="@{/contratos/{id}/editar(id=${contrato.idContrato})}" method="post">
+        <div class="mb-3">
+            <label for="fechaFin" class="form-label">Fecha de fin</label>
+            <input type="date" id="fechaFin" name="fechaFin" class="form-control"
+                   th:value="${contrato.fechaFin != null ? #temporals.format(contrato.fechaFin, 'yyyy-MM-dd') : ''}">
+            <div class="form-text">Déjela vacía si el contrato no tiene fecha de fin definida.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a th:href="@{/contratos/{id}(id=${contrato.idContrato})}" class="btn btn-secondary">Cancelar</a>
+    </form>
+
+</section>
+</body>
+</html>
