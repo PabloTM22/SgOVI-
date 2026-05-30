@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Nuevo contrato</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Formalizar contrato</h2>
+
+    <p class="text-body-secondary">
+        Asistente: <span th:text="${candidato != null ? candidato.nombre + ' ' + candidato.apellidos : 'No disponible'}"></span>
+        &nbsp;·&nbsp;
+        Persona usuaria: <span th:text="${usuario != null ? usuario.nombre + ' ' + usuario.apellidos : 'No disponible'}"></span>
+        &nbsp;·&nbsp;
+        Tipo: <span th:text="${solicitud.tipoAsistencia}"></span>
+    </p>
+
+    <div th:if="${errorContrato}" class="alert alert-danger" role="alert" th:text="${errorContrato}"></div>
+
+    <form th:action="@{/contratos/nuevo/{id}(id=${seleccion.idSeleccion})}"
+          th:object="${contrato}" method="post" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+            <input type="date" id="fechaInicio" class="form-control"
+                   th:field="*{fechaInicio}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="fechaFin" class="form-label">Fecha de fin (opcional)</label>
+            <input type="date" id="fechaFin" class="form-control"
+                   th:field="*{fechaFin}">
+        </div>
+
+        <div class="mb-3">
+            <label for="file" class="form-label">Documento del contrato (PDF, opcional)</label>
+            <input type="file" id="file" name="file" class="form-control" accept="application/pdf">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrar contrato</button>
+        <a th:href="@{/tecnico/solicitudes/{id}/candidatos(id=${solicitud.idSolicitud})}"
+           class="btn btn-secondary">Cancelar</a>
+    </form>
+
+</section>
+</body>
+</html>
