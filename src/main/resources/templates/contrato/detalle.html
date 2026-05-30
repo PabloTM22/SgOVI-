@@ -65,8 +65,18 @@
     <div class="d-flex gap-2 mt-3">
         <a th:if="${esTecnico}" th:href="@{/contratos/{id}/editar(id=${contrato.idContrato})}"
            class="btn btn-outline-primary">Editar fecha de fin</a>
-        <a th:href="@{/solicitudes/{id}(id=${solicitud.idSolicitud})}" class="btn btn-secondary">
+
+        <a th:if="${session.user.rol == 'TECNICO'}"
+           th:href="@{/tecnico/solicitudes}" class="btn btn-secondary">
+            Volver al panel técnico
+        </a>
+        <a th:if="${session.user.rol == 'USUARIO_OVI'}"
+           th:href="@{/solicitudes/{id}(id=${solicitud.idSolicitud})}" class="btn btn-secondary">
             Volver a la solicitud
+        </a>
+        <a th:if="${session.user.rol == 'CANDIDATO'}"
+           th:href="@{/}" class="btn btn-secondary">
+            Volver al inicio
         </a>
     </div>
 
