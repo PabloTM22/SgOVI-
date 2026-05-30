@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+  <title>Mi perfil de asistente</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+  <h2>Mi perfil de asistente personal</h2>
+
+  <div th:if="${mensajeExito}" class="alert alert-success" role="alert" th:text="${mensajeExito}"></div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="h5 card-title"
+          th:text="${asistente.nombre + ' ' + asistente.apellidos}"></h3>
+      <p class="mb-1">
+        <span class="fw-bold">Tipo:</span>
+        <span th:text="${asistente.tipoAp}"></span>
+        &nbsp;·&nbsp;
+        <span class="fw-bold">Estado en la OVI:</span>
+        <span th:text="${asistente.estado}"
+              th:classappend="${asistente.estado == 'aceptado'} ? 'badge bg-success' : 'badge bg-secondary'"></span>
+      </p>
+      <dl class="row mb-0">
+        <dt class="col-sm-3">Correo</dt>
+        <dd class="col-sm-9" th:text="${asistente.email}"></dd>
+        <dt class="col-sm-3">Teléfono</dt>
+        <dd class="col-sm-9"
+            th:text="${asistente.telefono != null and !#strings.isEmpty(asistente.telefono) ? asistente.telefono : 'No indicado'}"></dd>
+        <dt class="col-sm-3">Disponibilidad</dt>
+        <dd class="col-sm-9"
+            th:text="${asistente.disponibilidad != null and !#strings.isEmpty(asistente.disponibilidad) ? asistente.disponibilidad : 'No indicada'}"></dd>
+        <dt class="col-sm-3">Formación</dt>
+        <dd class="col-sm-9"
+            th:text="${asistente.formacion != null and !#strings.isEmpty(asistente.formacion) ? asistente.formacion : 'No indicada'}"></dd>
+        <dt class="col-sm-3">Experiencia</dt>
+        <dd class="col-sm-9"
+            th:text="${asistente.experiencia != null and !#strings.isEmpty(asistente.experiencia) ? asistente.experiencia : 'No indicada'}"></dd>
+      </dl>
+      <a th:href="@{/mi-perfil/editar}" class="btn btn-primary mt-3">Editar mis datos</a>
+    </div>
+  </div>
+
+  <h3 class="h5">Propuestas en las que participo</h3>
+  <p th:if="${#lists.isEmpty(propuestas)}" class="alert alert-info" role="alert">
+    Todavía no se le ha propuesto para ninguna solicitud de asistencia.
+  </p>
+
+  <ul class="list-group" th:unless="${#lists.isEmpty(propuestas)}">
+    <li class="list-group-item" th:each="s : ${propuestas}"
+        th:with="sol=${solicitudes[s.idSeleccion]}">
+      <div class="d-flex justify-content-between align-items-center">
+                <span>
+                    <span class="fw-bold">Solicitud de tipo</span>
+                    <span th:text="${sol != null ? sol.tipoAsistencia : '—'}"></span>
+                    <span th:text="${s.estado}"
+                          th:classappend="
+                            ${s.estado == 'propuesta'}   ? 'badge bg-secondary ms-2'     :
+                            (${s.estado == 'contactada'} ? 'badge bg-info text-dark ms-2' :
+                            (${s.estado == 'aceptada'}   ? 'badge bg-success ms-2'        :
+                            'badge bg-danger ms-2'))"></span>
+                </span>
+        <span class="d-flex gap-2">
+                    <a th:href="@{/comunicaciones/seleccion/{sid}(sid=${s.idSeleccion})}"
+                       class="btn btn-sm btn-outline-secondary">Mensajes</a>
+                    <a th:if="${contratoPorSeleccion.containsKey(s.idSeleccion)}"
+                       th:href="@{/contratos/{id}(id=${contratoPorSeleccion.get(s.idSeleccion)})}"
+                       class="btn btn-sm btn-outline-primary">Ver contrato</a>
+                </span>
+      </div>
+    </li>
+  </ul>
+
+  <a th:href="@{/}" class="btn btn-secondary mt-3">Volver al inicio</a>
+
+</section>
+</body>
+</html>

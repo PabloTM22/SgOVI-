@@ -42,7 +42,7 @@
 
     <!-- Usuario OVI autenticado -->
     <div th:if="${session.user != null and session.user.rol == 'USUARIO_OVI'}">
-        <h5 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h5>
+        <h3 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h3>
         <div class="row g-3 mt-1">
             <div class="col-sm-4">
                 <div class="card h-100">
@@ -108,10 +108,20 @@
         </div>
     </div>
 
-    <!-- Asistente personal autenticado -->
-    <div th:if="${session.user != null and session.user.rol == 'ASISTENTE'}">
+    <!-- Asistente personal (candidato) autenticado -->
+    <div th:if="${session.user != null and session.user.rol == 'CANDIDATO'}">
         <h3 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h3>
-        <p class="text-body-secondary">Su perfil está activo en la bolsa de candidatos de la OVI.</p>
+        <div class="row g-3 mt-1">
+            <div class="col-sm-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">Mi perfil</h4>
+                        <p class="card-text small">Consulte sus propuestas, mensajes y contratos, y edite sus datos.</p>
+                        <a th:href="@{/mi-perfil}" class="btn btn-primary btn-sm">Ir a mi perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Formador autenticado -->

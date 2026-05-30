@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+  <title>Editar mis datos</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+  <h2>Editar mis datos</h2>
+
+  <p class="text-body-secondary">
+    Puede actualizar sus datos de contacto y profesionales. El tipo de asistencia
+    y su estado en la OVI los gestiona el equipo técnico.
+  </p>
+
+  <div th:if="${errorPerfil}" class="alert alert-danger" role="alert" th:text="${errorPerfil}"></div>
+
+  <form th:action="@{/mi-perfil/editar}" th:object="${asistente}" method="post">
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo electrónico</label>
+      <input type="email" id="email" class="form-control" th:field="*{email}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="telefono" class="form-label">Teléfono</label>
+      <input type="text" id="telefono" class="form-control" th:field="*{telefono}">
+    </div>
+
+    <div class="mb-3">
+      <label for="disponibilidad" class="form-label">Disponibilidad horaria</label>
+      <input type="text" id="disponibilidad" class="form-control" th:field="*{disponibilidad}"
+             placeholder="Ej.: Mañanas de lunes a viernes">
+    </div>
+
+    <div class="mb-3">
+      <label for="formacion" class="form-label">Formación académica</label>
+      <textarea id="formacion" class="form-control" rows="3" th:field="*{formacion}"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="experiencia" class="form-label">Experiencia previa</label>
+      <textarea id="experiencia" class="form-control" rows="3" th:field="*{experiencia}"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a th:href="@{/mi-perfil}" class="btn btn-secondary">Cancelar</a>
+  </form>
+
+</section>
+</body>
+</html>

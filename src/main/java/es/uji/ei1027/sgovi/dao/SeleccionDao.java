@@ -59,6 +59,17 @@ public class SeleccionDao {
         }
     }
 
+    public List<Seleccion> findByAp(String idAp) {
+        try {
+            return jdbcTemplate.query(
+                    "SELECT * FROM seleccion WHERE id_ap = ? ORDER BY fecha_propuesta DESC",
+                    new SeleccionRowMapper(), idAp
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
     public void updateEstado(int idSeleccion, String nuevoEstado) {
         jdbcTemplate.update(
                 "UPDATE seleccion SET estado = ? WHERE id_seleccion = ?",
