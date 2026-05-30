@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/tecnico")
@@ -78,6 +79,12 @@ public class TecnicoController {
         List<String> idsYaSeleccionados = seleccionesExistentes.stream()
                 .map(Seleccion::getIdAp)
                 .collect(java.util.stream.Collectors.toList());
+        Map<Integer, Candidato> candidatosSeleccion = new java.util.LinkedHashMap<>();
+        for (Seleccion s : seleccionesExistentes) {
+            candidatosSeleccion.put(s.getIdSeleccion(), candidatoDao.getCandidato(s.getIdAp()));
+        }
+        model.addAttribute("selecciones", seleccionesExistentes);
+        model.addAttribute("candidatosSeleccion", candidatosSeleccion);
         model.addAttribute("solicitud", solicitud);
         model.addAttribute("candidatos", candidatos);
         model.addAttribute("idsYaSeleccionados", idsYaSeleccionados);
@@ -110,6 +117,27 @@ public class TecnicoController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorSeleccion", "Error al seleccionar: " + e.getMessage());
         }
+        return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
+    }
+
+    @PostMapping("/solicitudes/{idSolicitud}/retirar/{idSeleccion}")
+    public String retirarSeleccion(@PathVariable int idSolicitud,
+                                   @PathVariable int idSeleccion,
+                                   HttpSession session,
+                                   org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+        if (!esTecnico(session)) return "redirect:/login";
+        Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
+        if (seleccion == null || seleccion.getIdSolicitud() != idSolicitud) {
+            redirectAttributes.addFlashAttribute("errorSeleccion", "Selección no encontrada.");
+            return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
+        }
+        if (!("propuesta".equals(seleccion.getEstado()) || "contactada".equals(seleccion.getEstado()))) {
+            redirectAttributes.addFlashAttribute("errorSeleccion",
+                    "Solo se puede retirar una propuesta que no haya sido aceptada ni descartada.");
+            return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
+        }
+        seleccionDao.deleteSeleccion(idSeleccion);
+        redirectAttributes.addFlashAttribute("mensajeExito", "Propuesta retirada correctamente.");
         return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
     }
 }
