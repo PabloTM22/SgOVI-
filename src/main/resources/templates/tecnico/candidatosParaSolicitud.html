@@ -29,6 +29,7 @@
     <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
     <div th:if="${mensajeInfo}" class="alert alert-info" th:text="${mensajeInfo}"></div>
     <div th:if="${errorSeleccion}" class="alert alert-danger" th:text="${errorSeleccion}"></div>
+    <div th:if="${errorContrato}" class="alert alert-danger" th:text="${errorContrato}"></div>
 
     <h3 class="h5 mt-2">Propuestas actuales</h3>
     <p th:if="${#lists.isEmpty(selecciones)}" class="text-body-secondary">
@@ -46,15 +47,20 @@
                         (${s.estado == 'aceptada'}   ? 'badge bg-success ms-2'        :
                         'badge bg-danger ms-2'))"></span>
             </span>
-            <form th:if="${s.estado == 'propuesta' or s.estado == 'contactada'}"
-                  th:action="@{/tecnico/solicitudes/{idS}/retirar/{sid}(idS=${solicitud.idSolicitud},sid=${s.idSeleccion})}"
-                  method="post"
-                  onsubmit="return confirm('¿Seguro que desea retirar esta propuesta?');">
-                <button type="submit" class="btn btn-sm btn-outline-danger"
-                        th:attr="aria-label=${'Retirar a ' + (c != null ? c.nombre + ' ' + c.apellidos : 'este asistente')}">
-                    Retirar
-                </button>
-            </form>
+            <span class="d-flex gap-2">
+                <form th:if="${s.estado == 'propuesta' or s.estado == 'contactada'}"
+                      th:action="@{/tecnico/solicitudes/{idS}/retirar/{sid}(idS=${solicitud.idSolicitud},sid=${s.idSeleccion})}"
+                      method="post"
+                      onsubmit="return confirm('¿Seguro que desea retirar esta propuesta?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                            th:attr="aria-label=${'Retirar a ' + (c != null ? c.nombre + ' ' + c.apellidos : 'este asistente')}">
+                        Retirar
+                    </button>
+                </form>
+                <a th:if="${s.estado == 'aceptada'}"
+                   th:href="@{/contratos/nuevo/{sid}(sid=${s.idSeleccion})}"
+                   class="btn btn-sm btn-primary">Formalizar contrato</a>
+            </span>
         </li>
     </ul>
 
