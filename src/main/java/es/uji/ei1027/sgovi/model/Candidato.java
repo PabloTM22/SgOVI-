@@ -14,7 +14,7 @@ public class Candidato {
     private String disponibilidad;
     private Double latitud;
     private Double longitud;
-    private boolean estadoAceptado;
+    private String estado;
     private boolean activo;
     private boolean consentimientoLopd;
 
@@ -58,8 +58,8 @@ public class Candidato {
     public Double getLongitud() { return longitud; }
     public void setLongitud(Double longitud) { this.longitud = longitud; }
 
-    public boolean isEstadoAceptado() { return estadoAceptado; }
-    public void setEstadoAceptado(boolean estadoAceptado) { this.estadoAceptado = estadoAceptado; }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }
@@ -82,7 +82,7 @@ public class Candidato {
                 ", disponibilidad='" + disponibilidad + '\'' +
                 ", latitud=" + latitud +
                 ", longitud=" + longitud +
-                ", estadoAceptado=" + estadoAceptado +
+                ", estado='" + estado + '\'' +
                 ", activo=" + activo +
                 ", consentimientoLopd=" + consentimientoLopd +
                 '}';

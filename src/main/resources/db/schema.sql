@@ -59,11 +59,11 @@ CREATE TABLE asistentepersonal (
     latitud              DECIMAL(9,6),
     longitud             DECIMAL(9,6),
     consentimiento_lopd  BOOLEAN        NOT NULL DEFAULT FALSE,
-    estado_aceptado      BOOLEAN        DEFAULT FALSE,
+    estado               VARCHAR(20)    NOT NULL DEFAULT 'pendiente',
     activo               BOOLEAN        DEFAULT TRUE,
-    CHECK (tipo_ap IN ('PAP', 'PATI'))
+    CHECK (tipo_ap IN ('PAP', 'PATI')),
+    CHECK (estado IN ('pendiente', 'aceptado', 'rechazado'))
 );
-
 CREATE TABLE formador (
     id_formador  VARCHAR(50)  PRIMARY KEY,
     dni          VARCHAR(15)  UNIQUE NOT NULL,

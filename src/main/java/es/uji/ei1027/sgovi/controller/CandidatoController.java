@@ -69,28 +69,44 @@ public class CandidatoController {
             session.setAttribute("nextUrl", "/candidatos/revision");
             return "redirect:/login";
         }
-        model.addAttribute("candidatos", candidatoDao.findByStatus(false));
+        model.addAttribute("candidatos", candidatoDao.findByEstado("pendiente"));
         return "candidato/revision";
     }
 
     @PostMapping("/aceptar/{idAp}")
-    public String aceptarCandidato(@PathVariable String idAp, HttpSession session) {
+    public String aceptarCandidato(@PathVariable String idAp,
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
         if (!esTecnico(session)) return "redirect:/login";
-        candidatoDao.updateStatus(idAp, true);
+        candidatoService.aceptarCandidato(idAp);
+        redirectAttributes.addFlashAttribute("mensajeExito",
+                "Candidato aceptado correctamente.");
         return "redirect:/candidatos/revision";
     }
+
 
     @PostMapping("/rechazar/{idAp}")
     public String rechazarCandidato(@PathVariable String idAp,
                                     HttpSession session,
                                     RedirectAttributes redirectAttributes) {
         if (!esTecnico(session)) return "redirect:/login";
-        try {
-            candidatoDao.deleteCandidato(idAp);
-        } catch (DataIntegrityViolationException e) {
-            redirectAttributes.addFlashAttribute("errorBorrar",
-                    "No se puede eliminar el candidato porque tiene selecciones asociadas.");
-        }
+        candidatoService.rechazarCandidato(idAp);
+        redirectAttributes.addFlashAttribute("mensajeExito",
+                "Candidato rechazado.");
         return "redirect:/candidatos/revision";
+    }
+
+    @GetMapping("/detalle/{idAp}")
+    public String detalle(@PathVariable String idAp, HttpSession session, Model model) {
+        if (!esTecnico(session)) {
+            session.setAttribute("nextUrl", "/candidatos/detalle/" + idAp);
+            return "redirect:/login";
+        }
+        Candidato candidato = candidatoDao.getCandidato(idAp);
+        if (candidato == null) {
+            return "redirect:/candidatos/revision";
+        }
+        model.addAttribute("candidato", candidato);
+        return "candidato/detalle";
     }
 }

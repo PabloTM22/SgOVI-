@@ -25,7 +25,7 @@ public class CandidatoService {
     public void registrarCandidato(Candidato candidato, String contrasenaClaro) {
         String idAp = "ap_" + UUID.randomUUID().toString().substring(0, 8);
         candidato.setIdAp(idAp);
-        candidato.setEstadoAceptado(false);
+        candidato.setEstado("pendiente");
         candidato.setActivo(true);
 
         BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
@@ -39,5 +39,15 @@ public class CandidatoService {
         usuarioDao.addUsuario(credenciales);
 
         candidatoDao.addCandidato(candidato);
+    }
+
+    public void aceptarCandidato(String idAp) {
+        candidatoDao.updateEstado(idAp, "aceptado");
+        usuarioDao.updateActivo(idAp, true);
+    }
+
+    public void rechazarCandidato(String idAp) {
+        candidatoDao.updateEstado(idAp, "rechazado");
+        usuarioDao.updateActivo(idAp, false);
     }
 }

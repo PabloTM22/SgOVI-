@@ -62,12 +62,12 @@ public class CandidatoDao {
     // U - UPDATE (Actualizar todos los datos de un candidato)
     public void updateCandidato(Candidato candidato) {
         jdbcTemplate.update(
-                "UPDATE AsistentePersonal SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, tipo_ap=?, formacion=?, experiencia=?, disponibilidad=?, latitud=?, longitud=?, consentimiento_lopd=?, activo=? " +
+                "UPDATE AsistentePersonal SET dni=?, nombre=?, apellidos=?, email=?, telefono=?, tipo_ap=?, formacion=?, experiencia=?, disponibilidad=?, latitud=?, longitud=?, consentimiento_lopd=?, estado=?, activo=? " +
                         "WHERE id_ap=?",
                 candidato.getDni(), candidato.getNombre(), candidato.getApellidos(),
                 candidato.getEmail(), candidato.getTelefono(), candidato.getTipoAp(), candidato.getFormacion(),
                 candidato.getExperiencia(), candidato.getDisponibilidad(), candidato.getLatitud(),
-                candidato.getLongitud(), candidato.isConsentimientoLopd(), candidato.isActivo(),
+                candidato.getLongitud(), candidato.isConsentimientoLopd(), candidato.getEstado(), candidato.isActivo(),
                 candidato.getIdAp()
         );
     }
@@ -80,24 +80,20 @@ public class CandidatoDao {
         );
     }
 
-
-
-    // updateStatus: Actualiza SOLO si ha sido aceptado por el técnico
-    public void updateStatus(String idAp, boolean estadoAceptado) {
+    public void updateEstado(String idAp, String estado) {
         jdbcTemplate.update(
-                "UPDATE AsistentePersonal SET estado_aceptado = ? WHERE id_ap = ?",
-                estadoAceptado,
+                "UPDATE AsistentePersonal SET estado = ? WHERE id_ap = ?",
+                estado,
                 idAp
         );
     }
 
-    // findByStatus: Busca candidatos filtrando por si están aceptados o no
-    public List<Candidato> findByStatus(boolean estadoAceptado) {
+    public List<Candidato> findByEstado(String estado) {
         try {
             return jdbcTemplate.query(
-                    "SELECT * FROM AsistentePersonal WHERE estado_aceptado = ?",
+                    "SELECT * FROM AsistentePersonal WHERE estado = ? ORDER BY apellidos, nombre",
                     new CandidatoRowMapper(),
-                    estadoAceptado
+                    estado
             );
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
@@ -110,7 +106,7 @@ public class CandidatoDao {
         try {
             return jdbcTemplate.query(
                     "SELECT * FROM AsistentePersonal " +
-                            "WHERE estado_aceptado = TRUE AND tipo_ap = ? " +
+                            "WHERE estado = 'aceptado' AND tipo_ap = ? " +
                             "ORDER BY CASE WHEN latitud IS NULL OR longitud IS NULL THEN 1 ELSE 0 END, " +
                             "(COALESCE(latitud,0) - ?)^2 + (COALESCE(longitud,0) - ?)^2",
                     new CandidatoRowMapper(),
@@ -132,7 +128,7 @@ public class CandidatoDao {
 
         StringBuilder sql = new StringBuilder(
                 "SELECT * FROM AsistentePersonal " +
-                        "WHERE estado_aceptado = TRUE AND activo = TRUE"
+                        "WHERE estado = 'aceptado' AND activo = TRUE"
         );
         List<Object> params = new ArrayList<>();
 

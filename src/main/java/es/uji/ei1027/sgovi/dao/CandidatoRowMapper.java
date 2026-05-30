@@ -28,7 +28,7 @@ public class CandidatoRowMapper implements RowMapper<Candidato> {
         double lng = rs.getDouble("longitud");
         candidato.setLongitud(rs.wasNull() ? null : lng);
 
-        candidato.setEstadoAceptado(rs.getBoolean("estado_aceptado"));
+        candidato.setEstado(rs.getString("estado"));
         candidato.setActivo(rs.getBoolean("activo"));
         candidato.setConsentimientoLopd(rs.getBoolean("consentimiento_lopd"));
 

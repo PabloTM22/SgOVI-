@@ -36,15 +36,8 @@
             <td th:text="${c.formacion}"></td>
             <td th:text="${c.experiencia}"></td>
             <td>
-                <form th:action="@{/candidatos/aceptar/{id}(id=${c.idAp})}"
-                      method="post" class="d-inline">
-                    <button type="submit" class="btn btn-sm btn-success">Aceptar</button>
-                </form>
-                <form th:action="@{/candidatos/rechazar/{id}(id=${c.idAp})}"
-                      method="post" class="d-inline"
-                      th:onsubmit="return confirm('¿Seguro que quieres rechazar a ' + [[${c.nombre}]] + ' ' + [[${c.apellidos}]] + '?')">
-                    <button type="submit" class="btn btn-sm btn-danger">Rechazar</button>
-                </form>
+                <a th:href="@{/candidatos/detalle/{id}(id=${c.idAp})}"
+                   class="btn btn-sm btn-outline-primary">Ver y revisar</a>
             </td>
         </tr>
         </tbody>

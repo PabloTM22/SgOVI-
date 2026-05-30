@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Detalle del candidato</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Detalle del candidato PAP/PATI</h2>
+
+    <dl class="row">
+        <dt class="col-sm-3">Nombre completo</dt>
+        <dd class="col-sm-9" th:text="${candidato.nombre + ' ' + candidato.apellidos}"></dd>
+
+        <dt class="col-sm-3">DNI/NIE</dt>
+        <dd class="col-sm-9" th:text="${candidato.dni}"></dd>
+
+        <dt class="col-sm-3">Tipo</dt>
+        <dd class="col-sm-9" th:text="${candidato.tipoAp}"></dd>
+
+        <dt class="col-sm-3">Correo electrónico</dt>
+        <dd class="col-sm-9" th:text="${candidato.email}"></dd>
+
+        <dt class="col-sm-3">Teléfono</dt>
+        <dd class="col-sm-9" th:text="${candidato.telefono} ?: 'No indicado'"></dd>
+
+        <dt class="col-sm-3">Formación académica</dt>
+        <dd class="col-sm-9" th:text="${candidato.formacion} ?: 'No indicada'"></dd>
+
+        <dt class="col-sm-3">Experiencia previa</dt>
+        <dd class="col-sm-9" th:text="${candidato.experiencia} ?: 'No indicada'"></dd>
+
+        <dt class="col-sm-3">Disponibilidad</dt>
+        <dd class="col-sm-9" th:text="${candidato.disponibilidad} ?: 'No indicada'"></dd>
+
+        <dt class="col-sm-3">Consentimiento LOPD/RGPD</dt>
+        <dd class="col-sm-9" th:text="${candidato.consentimientoLopd} ? 'Aceptado' : 'No aceptado'"></dd>
+
+        <dt class="col-sm-3">Estado actual</dt>
+        <dd class="col-sm-9" th:text="${candidato.estado}"></dd>
+    </dl>
+
+    <div class="d-flex gap-2 mt-3">
+        <form th:action="@{/candidatos/aceptar/{id}(id=${candidato.idAp})}" method="post">
+            <button type="submit" class="btn btn-success">Aceptar candidato</button>
+        </form>
+        <form th:action="@{/candidatos/rechazar/{id}(id=${candidato.idAp})}" method="post"
+              onsubmit="return confirm('¿Seguro que quieres rechazar a este candidato?')">
+            <button type="submit" class="btn btn-danger">Rechazar candidato</button>
+        </form>
+        <a th:href="@{/candidatos/revision}" class="btn btn-secondary">Volver</a>
+    </div>
+
+</section>
+</body>
+</html>
