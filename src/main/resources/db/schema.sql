@@ -86,7 +86,8 @@ CREATE TABLE solicitud_servicio_ap (
     preferencias     TEXT,
     CHECK (tipo_asistencia IN ('PAP', 'PATI')),
     CHECK (estado IN ('en revision', 'aprobada',
-                      'cerrada con contrato', 'rechazada'))
+                      'cerrada con contrato',
+                      'cerrada con contrato finalizado', 'rechazada'))
 );
 
 ALTER TABLE solicitud_servicio_ap
