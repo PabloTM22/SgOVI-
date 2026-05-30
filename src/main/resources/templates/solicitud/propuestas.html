@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+    <title>Candidatos propuestos</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Candidatos propuestos para su solicitud</h2>
+
+    <p class="text-body-secondary">
+        Solicitud de tipo <span th:text="${solicitud.tipoAsistencia}"></span>,
+        registrada el
+        <span th:text="${#temporals.format(solicitud.fechaSolicitud, 'dd/MM/yyyy')}"></span>.
+    </p>
+
+    <div th:if="${mensajeExito}" class="alert alert-success" role="alert" th:text="${mensajeExito}"></div>
+    <div th:if="${mensajeError}" class="alert alert-danger" role="alert" th:text="${mensajeError}"></div>
+
+    <p th:if="${#lists.isEmpty(selecciones)}" class="alert alert-info" role="alert">
+        Todavía no se le ha propuesto ningún asistente personal. El equipo técnico de la OVI
+        le propondrá candidatos en cuanto estén disponibles.
+    </p>
+
+    <div class="row g-3">
+        <div class="col-md-6" th:each="s : ${selecciones}">
+            <div class="card h-100" th:with="c=${candidatos[s.idSeleccion]}">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h3 class="card-title h5 mb-0"
+                            th:text="${c != null ? c.nombre + ' ' + c.apellidos : 'Asistente no disponible'}"></h3>
+                        <span th:text="${s.estado}"
+                              th:classappend="
+                                ${s.estado == 'propuesta'}   ? 'badge bg-secondary'    :
+                                (${s.estado == 'contactada'} ? 'badge bg-info text-dark' :
+                                (${s.estado == 'aceptada'}   ? 'badge bg-success'        :
+                                'badge bg-danger'))"></span>
+                    </div>
+
+                    <dl class="row mb-3" th:if="${c != null}">
+                        <dt class="col-sm-4">Tipo</dt>
+                        <dd class="col-sm-8" th:text="${c.tipoAp}"></dd>
+                        <dt class="col-sm-4">Formación</dt>
+                        <dd class="col-sm-8"
+                            th:text="${c.formacion != null and !#strings.isEmpty(c.formacion) ? c.formacion : 'No indicada'}"></dd>
+                        <dt class="col-sm-4">Experiencia</dt>
+                        <dd class="col-sm-8"
+                            th:text="${c.experiencia != null and !#strings.isEmpty(c.experiencia) ? c.experiencia : 'No indicada'}"></dd>
+                        <dt class="col-sm-4">Contacto</dt>
+                        <dd class="col-sm-8">
+                            <span th:text="${c.email}"></span>
+                            <span th:if="${c.telefono != null and !#strings.isEmpty(c.telefono)}"
+                                  th:text="' · ' + ${c.telefono}"></span>
+                        </dd>
+                    </dl>
+
+                    <div th:if="${s.estado == 'propuesta' or s.estado == 'contactada'}" class="d-flex gap-2">
+                        <form th:action="@{/solicitudes/{id}/propuestas/{sid}/aceptar(id=${solicitud.idSolicitud},sid=${s.idSeleccion})}"
+                              method="post">
+                            <button type="submit" class="btn btn-success btn-sm"
+                                    th:attr="aria-label=${'Aceptar a ' + (c != null ? c.nombre + ' ' + c.apellidos : 'este asistente')}">
+                                Aceptar
+                            </button>
+                        </form>
+                        <form th:action="@{/solicitudes/{id}/propuestas/{sid}/descartar(id=${solicitud.idSolicitud},sid=${s.idSeleccion})}"
+                              method="post"
+                              onsubmit="return confirm('¿Seguro que desea descartar esta propuesta?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                    th:attr="aria-label=${'Descartar a ' + (c != null ? c.nombre + ' ' + c.apellidos : 'este asistente')}">
+                                Descartar
+                            </button>
+                        </form>
+                    </div>
+
+                    <p th:if="${s.estado == 'aceptada'}" class="text-success mb-0">
+                        Ha aceptado a este asistente. La OVI formalizará el contrato.
+                    </p>
+                    <p th:if="${s.estado == 'descartada'}" class="text-body-secondary mb-0">
+                        Propuesta descartada.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a th:href="@{/solicitudes/{id}(id=${solicitud.idSolicitud})}" class="btn btn-secondary mt-3">
+        Volver al detalle de la solicitud
+    </a>
+
+</section>
+</body>
+</html>
