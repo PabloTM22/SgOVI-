@@ -75,6 +75,8 @@
                             </button>
                         </form>
                     </div>
+                    <a th:href="@{/comunicaciones/seleccion/{sid}(sid=${s.idSeleccion})}"
+                       class="btn btn-outline-secondary btn-sm mt-2">Mensajes</a>
 
                     <p th:if="${s.estado == 'aceptada'}" class="text-success mb-0">
                         Ha aceptado a este asistente. La OVI formalizará el contrato.
