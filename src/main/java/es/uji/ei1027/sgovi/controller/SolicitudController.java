@@ -1,8 +1,8 @@
 package es.uji.ei1027.sgovi.controller;
 
+import es.uji.ei1027.sgovi.dao.RegistroContratoDao;
 import es.uji.ei1027.sgovi.dao.SolicitudServicioAPDao;
-import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
-import es.uji.ei1027.sgovi.model.UserDetails;
+import es.uji.ei1027.sgovi.model.*;
 import es.uji.ei1027.sgovi.validator.SolicitudValidator;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import es.uji.ei1027.sgovi.dao.SeleccionDao;
 import es.uji.ei1027.sgovi.dao.CandidatoDao;
-import es.uji.ei1027.sgovi.model.Seleccion;
-import es.uji.ei1027.sgovi.model.Candidato;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +23,19 @@ public class SolicitudController {
     private final SolicitudServicioAPDao solicitudDao;
     private final SeleccionDao seleccionDao;
     private final CandidatoDao candidatoDao;
+    private final RegistroContratoDao contratoDao;
 
     @Autowired
     public SolicitudController(SolicitudServicioAPDao solicitudDao,
                                SeleccionDao seleccionDao,
-                               CandidatoDao candidatoDao) {
+                               CandidatoDao candidatoDao,
+                               RegistroContratoDao contratoDao) {
         this.solicitudDao = solicitudDao;
         this.seleccionDao = seleccionDao;
         this.candidatoDao = candidatoDao;
+        this.contratoDao = contratoDao;
     }
+
 
     @GetMapping("/lista")
     public String lista(HttpSession session, Model model) {
@@ -85,6 +87,19 @@ public class SolicitudController {
         if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
             return "redirect:/solicitudes/lista";
         }
+
+        if ("cerrada con contrato".equals(solicitud.getEstado())
+                || "cerrada con contrato finalizado".equals(solicitud.getEstado())) {
+            for (Seleccion sel : seleccionDao.findBySolicitud(id)) {
+                if ("aceptada".equals(sel.getEstado())) {
+                    RegistroContrato c = contratoDao.findBySeleccion(sel.getIdSeleccion());
+                    if (c != null) {
+                        model.addAttribute("idContrato", c.getIdContrato());
+                    }
+                }
+            }
+        }
+
         model.addAttribute("solicitud", solicitud);
         return "solicitud/detalle";
     }

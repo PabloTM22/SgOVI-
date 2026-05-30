@@ -69,11 +69,20 @@
             Su solicitud no ha podido ser aprobada en este momento.
             Puede ponerse en contacto con la OVI para más información.
         </p>
-        <p th:if="${solicitud.estado == 'cerrada con contrato'}"
-           class="text-primary">
-            Su solicitud está cerrada. Se ha formalizado un contrato con el asistente personal
-            seleccionado.
-        </p>
+        <div th:if="${solicitud.estado == 'cerrada con contrato'
+                      or solicitud.estado == 'cerrada con contrato finalizado'}"
+             class="text-primary">
+            <p th:if="${solicitud.estado == 'cerrada con contrato'}">
+                Su solicitud está cerrada. Se ha formalizado un contrato con el
+                asistente personal seleccionado.
+            </p>
+            <p th:if="${solicitud.estado == 'cerrada con contrato finalizado'}">
+                El contrato de asistencia personal ha finalizado.
+            </p>
+            <a th:if="${idContrato != null}"
+               th:href="@{/contratos/{id}(id=${idContrato})}"
+               class="btn btn-primary">Ver contrato</a>
+        </div>
     </div>
 
     <a th:href="@{/solicitudes/lista}" class="btn btn-secondary">Volver a mis solicitudes</a>
