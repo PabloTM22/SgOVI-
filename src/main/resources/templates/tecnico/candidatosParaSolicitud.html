@@ -60,6 +60,8 @@
                 <a th:if="${s.estado == 'aceptada'}"
                    th:href="@{/contratos/nuevo/{sid}(sid=${s.idSeleccion})}"
                    class="btn btn-sm btn-primary">Formalizar contrato</a>
+                <a th:href="@{/comunicaciones/seleccion/{sid}(sid=${s.idSeleccion})}"
+                   class="btn btn-sm btn-outline-secondary">Mensajes</a>
             </span>
         </li>
     </ul>

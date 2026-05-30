@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+<head>
+  <title>Mensajes de la propuesta</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+  <h2>Mensajes de la propuesta</h2>
+
+  <p class="text-body-secondary">
+    Asistente: <span th:text="${candidato != null ? candidato.nombre + ' ' + candidato.apellidos : 'No disponible'}"></span>
+    &nbsp;·&nbsp;
+    Tipo: <span th:text="${solicitud.tipoAsistencia}"></span>
+    &nbsp;·&nbsp;
+    Estado de la propuesta: <span th:text="${seleccion.estado}"></span>
+  </p>
+
+  <div th:if="${mensajeExito}" class="alert alert-success" role="alert" th:text="${mensajeExito}"></div>
+  <div th:if="${errorMensaje}" class="alert alert-danger" role="alert" th:text="${errorMensaje}"></div>
+
+  <div class="mb-4">
+    <p th:if="${#lists.isEmpty(mensajes)}" class="alert alert-info" role="alert">
+      Todavía no hay mensajes en esta conversación.
+    </p>
+
+    <ul class="list-unstyled" th:unless="${#lists.isEmpty(mensajes)}">
+      <li th:each="m : ${mensajes}" class="mb-3"
+          th:with="esMio=${m.idUsuario == session.user.username
+                                 or m.idAp == session.user.username
+                                 or m.idTecnico == session.user.username}">
+        <div class="d-flex" th:classappend="${esMio} ? 'justify-content-end' : 'justify-content-start'">
+          <div class="card" style="max-width: 75%;"
+               th:classappend="${esMio} ? 'border-primary' : ''">
+            <div class="card-body py-2 px-3">
+              <p class="card-subtitle mb-1 small fw-bold"
+                 th:text="${autores[m.idComunicacion]}"></p>
+              <p class="card-text mb-1" th:text="${m.mensaje}"
+                 style="white-space: pre-wrap;"></p>
+              <p class="card-text">
+                <small class="text-body-secondary"
+                       th:text="${#temporals.format(m.fechaEnvio, 'dd/MM/yyyy HH:mm')}"></small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <form th:if="${puedeEscribir}"
+        th:action="@{/comunicaciones/seleccion/{id}(id=${seleccion.idSeleccion})}"
+        method="post">
+    <div class="mb-3">
+      <label for="mensaje" class="form-label">Escribir un mensaje</label>
+      <textarea id="mensaje" name="mensaje" class="form-control" rows="3"
+                maxlength="2000" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+  </form>
+  <p th:unless="${puedeEscribir}" class="text-body-secondary">
+    Esta propuesta está descartada. Puede leer los mensajes anteriores pero no enviar nuevos.
+  </p>
+
+  <hr/>
+  <a th:if="${session.user.rol == 'TECNICO'}"
+     th:href="@{/tecnico/solicitudes/{id}/candidatos(id=${solicitud.idSolicitud})}"
+     class="btn btn-secondary">Volver a los candidatos</a>
+  <a th:if="${session.user.rol == 'USUARIO_OVI'}"
+     th:href="@{/solicitudes/{id}/propuestas(id=${solicitud.idSolicitud})}"
+     class="btn btn-secondary">Volver a las propuestas</a>
+  <a th:if="${session.user.rol == 'CANDIDATO'}"
+     th:href="@{/}" class="btn btn-secondary">Volver al inicio</a>
+
+</section>
+</body>
+</html>
