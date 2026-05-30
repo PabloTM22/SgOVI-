@@ -10,15 +10,29 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import es.uji.ei1027.sgovi.dao.SeleccionDao;
+import es.uji.ei1027.sgovi.dao.CandidatoDao;
+import es.uji.ei1027.sgovi.model.Seleccion;
+import es.uji.ei1027.sgovi.model.Candidato;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 @Controller
 @RequestMapping("/solicitudes")
 public class SolicitudController {
     private final SolicitudServicioAPDao solicitudDao;
+    private final SeleccionDao seleccionDao;
+    private final CandidatoDao candidatoDao;
 
     @Autowired
-    public SolicitudController(SolicitudServicioAPDao solicitudDao) {
+    public SolicitudController(SolicitudServicioAPDao solicitudDao,
+                               SeleccionDao seleccionDao,
+                               CandidatoDao candidatoDao) {
         this.solicitudDao = solicitudDao;
+        this.seleccionDao = seleccionDao;
+        this.candidatoDao = candidatoDao;
     }
 
     @GetMapping("/lista")
@@ -73,5 +87,77 @@ public class SolicitudController {
         }
         model.addAttribute("solicitud", solicitud);
         return "solicitud/detalle";
+    }
+    @GetMapping("/{id}/propuestas")
+    public String propuestas(@PathVariable int id, HttpSession session, Model model) {
+        if (session.getAttribute("user") == null) {
+            session.setAttribute("nextUrl", "/solicitudes/" + id + "/propuestas");
+            return "redirect:/login";
+        }
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
+        if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
+            return "redirect:/solicitudes/lista";
+        }
+        List<Seleccion> selecciones = seleccionDao.findBySolicitud(id);
+        Map<Integer, Candidato> candidatos = new LinkedHashMap<>();
+        for (Seleccion s : selecciones) {
+            candidatos.put(s.getIdSeleccion(), candidatoDao.getCandidato(s.getIdAp()));
+        }
+        model.addAttribute("solicitud", solicitud);
+        model.addAttribute("selecciones", selecciones);
+        model.addAttribute("candidatos", candidatos);
+        return "solicitud/propuestas";
+    }
+
+    @PostMapping("/{id}/propuestas/{idSeleccion}/aceptar")
+    public String aceptarPropuesta(@PathVariable int id,
+                                   @PathVariable int idSeleccion,
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("user") == null) return "redirect:/login";
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
+        if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
+            return "redirect:/solicitudes/lista";
+        }
+        Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
+        if (seleccion == null || seleccion.getIdSolicitud() != id
+                || !("propuesta".equals(seleccion.getEstado()) || "contactada".equals(seleccion.getEstado()))) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Esta propuesta ya no se puede aceptar.");
+            return "redirect:/solicitudes/" + id + "/propuestas";
+        }
+        seleccionDao.updateEstado(idSeleccion, "aceptada");
+        for (Seleccion otra : seleccionDao.findBySolicitud(id)) {
+            if (otra.getIdSeleccion() != idSeleccion
+                    && ("propuesta".equals(otra.getEstado()) || "contactada".equals(otra.getEstado()))) {
+                seleccionDao.updateEstado(otra.getIdSeleccion(), "descartada");
+            }
+        }
+        redirectAttributes.addFlashAttribute("mensajeExito",
+                "Ha aceptado al asistente personal propuesto. El resto de propuestas se han descartado.");
+        return "redirect:/solicitudes/" + id + "/propuestas";
+    }
+
+    @PostMapping("/{id}/propuestas/{idSeleccion}/descartar")
+    public String descartarPropuesta(@PathVariable int id,
+                                     @PathVariable int idSeleccion,
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("user") == null) return "redirect:/login";
+        UserDetails user = (UserDetails) session.getAttribute("user");
+        SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
+        if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
+            return "redirect:/solicitudes/lista";
+        }
+        Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
+        if (seleccion == null || seleccion.getIdSolicitud() != id
+                || !("propuesta".equals(seleccion.getEstado()) || "contactada".equals(seleccion.getEstado()))) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Esta propuesta ya no se puede descartar.");
+            return "redirect:/solicitudes/" + id + "/propuestas";
+        }
+        seleccionDao.updateEstado(idSeleccion, "descartada");
+        redirectAttributes.addFlashAttribute("mensajeExito", "Propuesta descartada.");
+        return "redirect:/solicitudes/" + id + "/propuestas";
     }
 }
