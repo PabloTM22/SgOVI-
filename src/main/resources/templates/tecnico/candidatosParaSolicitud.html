@@ -30,6 +30,34 @@
     <div th:if="${mensajeInfo}" class="alert alert-info" th:text="${mensajeInfo}"></div>
     <div th:if="${errorSeleccion}" class="alert alert-danger" th:text="${errorSeleccion}"></div>
 
+    <h3 class="h5 mt-2">Propuestas actuales</h3>
+    <p th:if="${#lists.isEmpty(selecciones)}" class="text-body-secondary">
+        Todavía no ha propuesto ningún candidato para esta solicitud.
+    </p>
+    <ul class="list-group mb-4" th:unless="${#lists.isEmpty(selecciones)}">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            th:each="s : ${selecciones}" th:with="c=${candidatosSeleccion[s.idSeleccion]}">
+            <span>
+                <span th:text="${c != null ? c.nombre + ' ' + c.apellidos : 'Asistente'}"></span>
+                <span th:text="${s.estado}"
+                      th:classappend="
+                        ${s.estado == 'propuesta'}   ? 'badge bg-secondary ms-2'    :
+                        (${s.estado == 'contactada'} ? 'badge bg-info text-dark ms-2' :
+                        (${s.estado == 'aceptada'}   ? 'badge bg-success ms-2'        :
+                        'badge bg-danger ms-2'))"></span>
+            </span>
+            <form th:if="${s.estado == 'propuesta' or s.estado == 'contactada'}"
+                  th:action="@{/tecnico/solicitudes/{idS}/retirar/{sid}(idS=${solicitud.idSolicitud},sid=${s.idSeleccion})}"
+                  method="post"
+                  onsubmit="return confirm('¿Seguro que desea retirar esta propuesta?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger"
+                        th:attr="aria-label=${'Retirar a ' + (c != null ? c.nombre + ' ' + c.apellidos : 'este asistente')}">
+                    Retirar
+                </button>
+            </form>
+        </li>
+    </ul>
+
     <table class="table table-striped table-bordered">
         <thead class="table-light">
         <tr>
