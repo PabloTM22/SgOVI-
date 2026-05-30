@@ -7,6 +7,8 @@ import es.uji.ei1027.sgovi.model.Candidato;
 import es.uji.ei1027.sgovi.model.Seleccion;
 import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
 import es.uji.ei1027.sgovi.model.UserDetails;
+import es.uji.ei1027.sgovi.dao.RegistroContratoDao;
+import es.uji.ei1027.sgovi.model.RegistroContrato;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,15 +24,19 @@ public class TecnicoController {
     private final SolicitudServicioAPDao solicitudDao;
     private final CandidatoDao candidatoDao;
     private final SeleccionDao seleccionDao;
+    private final RegistroContratoDao contratoDao;
 
     @Autowired
     public TecnicoController(SolicitudServicioAPDao solicitudDao,
                              CandidatoDao candidatoDao,
-                             SeleccionDao seleccionDao) {
+                             SeleccionDao seleccionDao,
+                             RegistroContratoDao contratoDao) {
         this.solicitudDao = solicitudDao;
         this.candidatoDao = candidatoDao;
         this.seleccionDao = seleccionDao;
+        this.contratoDao = contratoDao;
     }
+
 
     private boolean esTecnico(HttpSession session) {
         UserDetails user = (UserDetails) session.getAttribute("user");
@@ -43,7 +49,23 @@ public class TecnicoController {
             session.setAttribute("nextUrl", "/tecnico/solicitudes");
             return "redirect:/login";
         }
-        model.addAttribute("solicitudes", solicitudDao.getSolicitudes());
+        List<SolicitudServicioAP> solicitudes = solicitudDao.getSolicitudes();
+        Map<Integer, Integer> contratoPorSolicitud = new java.util.LinkedHashMap<>();
+        for (SolicitudServicioAP s : solicitudes) {
+            if ("cerrada con contrato".equals(s.getEstado())
+                    || "cerrada con contrato finalizado".equals(s.getEstado())) {
+                for (Seleccion sel : seleccionDao.findBySolicitud(s.getIdSolicitud())) {
+                    if ("aceptada".equals(sel.getEstado())) {
+                        RegistroContrato c = contratoDao.findBySeleccion(sel.getIdSeleccion());
+                        if (c != null) {
+                            contratoPorSolicitud.put(s.getIdSolicitud(), c.getIdContrato());
+                        }
+                    }
+                }
+            }
+        }
+        model.addAttribute("solicitudes", solicitudes);
+        model.addAttribute("contratoPorSolicitud", contratoPorSolicitud);
         return "tecnico/revisionSolicitudes";
     }
 

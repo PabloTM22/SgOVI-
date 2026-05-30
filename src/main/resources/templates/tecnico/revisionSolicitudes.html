@@ -35,10 +35,11 @@
             <td>
                 <span th:text="${s.estado}"
                       th:classappend="
-                        ${s.estado == 'en revision'}           ? 'badge bg-secondary' :
-                        (${s.estado == 'aprobada'}             ? 'badge bg-success'   :
-                        (${s.estado == 'rechazada'}            ? 'badge bg-danger'    :
-                        (${s.estado == 'cerrada con contrato'} ? 'badge bg-primary'   : 'badge bg-light text-dark')))">
+                        ${s.estado == 'en revision'}                       ? 'badge bg-secondary' :
+                        (${s.estado == 'aprobada'}                         ? 'badge bg-success'   :
+                        (${s.estado == 'rechazada'}                        ? 'badge bg-danger'    :
+                        (${s.estado == 'cerrada con contrato'}             ? 'badge bg-primary'   :
+                        (${s.estado == 'cerrada con contrato finalizado'}  ? 'badge bg-dark'      : 'badge bg-light text-dark'))))">
                 </span>
             </td>
             <td th:text="${#temporals.format(s.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></td>
@@ -56,6 +57,10 @@
                 <a th:if="${s.estado == 'aprobada'}"
                    th:href="@{/tecnico/solicitudes/{id}/candidatos(id=${s.idSolicitud})}"
                    class="btn btn-sm btn-outline-primary">Proponer candidatos</a>
+                <a th:if="${(s.estado == 'cerrada con contrato' or s.estado == 'cerrada con contrato finalizado')
+                            and contratoPorSolicitud.containsKey(s.idSolicitud)}"
+                   th:href="@{/contratos/{id}(id=${contratoPorSolicitud.get(s.idSolicitud)})}"
+                   class="btn btn-sm btn-outline-primary">Ver contrato</a>
             </td>
         </tr>
         </tbody>
