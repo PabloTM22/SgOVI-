@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
@@ -37,18 +38,8 @@ public class TecnicoController {
         this.contratoDao = contratoDao;
     }
 
-
-    private boolean esTecnico(HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        return user != null && "TECNICO".equals(user.getRol());
-    }
-
     @GetMapping("/solicitudes")
-    public String listaSolicitudesEnRevision(HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/tecnico/solicitudes");
-            return "redirect:/login";
-        }
+    public String listaSolicitudesEnRevision(Model model) {
         List<SolicitudServicioAP> solicitudes = solicitudDao.getSolicitudes();
         Map<Integer, Integer> contratoPorSolicitud = new java.util.LinkedHashMap<>();
         for (SolicitudServicioAP s : solicitudes) {
@@ -70,26 +61,19 @@ public class TecnicoController {
     }
 
     @PostMapping("/solicitudes/{id}/aprobar")
-    public String aprobar(@PathVariable int id, HttpSession session) {
-        if (!esTecnico(session)) return "redirect:/login";
+    public String aprobar(@PathVariable int id) {
         solicitudDao.updateEstado(id, "aprobada");
         return "redirect:/tecnico/solicitudes";
     }
 
     @PostMapping("/solicitudes/{id}/rechazar")
-    public String rechazar(@PathVariable int id, HttpSession session) {
-        if (!esTecnico(session)) return "redirect:/login";
+    public String rechazar(@PathVariable int id) {
         solicitudDao.updateEstado(id, "rechazada");
         return "redirect:/tecnico/solicitudes";
     }
 
     @GetMapping("/solicitudes/{id}/candidatos")
-    public String candidatosParaSolicitud(@PathVariable int id,
-                                          HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/tecnico/solicitudes/" + id + "/candidatos");
-            return "redirect:/login";
-        }
+    public String candidatosParaSolicitud(@PathVariable int id, Model model) {
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
         if (solicitud == null || !"aprobada".equals(solicitud.getEstado())) {
             return "redirect:/tecnico/solicitudes";
@@ -117,8 +101,7 @@ public class TecnicoController {
     public String seleccionarCandidato(@PathVariable int idSolicitud,
                                        @PathVariable String idAp,
                                        HttpSession session,
-                                       org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
+                                       RedirectAttributes redirectAttributes) {
         List<Seleccion> existentes = seleccionDao.findBySolicitud(idSolicitud);
         boolean yaSeleccionado = existentes.stream()
                 .anyMatch(s -> idAp.equals(s.getIdAp()));
@@ -145,9 +128,7 @@ public class TecnicoController {
     @PostMapping("/solicitudes/{idSolicitud}/retirar/{idSeleccion}")
     public String retirarSeleccion(@PathVariable int idSolicitud,
                                    @PathVariable int idSeleccion,
-                                   HttpSession session,
-                                   org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
+                                   RedirectAttributes redirectAttributes) {
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null || seleccion.getIdSolicitud() != idSolicitud) {
             redirectAttributes.addFlashAttribute("errorSeleccion", "Selección no encontrada.");

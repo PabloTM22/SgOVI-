@@ -2,10 +2,8 @@ package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.FormadorDao;
 import es.uji.ei1027.sgovi.model.Formador;
-import es.uji.ei1027.sgovi.model.UserDetails;
 import es.uji.ei1027.sgovi.service.FormadorService;
 import es.uji.ei1027.sgovi.validator.FormadorValidator;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,27 +34,14 @@ public class FormadorController {
         binder.setValidator(formadorValidator);
     }
 
-    private boolean esTecnico(HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        return user != null && "TECNICO".equals(user.getRol());
-    }
-
     @GetMapping
-    public String listar(HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/formadores");
-            return "redirect:/login";
-        }
+    public String listar(Model model) {
         model.addAttribute("formadores", formadorDao.getFormadores());
         return "formador/lista";
     }
 
     @GetMapping("/alta")
-    public String altaForm(HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/formadores/alta");
-            return "redirect:/login";
-        }
+    public String altaForm(Model model) {
         model.addAttribute("formador", new Formador());
         return "formador/alta";
     }
@@ -64,9 +49,7 @@ public class FormadorController {
     @PostMapping("/alta")
     public String altaSubmit(@ModelAttribute("formador") @Valid Formador formador,
                              BindingResult bindingResult,
-                             @RequestParam("contrasena") String contrasena,
-                             HttpSession session) {
-        if (!esTecnico(session)) return "redirect:/login";
+                             @RequestParam("contrasena") String contrasena) {
         if (contrasena == null || contrasena.isBlank()) {
             bindingResult.rejectValue("dni", "required.contrasena",
                     "La contraseña es obligatoria.");
@@ -79,11 +62,7 @@ public class FormadorController {
     }
 
     @GetMapping("/editar/{id}")
-    public String editarForm(@PathVariable String id, HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/formadores/editar/" + id);
-            return "redirect:/login";
-        }
+    public String editarForm(@PathVariable String id, Model model) {
         model.addAttribute("formador", formadorDao.getFormador(id));
         return "formador/editar";
     }
@@ -92,9 +71,7 @@ public class FormadorController {
     public String editarSubmit(@PathVariable String id,
                                @ModelAttribute("formador") @Valid Formador formador,
                                BindingResult bindingResult,
-                               @RequestParam("contrasena") String contrasena,
-                               HttpSession session) {
-        if (!esTecnico(session)) return "redirect:/login";
+                               @RequestParam("contrasena") String contrasena) {
         if (bindingResult.hasErrors()) {
             return "formador/editar";
         }
@@ -105,9 +82,7 @@ public class FormadorController {
 
     @GetMapping("/borrar/{id}")
     public String borrar(@PathVariable String id,
-                         HttpSession session,
                          RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
         try {
             formadorDao.deleteFormador(id);
         } catch (DataIntegrityViolationException e) {

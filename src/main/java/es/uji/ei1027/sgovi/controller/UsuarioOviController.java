@@ -1,11 +1,9 @@
 package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.UsuarioOviDao;
-import es.uji.ei1027.sgovi.model.UserDetails;
 import es.uji.ei1027.sgovi.model.UsuarioOvi;
 import es.uji.ei1027.sgovi.service.UsuarioOviService;
 import es.uji.ei1027.sgovi.validator.UsuarioOviValidator;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,27 +33,14 @@ public class UsuarioOviController {
         binder.setValidator(usuarioOviValidator);
     }
 
-    private boolean esTecnico(HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        return user != null && "TECNICO".equals(user.getRol());
-    }
-
     @GetMapping
-    public String listar(HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/usuarios");
-            return "redirect:/login";
-        }
+    public String listar(Model model) {
         model.addAttribute("usuarios", usuarioOviDao.getUsuarios());
         return "usuario/lista";
     }
 
     @GetMapping("/alta")
-    public String altaForm(HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/usuarios/alta");
-            return "redirect:/login";
-        }
+    public String altaForm(Model model) {
         model.addAttribute("usuario", new UsuarioOvi());
         return "usuario/alta";
     }
@@ -63,9 +48,7 @@ public class UsuarioOviController {
     @PostMapping("/alta")
     public String altaSubmit(@ModelAttribute("usuario") @Valid UsuarioOvi usuario,
                              BindingResult bindingResult,
-                             @RequestParam("contrasena") String contrasena,
-                             HttpSession session) {
-        if (!esTecnico(session)) return "redirect:/login";
+                             @RequestParam("contrasena") String contrasena) {
         if (contrasena == null || contrasena.isBlank()) {
             bindingResult.rejectValue("dni", "required.contrasena",
                     "La contraseña es obligatoria.");
@@ -78,11 +61,7 @@ public class UsuarioOviController {
     }
 
     @GetMapping("/editar/{idUsuario}")
-    public String editarForm(@PathVariable String idUsuario, HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/usuarios/editar/" + idUsuario);
-            return "redirect:/login";
-        }
+    public String editarForm(@PathVariable String idUsuario, Model model) {
         model.addAttribute("usuario", usuarioOviDao.getUsuario(idUsuario));
         return "usuario/editar";
     }
@@ -91,9 +70,7 @@ public class UsuarioOviController {
     public String editarSubmit(@PathVariable String idUsuario,
                                @ModelAttribute("usuario") @Valid UsuarioOvi usuario,
                                BindingResult bindingResult,
-                               @RequestParam("contrasena") String contrasena,
-                               HttpSession session) {
-        if (!esTecnico(session)) return "redirect:/login";
+                               @RequestParam("contrasena") String contrasena) {
         if (bindingResult.hasErrors()) {
             return "usuario/editar";
         }
@@ -103,21 +80,13 @@ public class UsuarioOviController {
     }
 
     @GetMapping("/revision")
-    public String revision(HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/usuarios/revision");
-            return "redirect:/login";
-        }
+    public String revision(Model model) {
         model.addAttribute("usuarios", usuarioOviDao.findByEstado("pendiente"));
         return "usuario/revision";
     }
 
     @GetMapping("/detalle/{idUsuario}")
-    public String detalle(@PathVariable String idUsuario, HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/usuarios/detalle/" + idUsuario);
-            return "redirect:/login";
-        }
+    public String detalle(@PathVariable String idUsuario, Model model) {
         UsuarioOvi usuario = usuarioOviDao.getUsuario(idUsuario);
         if (usuario == null) {
             return "redirect:/usuarios/revision";
@@ -128,9 +97,7 @@ public class UsuarioOviController {
 
     @PostMapping("/aceptar/{idUsuario}")
     public String aceptar(@PathVariable String idUsuario,
-                          HttpSession session,
                           RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
         usuarioOviService.aceptarUsuario(idUsuario);
         redirectAttributes.addFlashAttribute("mensajeExito",
                 "Usuario aceptado correctamente.");
@@ -139,9 +106,7 @@ public class UsuarioOviController {
 
     @PostMapping("/rechazar/{idUsuario}")
     public String rechazar(@PathVariable String idUsuario,
-                           HttpSession session,
                            RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
         usuarioOviService.rechazarUsuario(idUsuario);
         redirectAttributes.addFlashAttribute("mensajeExito",
                 "Usuario rechazado.");
@@ -150,9 +115,7 @@ public class UsuarioOviController {
 
     @PostMapping("/borrar/{idUsuario}")
     public String borrar(@PathVariable String idUsuario,
-                         HttpSession session,
                          RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
         try {
             usuarioOviDao.deleteUsuario(idUsuario);
         } catch (DataIntegrityViolationException e) {
