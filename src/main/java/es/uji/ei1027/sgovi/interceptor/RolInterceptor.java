@@ -20,11 +20,17 @@ public class RolInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
         HttpSession session = request.getSession();
         UserDetails user = (UserDetails) session.getAttribute("user");
+
         if (user != null && rolRequerido.equals(user.getRol())) {
             return true;
         }
-        session.setAttribute("nextUrl", urlSolicitada(request));
-        response.sendRedirect(request.getContextPath() + "/login");
+
+        if (user == null) {
+            session.setAttribute("nextUrl", urlSolicitada(request));
+            response.sendRedirect(request.getContextPath() + "/login");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/");
+        }
         return false;
     }
 
