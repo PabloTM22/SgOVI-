@@ -19,9 +19,6 @@
     Estado de la propuesta: <span th:text="${seleccion.estado}"></span>
   </p>
 
-  <div th:if="${mensajeExito}" class="alert alert-success" role="alert" th:text="${mensajeExito}"></div>
-  <div th:if="${errorMensaje}" class="alert alert-danger" role="alert" th:text="${errorMensaje}"></div>
-
   <div class="mb-4">
     <p th:if="${#lists.isEmpty(mensajes)}" class="alert alert-info" role="alert">
       Todavía no hay mensajes en esta conversación.

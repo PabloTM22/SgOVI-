@@ -73,12 +73,12 @@ public class ContratoController {
         }
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null || !"aceptada".equals(seleccion.getEstado())) {
-            redirectAttributes.addFlashAttribute("errorContrato",
+            redirectAttributes.addFlashAttribute("message",
                     "Solo se puede formalizar un contrato sobre una propuesta aceptada.");
             return "redirect:/tecnico/solicitudes";
         }
         if (contratoDao.findBySeleccion(idSeleccion) != null) {
-            redirectAttributes.addFlashAttribute("errorContrato",
+            redirectAttributes.addFlashAttribute("message",
                     "Esta propuesta ya tiene un contrato registrado.");
             return "redirect:/tecnico/solicitudes/" + seleccion.getIdSolicitud() + "/candidatos";
         }
@@ -101,24 +101,24 @@ public class ContratoController {
         if (!esTecnico(session)) return "redirect:/login";
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null || !"aceptada".equals(seleccion.getEstado())) {
-            redirectAttributes.addFlashAttribute("errorContrato",
+            redirectAttributes.addFlashAttribute("message",
                     "Solo se puede formalizar un contrato sobre una propuesta aceptada.");
             return "redirect:/tecnico/solicitudes";
         }
         if (contratoDao.findBySeleccion(idSeleccion) != null) {
-            redirectAttributes.addFlashAttribute("errorContrato",
+            redirectAttributes.addFlashAttribute("message",
                     "Esta propuesta ya tiene un contrato registrado.");
             return "redirect:/tecnico/solicitudes/" + seleccion.getIdSolicitud() + "/candidatos";
         }
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(seleccion.getIdSolicitud());
 
         if (contrato.getFechaInicio() == null) {
-            model.addAttribute("errorContrato", "La fecha de inicio es obligatoria.");
+            model.addAttribute("message", "La fecha de inicio es obligatoria.");
             poblarDatos(model, seleccion, solicitud);
             return "contrato/nuevo";
         }
         if (contrato.getFechaFin() != null && contrato.getFechaFin().isBefore(contrato.getFechaInicio())) {
-            model.addAttribute("errorContrato", "La fecha de fin no puede ser anterior a la de inicio.");
+            model.addAttribute("message", "La fecha de fin no puede ser anterior a la de inicio.");
             poblarDatos(model, seleccion, solicitud);
             return "contrato/nuevo";
         }
@@ -127,7 +127,7 @@ public class ContratoController {
         if (file != null && !file.isEmpty()) {
             String nombreOriginal = file.getOriginalFilename();
             if (nombreOriginal == null || !nombreOriginal.toLowerCase().endsWith(".pdf")) {
-                model.addAttribute("errorContrato", "El documento del contrato debe ser un PDF.");
+                model.addAttribute("message", "El documento del contrato debe ser un PDF.");
                 poblarDatos(model, seleccion, solicitud);
                 return "contrato/nuevo";
             }
@@ -138,7 +138,7 @@ public class ContratoController {
                 Files.write(destino, file.getBytes());
                 pdfRuta = "/pdfs/contratos/" + nombreFichero;
             } catch (IOException e) {
-                model.addAttribute("errorContrato", "No se pudo guardar el documento: " + e.getMessage());
+                model.addAttribute("message", "No se pudo guardar el documento: " + e.getMessage());
                 poblarDatos(model, seleccion, solicitud);
                 return "contrato/nuevo";
             }
@@ -152,7 +152,7 @@ public class ContratoController {
 
         solicitudDao.updateEstado(seleccion.getIdSolicitud(), "cerrada con contrato");
 
-        redirectAttributes.addFlashAttribute("mensajeExito", "Contrato registrado correctamente.");
+        redirectAttributes.addFlashAttribute("message", "Contrato registrado correctamente.");
         RegistroContrato creado = contratoDao.findBySeleccion(idSeleccion);
         return "redirect:/contratos/" + creado.getIdContrato();
     }
@@ -217,12 +217,12 @@ public class ContratoController {
             SolicitudServicioAP solicitud = solicitudDao.getSolicitud(seleccion.getIdSolicitud());
             model.addAttribute("contrato", contrato);
             poblarDatos(model, seleccion, solicitud);
-            model.addAttribute("errorContrato", "La fecha de fin no puede ser anterior a la de inicio.");
+            model.addAttribute("message", "La fecha de fin no puede ser anterior a la de inicio.");
             return "contrato/editar";
         }
         contrato.setFechaFin(fechaFin);
         contratoDao.updateContrato(contrato);
-        redirectAttributes.addFlashAttribute("mensajeExito", "Datos del contrato actualizados.");
+        redirectAttributes.addFlashAttribute("message", "Datos del contrato actualizados.");
         return "redirect:/contratos/" + idContrato;
     }
 }

@@ -80,13 +80,13 @@ public class FormadorController {
         return "redirect:/formadores";
     }
 
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrar(@PathVariable String id,
                          RedirectAttributes redirectAttributes) {
         try {
             formadorDao.deleteFormador(id);
         } catch (DataIntegrityViolationException e) {
-            redirectAttributes.addFlashAttribute("errorBorrar",
+            redirectAttributes.addFlashAttribute("message",
                     "No se puede eliminar el formador porque tiene actividades asociadas.");
         }
         return "redirect:/formadores";

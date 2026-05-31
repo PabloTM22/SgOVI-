@@ -19,8 +19,6 @@
         Tipo: <span th:text="${solicitud.tipoAsistencia}"></span>
     </p>
 
-    <div th:if="${errorContrato}" class="alert alert-danger" role="alert" th:text="${errorContrato}"></div>
-
     <form th:action="@{/contratos/nuevo/{id}(id=${seleccion.idSeleccion})}"
           th:object="${contrato}" method="post" enctype="multipart/form-data">
 

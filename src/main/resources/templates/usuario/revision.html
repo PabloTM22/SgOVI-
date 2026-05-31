@@ -11,9 +11,6 @@
 
     <h2>Usuarios OVI pendientes de revisión</h2>
 
-    <div th:if="${mensajeExito}" class="alert alert-success" role="alert"
-         th:text="${mensajeExito}"></div>
-
     <p th:if="${#lists.isEmpty(usuarios)}">No hay usuarios pendientes de revisión.</p>
 
     <table th:unless="${#lists.isEmpty(usuarios)}" class="table table-striped">

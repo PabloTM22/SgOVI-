@@ -16,8 +16,6 @@
     y su estado en la OVI los gestiona el equipo técnico.
   </p>
 
-  <div th:if="${errorPerfil}" class="alert alert-danger" role="alert" th:text="${errorPerfil}"></div>
-
   <form th:action="@{/mi-perfil/editar}" th:object="${asistente}" method="post">
 
     <div class="mb-3">

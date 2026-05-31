@@ -1,14 +1,7 @@
 package es.uji.ei1027.sgovi.controller;
 
-import es.uji.ei1027.sgovi.dao.CandidatoDao;
-import es.uji.ei1027.sgovi.dao.SeleccionDao;
-import es.uji.ei1027.sgovi.dao.SolicitudServicioAPDao;
-import es.uji.ei1027.sgovi.model.Candidato;
-import es.uji.ei1027.sgovi.model.Seleccion;
-import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
-import es.uji.ei1027.sgovi.model.UserDetails;
-import es.uji.ei1027.sgovi.dao.RegistroContratoDao;
-import es.uji.ei1027.sgovi.model.RegistroContrato;
+import es.uji.ei1027.sgovi.dao.*;
+import es.uji.ei1027.sgovi.model.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,16 +19,19 @@ public class TecnicoController {
     private final CandidatoDao candidatoDao;
     private final SeleccionDao seleccionDao;
     private final RegistroContratoDao contratoDao;
+    private final UsuarioOviDao usuarioDao;
 
     @Autowired
     public TecnicoController(SolicitudServicioAPDao solicitudDao,
                              CandidatoDao candidatoDao,
                              SeleccionDao seleccionDao,
-                             RegistroContratoDao contratoDao) {
+                             RegistroContratoDao contratoDao,
+                             UsuarioOviDao usuarioDao) {
         this.solicitudDao = solicitudDao;
         this.candidatoDao = candidatoDao;
         this.seleccionDao = seleccionDao;
         this.contratoDao = contratoDao;
+        this.usuarioDao = usuarioDao;
     }
 
     @GetMapping("/solicitudes")
@@ -94,6 +90,12 @@ public class TecnicoController {
         model.addAttribute("solicitud", solicitud);
         model.addAttribute("candidatos", candidatos);
         model.addAttribute("idsYaSeleccionados", idsYaSeleccionados);
+
+        UsuarioOvi usuarioSolicitante = usuarioDao.getUsuario(solicitud.getIdUsuario());
+        model.addAttribute("nombreUsuario",
+                usuarioSolicitante != null
+                        ? usuarioSolicitante.getNombre() + " " + usuarioSolicitante.getApellidos()
+                        : null);
         return "tecnico/candidatosParaSolicitud";
     }
 
@@ -106,7 +108,7 @@ public class TecnicoController {
         boolean yaSeleccionado = existentes.stream()
                 .anyMatch(s -> idAp.equals(s.getIdAp()));
         if (yaSeleccionado) {
-            redirectAttributes.addFlashAttribute("mensajeInfo",
+            redirectAttributes.addFlashAttribute("message",
                     "Este candidato ya ha sido propuesto para esta solicitud.");
             return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
         }
@@ -118,9 +120,9 @@ public class TecnicoController {
         seleccion.setEstado("propuesta");
         try {
             seleccionDao.addSeleccion(seleccion);
-            redirectAttributes.addFlashAttribute("mensajeExito", "Candidato seleccionado correctamente.");
+            redirectAttributes.addFlashAttribute("message", "Candidato seleccionado correctamente.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorSeleccion", "Error al seleccionar: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("message", "Error al seleccionar: " + e.getMessage());
         }
         return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
     }
@@ -131,16 +133,16 @@ public class TecnicoController {
                                    RedirectAttributes redirectAttributes) {
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null || seleccion.getIdSolicitud() != idSolicitud) {
-            redirectAttributes.addFlashAttribute("errorSeleccion", "Selección no encontrada.");
+            redirectAttributes.addFlashAttribute("message", "Selección no encontrada.");
             return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
         }
         if (!("propuesta".equals(seleccion.getEstado()) || "contactada".equals(seleccion.getEstado()))) {
-            redirectAttributes.addFlashAttribute("errorSeleccion",
+            redirectAttributes.addFlashAttribute("message",
                     "Solo se puede retirar una propuesta que no haya sido aceptada ni descartada.");
             return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
         }
         seleccionDao.deleteSeleccion(idSeleccion);
-        redirectAttributes.addFlashAttribute("mensajeExito", "Propuesta retirada correctamente.");
+        redirectAttributes.addFlashAttribute("message", "Propuesta retirada correctamente.");
         return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
     }
 }

@@ -66,17 +66,16 @@ public class CandidatoController {
     public String aceptarCandidato(@PathVariable String idAp,
                                    RedirectAttributes redirectAttributes) {
         candidatoService.aceptarCandidato(idAp);
-        redirectAttributes.addFlashAttribute("mensajeExito",
+        redirectAttributes.addFlashAttribute("message",
                 "Candidato aceptado correctamente.");
         return "redirect:/candidatos/revision";
     }
-
 
     @PostMapping("/rechazar/{idAp}")
     public String rechazarCandidato(@PathVariable String idAp,
                                     RedirectAttributes redirectAttributes) {
         candidatoService.rechazarCandidato(idAp);
-        redirectAttributes.addFlashAttribute("mensajeExito",
+        redirectAttributes.addFlashAttribute("message",
                 "Candidato rechazado.");
         return "redirect:/candidatos/revision";
     }

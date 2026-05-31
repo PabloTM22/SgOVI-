@@ -99,7 +99,7 @@ public class UsuarioOviController {
     public String aceptar(@PathVariable String idUsuario,
                           RedirectAttributes redirectAttributes) {
         usuarioOviService.aceptarUsuario(idUsuario);
-        redirectAttributes.addFlashAttribute("mensajeExito",
+        redirectAttributes.addFlashAttribute("message",
                 "Usuario aceptado correctamente.");
         return "redirect:/usuarios/revision";
     }
@@ -108,7 +108,7 @@ public class UsuarioOviController {
     public String rechazar(@PathVariable String idUsuario,
                            RedirectAttributes redirectAttributes) {
         usuarioOviService.rechazarUsuario(idUsuario);
-        redirectAttributes.addFlashAttribute("mensajeExito",
+        redirectAttributes.addFlashAttribute("message",
                 "Usuario rechazado.");
         return "redirect:/usuarios/revision";
     }
@@ -119,7 +119,7 @@ public class UsuarioOviController {
         try {
             usuarioOviDao.deleteUsuario(idUsuario);
         } catch (DataIntegrityViolationException e) {
-            redirectAttributes.addFlashAttribute("errorBorrar",
+            redirectAttributes.addFlashAttribute("message",
                     "No se puede eliminar el usuario porque tiene solicitudes asociadas.");
         }
         return "redirect:/usuarios";

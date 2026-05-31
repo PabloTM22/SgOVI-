@@ -110,16 +110,16 @@ public class ComunicacionController {
         if (solicitud == null || !autorizado(user, seleccion, solicitud)) return "redirect:/";
 
         if ("descartada".equals(seleccion.getEstado())) {
-            redirectAttributes.addFlashAttribute("errorMensaje",
+            redirectAttributes.addFlashAttribute("message",
                     "No se pueden enviar mensajes en una propuesta descartada.");
             return "redirect:/comunicaciones/seleccion/" + idSeleccion;
         }
         if (mensaje == null || mensaje.trim().isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMensaje", "El mensaje no puede estar vacío.");
+            redirectAttributes.addFlashAttribute("message", "El mensaje no puede estar vacío.");
             return "redirect:/comunicaciones/seleccion/" + idSeleccion;
         }
         if (mensaje.length() > MAX_MENSAJE) {
-            redirectAttributes.addFlashAttribute("errorMensaje",
+            redirectAttributes.addFlashAttribute("message",
                     "El mensaje es demasiado largo (máximo " + MAX_MENSAJE + " caracteres).");
             return "redirect:/comunicaciones/seleccion/" + idSeleccion;
         }
@@ -134,7 +134,7 @@ public class ComunicacionController {
             default: return "redirect:/";
         }
         comunicacionDao.addComunicacion(com);
-        redirectAttributes.addFlashAttribute("mensajeExito", "Mensaje enviado.");
+        redirectAttributes.addFlashAttribute("message", "Mensaje enviado.");
         return "redirect:/comunicaciones/seleccion/" + idSeleccion;
     }
 }

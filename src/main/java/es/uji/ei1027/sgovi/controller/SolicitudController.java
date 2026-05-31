@@ -128,7 +128,7 @@ public class SolicitudController {
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null || seleccion.getIdSolicitud() != id
                 || !("propuesta".equals(seleccion.getEstado()) || "contactada".equals(seleccion.getEstado()))) {
-            redirectAttributes.addFlashAttribute("mensajeError", "Esta propuesta ya no se puede aceptar.");
+            redirectAttributes.addFlashAttribute("message", "Esta propuesta ya no se puede aceptar.");
             return "redirect:/solicitudes/" + id + "/propuestas";
         }
         seleccionDao.updateEstado(idSeleccion, "aceptada");
@@ -138,7 +138,7 @@ public class SolicitudController {
                 seleccionDao.updateEstado(otra.getIdSeleccion(), "descartada");
             }
         }
-        redirectAttributes.addFlashAttribute("mensajeExito",
+        redirectAttributes.addFlashAttribute("message",
                 "Ha aceptado al asistente personal propuesto. El resto de propuestas se han descartado.");
         return "redirect:/solicitudes/" + id + "/propuestas";
     }
@@ -156,11 +156,11 @@ public class SolicitudController {
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null || seleccion.getIdSolicitud() != id
                 || !("propuesta".equals(seleccion.getEstado()) || "contactada".equals(seleccion.getEstado()))) {
-            redirectAttributes.addFlashAttribute("mensajeError", "Esta propuesta ya no se puede descartar.");
+            redirectAttributes.addFlashAttribute("message", "Esta propuesta ya no se puede descartar.");
             return "redirect:/solicitudes/" + id + "/propuestas";
         }
         seleccionDao.updateEstado(idSeleccion, "descartada");
-        redirectAttributes.addFlashAttribute("mensajeExito", "Propuesta descartada.");
+        redirectAttributes.addFlashAttribute("message", "Propuesta descartada.");
         return "redirect:/solicitudes/" + id + "/propuestas";
     }
 }

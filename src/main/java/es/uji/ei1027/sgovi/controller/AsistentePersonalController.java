@@ -86,7 +86,7 @@ public class AsistentePersonalController {
 
         if (form.getEmail() == null || form.getEmail().trim().isEmpty()) {
             model.addAttribute("asistente", form);
-            model.addAttribute("errorPerfil", "El correo electrónico es obligatorio.");
+            model.addAttribute("message", "El correo electrónico es obligatorio.");
             return "asistente/editarPerfil";
         }
 
@@ -97,7 +97,7 @@ public class AsistentePersonalController {
         actual.setDisponibilidad(form.getDisponibilidad());
 
         candidatoDao.updateCandidato(actual);
-        redirectAttributes.addFlashAttribute("mensajeExito", "Sus datos se han actualizado correctamente.");
+        redirectAttributes.addFlashAttribute("message", "Sus datos se han actualizado correctamente.");
         return "redirect:/mi-perfil";
     }
 }

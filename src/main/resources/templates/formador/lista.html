@@ -15,8 +15,6 @@
         <a th:href="@{/formadores/alta}" class="btn btn-primary">Dar de alta nuevo formador</a>
     </p>
 
-    <div th:if="${errorBorrar}" class="alert alert-danger" th:text="${errorBorrar}" role="alert"></div>
-
     <table class="table table-striped table-bordered">
         <thead class="table-light">
         <tr>
@@ -43,8 +41,11 @@
             <td>
                 <a th:href="@{/formadores/editar/{id}(id=${f.idFormador})}"
                    class="btn btn-sm btn-outline-warning">Editar</a>
-                <a th:href="@{/formadores/borrar/{id}(id=${f.idFormador})}"
-                   class="btn btn-sm btn-outline-danger">Borrar</a>
+                <form th:action="@{/formadores/borrar/{id}(id=${f.idFormador})}"
+                      method="post" class="d-inline"
+                      onsubmit="return confirm('¿Seguro que quieres eliminar este formador?')">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Borrar</button>
+                </form>
             </td>
         </tr>
         </tbody>

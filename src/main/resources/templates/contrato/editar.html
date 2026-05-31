@@ -17,8 +17,6 @@
         Inicio: <span th:text="${#temporals.format(contrato.fechaInicio, 'dd/MM/yyyy')}"></span>
     </p>
 
-    <div th:if="${errorContrato}" class="alert alert-danger" role="alert" th:text="${errorContrato}"></div>
-
     <form th:action="@{/contratos/{id}/editar(id=${contrato.idContrato})}" method="post">
         <div class="mb-3">
             <label for="fechaFin" class="form-label">Fecha de fin</label>

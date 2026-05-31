@@ -17,9 +17,6 @@
         <span th:text="${#temporals.format(solicitud.fechaSolicitud, 'dd/MM/yyyy')}"></span>.
     </p>
 
-    <div th:if="${mensajeExito}" class="alert alert-success" role="alert" th:text="${mensajeExito}"></div>
-    <div th:if="${mensajeError}" class="alert alert-danger" role="alert" th:text="${mensajeError}"></div>
-
     <p th:if="${#lists.isEmpty(selecciones)}" class="alert alert-info" role="alert">
         Todavía no se le ha propuesto ningún asistente personal. El equipo técnico de la OVI
         le propondrá candidatos en cuanto estén disponibles.

@@ -12,24 +12,16 @@
     <h2>Candidatos propuestos para la solicitud</h2>
 
     <div class="mb-3">
-        <span class="fw-bold">Solicitud:</span>
-        <span th:text="${solicitud.idSolicitud}"></span>
-        &nbsp;·&nbsp;
         <span class="fw-bold">Tipo:</span>
         <span th:text="${solicitud.tipoAsistencia}"></span>
         &nbsp;·&nbsp;
-        <span class="fw-bold">Usuario:</span>
-        <span th:text="${solicitud.idUsuario}"></span>
+        <span class="fw-bold">Persona usuaria:</span>
+        <span th:text="${nombreUsuario != null ? nombreUsuario : 'No disponible'}"></span>
     </div>
 
     <p class="text-body-secondary">
         Los candidatos se muestran ordenados por proximidad geográfica al usuario.
     </p>
-
-    <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
-    <div th:if="${mensajeInfo}" class="alert alert-info" th:text="${mensajeInfo}"></div>
-    <div th:if="${errorSeleccion}" class="alert alert-danger" th:text="${errorSeleccion}"></div>
-    <div th:if="${errorContrato}" class="alert alert-danger" th:text="${errorContrato}"></div>
 
     <h3 class="h5 mt-2">Propuestas actuales</h3>
     <p th:if="${#lists.isEmpty(selecciones)}" class="text-body-secondary">
