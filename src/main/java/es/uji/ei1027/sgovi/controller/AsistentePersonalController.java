@@ -40,17 +40,8 @@ public class AsistentePersonalController {
         this.contratoDao = contratoDao;
     }
 
-    private boolean esCandidato(HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        return user != null && "CANDIDATO".equals(user.getRol());
-    }
-
     @GetMapping
     public String panel(HttpSession session, Model model) {
-        if (!esCandidato(session)) {
-            session.setAttribute("nextUrl", "/mi-perfil");
-            return "redirect:/login";
-        }
         UserDetails user = (UserDetails) session.getAttribute("user");
         Candidato asistente = candidatoDao.getCandidato(user.getUsername());
         if (asistente == null) return "redirect:/";
@@ -76,10 +67,6 @@ public class AsistentePersonalController {
 
     @GetMapping("/editar")
     public String editarForm(HttpSession session, Model model) {
-        if (!esCandidato(session)) {
-            session.setAttribute("nextUrl", "/mi-perfil/editar");
-            return "redirect:/login";
-        }
         UserDetails user = (UserDetails) session.getAttribute("user");
         Candidato asistente = candidatoDao.getCandidato(user.getUsername());
         if (asistente == null) return "redirect:/";
@@ -92,7 +79,6 @@ public class AsistentePersonalController {
                                HttpSession session,
                                Model model,
                                RedirectAttributes redirectAttributes) {
-        if (!esCandidato(session)) return "redirect:/login";
         UserDetails user = (UserDetails) session.getAttribute("user");
 
         Candidato actual = candidatoDao.getCandidato(user.getUsername());

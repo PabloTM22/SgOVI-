@@ -2,10 +2,8 @@ package es.uji.ei1027.sgovi.controller;
 
 import es.uji.ei1027.sgovi.dao.CandidatoDao;
 import es.uji.ei1027.sgovi.model.Candidato;
-import es.uji.ei1027.sgovi.model.UserDetails;
 import es.uji.ei1027.sgovi.service.CandidatoService;
 import es.uji.ei1027.sgovi.validator.CandidatoValidator;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,11 +35,6 @@ public class CandidatoController {
         binder.setValidator(candidatoValidator);
     }
 
-    private boolean esTecnico(HttpSession session) {
-        UserDetails user = (UserDetails) session.getAttribute("user");
-        return user != null && "TECNICO".equals(user.getRol());
-    }
-
     @GetMapping("/registro")
     public String registrarCandidatoForm(Model model) {
         model.addAttribute("candidato", new Candidato());
@@ -64,20 +57,14 @@ public class CandidatoController {
     }
 
     @GetMapping("/revision")
-    public String listarPendientes(HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/candidatos/revision");
-            return "redirect:/login";
-        }
+    public String listarPendientes(Model model) {
         model.addAttribute("candidatos", candidatoDao.findByEstado("pendiente"));
         return "candidato/revision";
     }
 
     @PostMapping("/aceptar/{idAp}")
     public String aceptarCandidato(@PathVariable String idAp,
-                                   HttpSession session,
                                    RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
         candidatoService.aceptarCandidato(idAp);
         redirectAttributes.addFlashAttribute("mensajeExito",
                 "Candidato aceptado correctamente.");
@@ -87,9 +74,7 @@ public class CandidatoController {
 
     @PostMapping("/rechazar/{idAp}")
     public String rechazarCandidato(@PathVariable String idAp,
-                                    HttpSession session,
                                     RedirectAttributes redirectAttributes) {
-        if (!esTecnico(session)) return "redirect:/login";
         candidatoService.rechazarCandidato(idAp);
         redirectAttributes.addFlashAttribute("mensajeExito",
                 "Candidato rechazado.");
@@ -97,11 +82,7 @@ public class CandidatoController {
     }
 
     @GetMapping("/detalle/{idAp}")
-    public String detalle(@PathVariable String idAp, HttpSession session, Model model) {
-        if (!esTecnico(session)) {
-            session.setAttribute("nextUrl", "/candidatos/detalle/" + idAp);
-            return "redirect:/login";
-        }
+    public String detalle(@PathVariable String idAp, Model model) {
         Candidato candidato = candidatoDao.getCandidato(idAp);
         if (candidato == null) {
             return "redirect:/candidatos/revision";

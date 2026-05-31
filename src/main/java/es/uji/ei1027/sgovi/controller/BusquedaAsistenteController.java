@@ -58,8 +58,7 @@ public class BusquedaAsistenteController {
                          HttpSession session,
                          Model model) {
         if (!puedeBuscar(session)) {
-            session.setAttribute("nextUrl", "/asistentes/buscar");
-            return "redirect:/login";
+            return "redirect:/";
         }
 
         List<Candidato> resultados = candidatoDao.buscar(
@@ -86,8 +85,7 @@ public class BusquedaAsistenteController {
                          HttpSession session,
                          Model model) {
         if (!puedeBuscar(session)) {
-            session.setAttribute("nextUrl", "/asistentes/" + idAp);
-            return "redirect:/login";
+            return "redirect:/";
         }
 
         Candidato a = candidatoDao.getCandidato(idAp);

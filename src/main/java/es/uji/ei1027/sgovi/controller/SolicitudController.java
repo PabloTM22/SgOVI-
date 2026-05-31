@@ -46,24 +46,15 @@ public class SolicitudController {
         binder.setValidator(solicitudValidator);
     }
 
-
     @GetMapping("/lista")
     public String lista(HttpSession session, Model model) {
-        if (session.getAttribute("user") == null) {
-            session.setAttribute("nextUrl", "/solicitudes/lista");
-            return "redirect:/login";
-        }
         UserDetails user = (UserDetails) session.getAttribute("user");
         model.addAttribute("solicitudes", solicitudDao.findByUsuario(user.getUsername()));
         return "solicitud/lista";
     }
 
     @GetMapping("/nueva")
-    public String nuevaForm(HttpSession session, Model model) {
-        if (session.getAttribute("user") == null) {
-            session.setAttribute("nextUrl", "/solicitudes/nueva");
-            return "redirect:/login";
-        }
+    public String nuevaForm(Model model) {
         model.addAttribute("solicitud", new SolicitudServicioAP());
         return "solicitud/nueva";
     }
@@ -72,9 +63,6 @@ public class SolicitudController {
     public String nuevaSubmit(@ModelAttribute("solicitud") @Valid SolicitudServicioAP solicitud,
                               BindingResult bindingResult,
                               HttpSession session) {
-        if (session.getAttribute("user") == null) {
-            return "redirect:/login";
-        }
         if (bindingResult.hasErrors()) {
             return "solicitud/nueva";
         }
@@ -87,10 +75,6 @@ public class SolicitudController {
 
     @GetMapping("/{id}")
     public String detalle(@PathVariable int id, HttpSession session, Model model) {
-        if (session.getAttribute("user") == null) {
-            session.setAttribute("nextUrl", "/solicitudes/" + id);
-            return "redirect:/login";
-        }
         UserDetails user = (UserDetails) session.getAttribute("user");
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
         if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
@@ -112,12 +96,9 @@ public class SolicitudController {
         model.addAttribute("solicitud", solicitud);
         return "solicitud/detalle";
     }
+
     @GetMapping("/{id}/propuestas")
     public String propuestas(@PathVariable int id, HttpSession session, Model model) {
-        if (session.getAttribute("user") == null) {
-            session.setAttribute("nextUrl", "/solicitudes/" + id + "/propuestas");
-            return "redirect:/login";
-        }
         UserDetails user = (UserDetails) session.getAttribute("user");
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
         if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
@@ -139,7 +120,6 @@ public class SolicitudController {
                                    @PathVariable int idSeleccion,
                                    HttpSession session,
                                    RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("user") == null) return "redirect:/login";
         UserDetails user = (UserDetails) session.getAttribute("user");
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
         if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {
@@ -168,7 +148,6 @@ public class SolicitudController {
                                      @PathVariable int idSeleccion,
                                      HttpSession session,
                                      RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("user") == null) return "redirect:/login";
         UserDetails user = (UserDetails) session.getAttribute("user");
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
         if (solicitud == null || !solicitud.getIdUsuario().equals(user.getUsername())) {

@@ -89,10 +89,6 @@ public class ComunicacionController {
     @GetMapping("/seleccion/{idSeleccion}")
     public String hilo(@PathVariable int idSeleccion, HttpSession session, Model model) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null) {
-            session.setAttribute("nextUrl", "/comunicaciones/seleccion/" + idSeleccion);
-            return "redirect:/login";
-        }
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null) return "redirect:/";
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(seleccion.getIdSolicitud());
@@ -108,7 +104,6 @@ public class ComunicacionController {
                          HttpSession session,
                          RedirectAttributes redirectAttributes) {
         UserDetails user = (UserDetails) session.getAttribute("user");
-        if (user == null) return "redirect:/login";
         Seleccion seleccion = seleccionDao.getSeleccion(idSeleccion);
         if (seleccion == null) return "redirect:/";
         SolicitudServicioAP solicitud = solicitudDao.getSolicitud(seleccion.getIdSolicitud());
