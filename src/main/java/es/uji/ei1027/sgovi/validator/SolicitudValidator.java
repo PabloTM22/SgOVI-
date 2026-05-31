@@ -1,12 +1,14 @@
 package es.uji.ei1027.sgovi.validator;
 
 import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class SolicitudValidator implements Validator {
 
     private static final List<String> TIPOS_VALIDOS = Arrays.asList("PAP", "PATI");

@@ -5,10 +5,12 @@ import es.uji.ei1027.sgovi.dao.SolicitudServicioAPDao;
 import es.uji.ei1027.sgovi.model.*;
 import es.uji.ei1027.sgovi.validator.SolicitudValidator;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import es.uji.ei1027.sgovi.dao.SeleccionDao;
 import es.uji.ei1027.sgovi.dao.CandidatoDao;
@@ -24,16 +26,24 @@ public class SolicitudController {
     private final SeleccionDao seleccionDao;
     private final CandidatoDao candidatoDao;
     private final RegistroContratoDao contratoDao;
+    private final SolicitudValidator solicitudValidator;
 
     @Autowired
     public SolicitudController(SolicitudServicioAPDao solicitudDao,
                                SeleccionDao seleccionDao,
                                CandidatoDao candidatoDao,
-                               RegistroContratoDao contratoDao) {
+                               RegistroContratoDao contratoDao,
+                               SolicitudValidator solicitudValidator) {
         this.solicitudDao = solicitudDao;
         this.seleccionDao = seleccionDao;
         this.candidatoDao = candidatoDao;
         this.contratoDao = contratoDao;
+        this.solicitudValidator = solicitudValidator;
+    }
+
+    @InitBinder("solicitud")
+    public void initBinder(WebDataBinder binder) {
+        binder.setValidator(solicitudValidator);
     }
 
 
@@ -59,13 +69,12 @@ public class SolicitudController {
     }
 
     @PostMapping("/nueva")
-    public String nuevaSubmit(@ModelAttribute("solicitud") SolicitudServicioAP solicitud,
+    public String nuevaSubmit(@ModelAttribute("solicitud") @Valid SolicitudServicioAP solicitud,
                               BindingResult bindingResult,
                               HttpSession session) {
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
         }
-        new SolicitudValidator().validate(solicitud, bindingResult);
         if (bindingResult.hasErrors()) {
             return "solicitud/nueva";
         }
