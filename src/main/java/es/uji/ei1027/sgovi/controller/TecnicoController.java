@@ -1,7 +1,16 @@
 package es.uji.ei1027.sgovi.controller;
 
-import es.uji.ei1027.sgovi.dao.*;
-import es.uji.ei1027.sgovi.model.*;
+import es.uji.ei1027.sgovi.dao.CandidatoDao;
+import es.uji.ei1027.sgovi.dao.RegistroContratoDao;
+import es.uji.ei1027.sgovi.dao.SeleccionDao;
+import es.uji.ei1027.sgovi.dao.SolicitudServicioAPDao;
+import es.uji.ei1027.sgovi.dao.UsuarioOviDao;
+import es.uji.ei1027.sgovi.model.Candidato;
+import es.uji.ei1027.sgovi.model.RegistroContrato;
+import es.uji.ei1027.sgovi.model.Seleccion;
+import es.uji.ei1027.sgovi.model.SolicitudServicioAP;
+import es.uji.ei1027.sgovi.model.UserDetails;
+import es.uji.ei1027.sgovi.model.UsuarioOvi;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -85,17 +94,18 @@ public class TecnicoController {
         for (Seleccion s : seleccionesExistentes) {
             candidatosSeleccion.put(s.getIdSeleccion(), candidatoDao.getCandidato(s.getIdAp()));
         }
-        model.addAttribute("selecciones", seleccionesExistentes);
-        model.addAttribute("candidatosSeleccion", candidatosSeleccion);
-        model.addAttribute("solicitud", solicitud);
-        model.addAttribute("candidatos", candidatos);
-        model.addAttribute("idsYaSeleccionados", idsYaSeleccionados);
 
         UsuarioOvi usuarioSolicitante = usuarioDao.getUsuario(solicitud.getIdUsuario());
         model.addAttribute("nombreUsuario",
                 usuarioSolicitante != null
                         ? usuarioSolicitante.getNombre() + " " + usuarioSolicitante.getApellidos()
                         : null);
+
+        model.addAttribute("selecciones", seleccionesExistentes);
+        model.addAttribute("candidatosSeleccion", candidatosSeleccion);
+        model.addAttribute("solicitud", solicitud);
+        model.addAttribute("candidatos", candidatos);
+        model.addAttribute("idsYaSeleccionados", idsYaSeleccionados);
         return "tecnico/candidatosParaSolicitud";
     }
 

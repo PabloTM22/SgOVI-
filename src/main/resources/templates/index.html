@@ -123,13 +123,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Formador autenticado -->
-    <div th:if="${session.user != null and session.user.rol == 'FORMADOR'}">
-        <h3 th:text="'Bienvenido, ' + ${session.user.username}">Bienvenido</h3>
-        <p class="text-body-secondary">Acceda a las actividades de formación que imparte.</p>
-    </div>
-
 </section>
 </body>
 </html>
