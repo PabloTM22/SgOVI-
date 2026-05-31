@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class LoginController {
     private UserDao userDao;
+    private final UserValidator userValidator;
+
+    @Autowired
+    public LoginController(UserValidator userValidator) {
+        this.userValidator = userValidator;
+    }
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -31,7 +37,6 @@ public class LoginController {
     public String checkLogin(@ModelAttribute("user") UserDetails user,
                              BindingResult bindingResult,
                              HttpSession session) {
-        UserValidator userValidator = new UserValidator();
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return "login";
