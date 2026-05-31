@@ -15,7 +15,6 @@ public class Candidato {
     private Double latitud;
     private Double longitud;
     private String estado;
-    private boolean activo;
     private boolean consentimientoLopd;
 
     public Candidato() {
@@ -61,9 +60,6 @@ public class Candidato {
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
 
-    public boolean isActivo() { return activo; }
-    public void setActivo(boolean activo) { this.activo = activo; }
-
     public boolean isConsentimientoLopd() { return consentimientoLopd; }
     public void setConsentimientoLopd(boolean consentimientoLopd) { this.consentimientoLopd = consentimientoLopd; }
 
@@ -83,7 +79,6 @@ public class Candidato {
                 ", latitud=" + latitud +
                 ", longitud=" + longitud +
                 ", estado='" + estado + '\'' +
-                ", activo=" + activo +
                 ", consentimientoLopd=" + consentimientoLopd +
                 '}';
     }

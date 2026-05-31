@@ -26,7 +26,6 @@ public class CandidatoService {
         String idAp = "ap_" + UUID.randomUUID().toString().substring(0, 8);
         candidato.setIdAp(idAp);
         candidato.setEstado("pendiente");
-        candidato.setActivo(true);
 
         BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
         String hash = encryptor.encryptPassword(contrasenaClaro);

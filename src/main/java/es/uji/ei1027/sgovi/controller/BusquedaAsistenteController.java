@@ -89,7 +89,7 @@ public class BusquedaAsistenteController {
         }
 
         Candidato a = candidatoDao.getCandidato(idAp);
-        if (a == null || !"aceptado".equals(a.getEstado()) || !a.isActivo()) {
+        if (a == null || !"aceptado".equals(a.getEstado())) {
             return "redirect:/asistentes/buscar";
         }
 
