@@ -33,9 +33,74 @@ public class UsuarioOviController {
         binder.setValidator(usuarioOviValidator);
     }
 
+
+    private static final int PAGE_LENGTH = 10;
+
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("usuarios", usuarioOviDao.getUsuarios());
+    public String listar(@RequestParam(value = "buscar", required = false) String buscar,
+                         @RequestParam(value = "estado", required = false, defaultValue = "TODOS") String estado,
+                         @RequestParam(value = "orden", required = false, defaultValue = "apellidos") String orden,
+                         @RequestParam(value = "page") java.util.Optional<Integer> page,
+                         Model model) {
+
+        java.util.List<UsuarioOvi> usuarios = usuarioOviDao.getUsuarios();
+
+        // Búsqueda de texto libre (nombre, apellidos, dni, email)
+        if (buscar != null && !buscar.isBlank()) {
+            String q = buscar.toLowerCase();
+            usuarios = usuarios.stream()
+                    .filter(u -> (u.getNombre() + " " + u.getApellidos()).toLowerCase().contains(q)
+                            || (u.getDni() != null && u.getDni().toLowerCase().contains(q))
+                            || (u.getEmail() != null && u.getEmail().toLowerCase().contains(q)))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Filtro por estado
+        if (estado != null && !"TODOS".equalsIgnoreCase(estado)) {
+            usuarios = usuarios.stream()
+                    .filter(u -> estado.equals(u.getEstado()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Ordenación
+        java.util.Comparator<UsuarioOvi> comparador;
+        switch (orden) {
+            case "nombre":
+                comparador = java.util.Comparator.comparing(UsuarioOvi::getNombre, String.CASE_INSENSITIVE_ORDER);
+                break;
+            case "estado":
+                comparador = java.util.Comparator.comparing(UsuarioOvi::getEstado, String.CASE_INSENSITIVE_ORDER);
+                break;
+            default:
+                comparador = java.util.Comparator.comparing(UsuarioOvi::getApellidos, String.CASE_INSENSITIVE_ORDER);
+        }
+        usuarios.sort(comparador);
+
+        // Paginación (patrón del boletín: troceado en memoria)
+        java.util.List<java.util.List<UsuarioOvi>> paginas = new java.util.ArrayList<>();
+        for (int i = 0; i < usuarios.size(); i += PAGE_LENGTH) {
+            paginas.add(usuarios.subList(i, Math.min(i + PAGE_LENGTH, usuarios.size())));
+        }
+        int totalPaginas = paginas.size();
+        int paginaActual = page.orElse(1);
+        if (paginaActual < 1) paginaActual = 1;
+        if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+
+        java.util.List<UsuarioOvi> pagina = totalPaginas == 0
+                ? new java.util.ArrayList<>()
+                : paginas.get(paginaActual - 1);
+
+        java.util.List<Integer> numerosPagina = java.util.stream.IntStream.rangeClosed(1, totalPaginas)
+                .boxed().collect(java.util.stream.Collectors.toList());
+
+        model.addAttribute("usuarios", pagina);
+        model.addAttribute("numerosPagina", numerosPagina);
+        model.addAttribute("paginaActual", paginaActual);
+        model.addAttribute("totalPaginas", totalPaginas);
+        model.addAttribute("totalRegistros", usuarios.size());
+        model.addAttribute("buscar", buscar);
+        model.addAttribute("filtroEstado", estado);
+        model.addAttribute("filtroOrden", orden);
         return "usuario/lista";
     }
 
