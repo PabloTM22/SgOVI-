@@ -80,6 +80,8 @@
             </td>
             <td th:text="${#temporals.format(s.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></td>
             <td>
+                <a th:href="@{/tecnico/solicitudes/{id}(id=${s.idSolicitud})}"
+                   class="btn btn-sm btn-outline-secondary">Ver detalles</a>
                 <form th:if="${s.estado == 'en revision'}"
                       th:action="@{/tecnico/solicitudes/{id}/aprobar(id=${s.idSolicitud})}"
                       method="post" class="d-inline">

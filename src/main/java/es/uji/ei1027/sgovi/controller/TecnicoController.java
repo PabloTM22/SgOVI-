@@ -237,4 +237,16 @@ public class TecnicoController {
         redirectAttributes.addFlashAttribute("message", "Propuesta retirada correctamente.");
         return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
     }
+
+    @GetMapping("/solicitudes/{id}")
+    public String detalleSolicitud(@PathVariable int id, Model model) {
+        SolicitudServicioAP solicitud = solicitudDao.getSolicitud(id);
+        if (solicitud == null) {
+            return "redirect:/tecnico/solicitudes";
+        }
+        UsuarioOvi usuario = usuarioDao.getUsuario(solicitud.getIdUsuario());
+        model.addAttribute("solicitud", solicitud);
+        model.addAttribute("usuario", usuario);
+        return "tecnico/detalleSolicitud";
+    }
 }
