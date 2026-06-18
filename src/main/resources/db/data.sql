@@ -38,9 +38,9 @@ INSERT INTO seleccion (id_solicitud, id_ap, id_tecnico, estado) VALUES
 
 -- Credenciales centralizadas (SUSTITUIR los hashes)
 INSERT INTO usuario (username, password, rol, activo) VALUES
-                                                          ('tec_admin',    '__HASH_1__', 'TECNICO',     TRUE),
-                                                          ('usr_carlos01', '__HASH_2__', 'USUARIO_OVI', TRUE),
-                                                          ('usr_lucia02',  '__HASH_3__', 'USUARIO_OVI', FALSE),
-                                                          ('ap_marta01',   '__HASH_4__', 'CANDIDATO',   TRUE),
-                                                          ('ap_jorge02',   '__HASH_5__', 'CANDIDATO',   FALSE),
-                                                          ('frm_pablo01',  '__HASH_6__', 'FORMADOR',    TRUE);
+                                                          ('tec_admin',    'JjwsASyzqaFVjQV8iq9q6saaZh8dtPFi', 'TECNICO',     TRUE),
+                                                          ('usr_carlos01', 'm5k7ZCIzlL3foFoUc7kncaMskcoXNolt', 'USUARIO_OVI', TRUE),
+                                                          ('usr_lucia02',  'm/+2PLEinle0tleoUQY75SazHgIzxyqQ', 'USUARIO_OVI', FALSE),
+                                                          ('ap_marta01',   '3nfX3lApPX+x9DQ9Mmy2EaptOfonlvQz', 'CANDIDATO',   TRUE),
+                                                          ('ap_jorge02',   'bI+V1g1X2d/8Y5D23DXYBq6K7dXCuWzj', 'CANDIDATO',   FALSE),
+                                                          ('frm_pablo01',  'p5mNQLXCf2FqYNAfYNRBoF1bn8dD4KWT', 'FORMADOR',    TRUE);
