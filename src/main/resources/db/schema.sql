@@ -128,4 +128,115 @@ CREATE TABLE comunicacionusuario (
                                      id_ap            VARCHAR(50),
                                      id_tecnico       VARCHAR(50),
                                      mensaje          TEXT          NOT NULL,
-                                     fe
+                                     fecha_envio      TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+                                     CHECK (
+                                         (CASE WHEN id_usuario IS NULL THEN 0 ELSE 1 END) +
+                                         (CASE WHEN id_ap      IS NULL THEN 0 ELSE 1 END) +
+                                         (CASE WHEN id_tecnico IS NULL THEN 0 ELSE 1 END) = 1
+                                         )
+);
+
+ALTER TABLE comunicacionusuario
+    ADD CONSTRAINT comunicacionusuario_id_seleccion_fkey
+        FOREIGN KEY (id_seleccion) REFERENCES seleccion(id_seleccion)
+            ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE comunicacionusuario
+    ADD CONSTRAINT comunicacionusuario_id_usuario_fkey
+        FOREIGN KEY (id_usuario) REFERENCES usuarioovi(id_usuario)
+            ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE comunicacionusuario
+    ADD CONSTRAINT comunicacionusuario_id_ap_fkey
+        FOREIGN KEY (id_ap) REFERENCES asistentepersonal(id_ap)
+            ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE comunicacionusuario
+    ADD CONSTRAINT comunicacionusuario_id_tecnico_fkey
+        FOREIGN KEY (id_tecnico) REFERENCES tecnico(id_tecnico)
+            ON UPDATE CASCADE ON DELETE RESTRICT;
+
+-- ---------------------------------------------------------------------
+-- Contratos resultado de una seleccion aceptada
+-- ---------------------------------------------------------------------
+
+CREATE TABLE registrocontrato (
+                                  id_contrato    SERIAL        PRIMARY KEY,
+                                  id_seleccion   INT           NOT NULL,
+                                  id_tecnico     VARCHAR(50),
+                                  fecha_inicio   DATE          NOT NULL,
+                                  fecha_fin      DATE,
+                                  pdf_ruta       VARCHAR(255)
+);
+
+ALTER TABLE registrocontrato
+    ADD CONSTRAINT registrocontrato_id_seleccion_fkey
+        FOREIGN KEY (id_seleccion) REFERENCES seleccion(id_seleccion)
+            ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE registrocontrato
+    ADD CONSTRAINT registrocontrato_id_tecnico_fkey
+        FOREIGN KEY (id_tecnico) REFERENCES tecnico(id_tecnico)
+            ON UPDATE CASCADE ON DELETE SET NULL;
+
+-- ---------------------------------------------------------------------
+-- Activitats de formacio i divulgacio
+-- ---------------------------------------------------------------------
+
+CREATE TABLE actividadformacion (
+                                    id_actividad       SERIAL        PRIMARY KEY,
+                                    id_formador        VARCHAR(50)   NOT NULL,
+                                    tipo_actividad     VARCHAR(20)   NOT NULL,
+                                    titulo             VARCHAR(150)  NOT NULL,
+                                    descripcion        TEXT,
+                                    fecha_actividad    TIMESTAMP     NOT NULL,
+                                    lugar              VARCHAR(150),
+                                    plazas             INT,
+                                    num_participantes  INT
+);
+
+ALTER TABLE actividadformacion
+    ADD CONSTRAINT actividadformacion_id_formador_fkey
+        FOREIGN KEY (id_formador) REFERENCES formador(id_formador)
+            ON UPDATE CASCADE ON DELETE RESTRICT;
+
+CREATE TABLE asistenciaformacion (
+                                     id_asistencia      INT           PRIMARY KEY,
+                                     id_actividad       INT           NOT NULL,
+                                     id_usuario         VARCHAR(50),
+                                     id_ap              VARCHAR(50),
+                                     fecha_inscripcion  TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+                                     asistio            BOOLEAN       DEFAULT FALSE,
+                                     certificado_ruta   VARCHAR(255),
+                                     CHECK (
+                                         (id_usuario IS NOT NULL AND id_ap IS NULL) OR
+                                         (id_usuario IS NULL AND id_ap IS NOT NULL)
+                                         )
+);
+
+ALTER TABLE asistenciaformacion
+    ADD CONSTRAINT asistenciaformacion_id_actividad_fkey
+        FOREIGN KEY (id_actividad) REFERENCES actividadformacion(id_actividad)
+            ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE asistenciaformacion
+    ADD CONSTRAINT asistenciaformacion_id_usuario_fkey
+        FOREIGN KEY (id_usuario) REFERENCES usuarioovi(id_usuario)
+            ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE asistenciaformacion
+    ADD CONSTRAINT asistenciaformacion_id_ap_fkey
+        FOREIGN KEY (id_ap) REFERENCES asistentepersonal(id_ap)
+            ON UPDATE CASCADE ON DELETE RESTRICT;
+
+-- ---------------------------------------------------------------------
+-- Tabla centralizada de credenciales
+-- ---------------------------------------------------------------------
+
+CREATE TABLE usuario (
+                         username   VARCHAR(50)  PRIMARY KEY,
+                         password   VARCHAR(255) NOT NULL,
+                         rol        VARCHAR(20)  NOT NULL,
+                         activo     BOOLEAN      DEFAULT TRUE,
+                         CHECK (rol IN ('TECNICO', 'USUARIO_OVI', 'CANDIDATO', 'FORMADOR'))
+);
