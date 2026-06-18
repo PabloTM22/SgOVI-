@@ -43,9 +43,64 @@ public class TecnicoController {
         this.usuarioDao = usuarioDao;
     }
 
+    private static final int PAGE_LENGTH = 10;
+
     @GetMapping("/solicitudes")
-    public String listaSolicitudesEnRevision(Model model) {
+    public String listaSolicitudesEnRevision(@RequestParam(value = "buscar", required = false) String buscar,
+                                             @RequestParam(value = "tipo", required = false, defaultValue = "TODOS") String tipo,
+                                             @RequestParam(value = "estado", required = false, defaultValue = "TODOS") String estado,
+                                             @RequestParam(value = "orden", required = false, defaultValue = "fecha") String orden,
+                                             @RequestParam(value = "page") java.util.Optional<Integer> page,
+                                             Model model) {
+
         List<SolicitudServicioAP> solicitudes = solicitudDao.getSolicitudes();
+
+        // Resolver nombre del solicitante por solicitud (para búsqueda y para mostrar)
+        Map<Integer, String> nombrePorSolicitud = new java.util.LinkedHashMap<>();
+        for (SolicitudServicioAP s : solicitudes) {
+            UsuarioOvi u = usuarioDao.getUsuario(s.getIdUsuario());
+            nombrePorSolicitud.put(s.getIdSolicitud(),
+                    u != null ? u.getNombre() + " " + u.getApellidos() : "Usuario no disponible");
+        }
+
+        // Búsqueda por nombre del solicitante
+        if (buscar != null && !buscar.isBlank()) {
+            String q = buscar.toLowerCase();
+            solicitudes = solicitudes.stream()
+                    .filter(s -> nombrePorSolicitud.get(s.getIdSolicitud()).toLowerCase().contains(q))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Filtro por tipo (PAP / PATI)
+        if (tipo != null && !"TODOS".equalsIgnoreCase(tipo)) {
+            solicitudes = solicitudes.stream()
+                    .filter(s -> tipo.equals(s.getTipoAsistencia()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Filtro por estado
+        if (estado != null && !"TODOS".equalsIgnoreCase(estado)) {
+            solicitudes = solicitudes.stream()
+                    .filter(s -> estado.equals(s.getEstado()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Ordenación
+        java.util.Comparator<SolicitudServicioAP> comparador;
+        switch (orden) {
+            case "estado":
+                comparador = java.util.Comparator.comparing(SolicitudServicioAP::getEstado, String.CASE_INSENSITIVE_ORDER);
+                break;
+            case "tipo":
+                comparador = java.util.Comparator.comparing(SolicitudServicioAP::getTipoAsistencia, String.CASE_INSENSITIVE_ORDER);
+                break;
+            default: // fecha (más reciente primero)
+                comparador = java.util.Comparator.comparing(SolicitudServicioAP::getFechaSolicitud,
+                        java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder()));
+        }
+        solicitudes.sort(comparador);
+
+        // Mapa de contratos (solo para las cerradas con contrato)
         Map<Integer, Integer> contratoPorSolicitud = new java.util.LinkedHashMap<>();
         for (SolicitudServicioAP s : solicitudes) {
             if ("cerrada con contrato".equals(s.getEstado())
@@ -60,8 +115,35 @@ public class TecnicoController {
                 }
             }
         }
-        model.addAttribute("solicitudes", solicitudes);
+
+        // Paginación (troceado en memoria)
+        java.util.List<List<SolicitudServicioAP>> paginas = new java.util.ArrayList<>();
+        for (int i = 0; i < solicitudes.size(); i += PAGE_LENGTH) {
+            paginas.add(solicitudes.subList(i, Math.min(i + PAGE_LENGTH, solicitudes.size())));
+        }
+        int totalPaginas = paginas.size();
+        int paginaActual = page.orElse(1);
+        if (paginaActual < 1) paginaActual = 1;
+        if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+
+        List<SolicitudServicioAP> pagina = totalPaginas == 0
+                ? new java.util.ArrayList<>()
+                : paginas.get(paginaActual - 1);
+
+        List<Integer> numerosPagina = java.util.stream.IntStream.rangeClosed(1, totalPaginas)
+                .boxed().collect(java.util.stream.Collectors.toList());
+
+        model.addAttribute("solicitudes", pagina);
+        model.addAttribute("nombrePorSolicitud", nombrePorSolicitud);
         model.addAttribute("contratoPorSolicitud", contratoPorSolicitud);
+        model.addAttribute("numerosPagina", numerosPagina);
+        model.addAttribute("paginaActual", paginaActual);
+        model.addAttribute("totalPaginas", totalPaginas);
+        model.addAttribute("totalRegistros", solicitudes.size());
+        model.addAttribute("buscar", buscar);
+        model.addAttribute("filtroTipo", tipo);
+        model.addAttribute("filtroEstado", estado);
+        model.addAttribute("filtroOrden", orden);
         return "tecnico/revisionSolicitudes";
     }
 
