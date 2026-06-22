@@ -36,9 +36,12 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new RolInterceptor("CANDIDATO"))
                 .addPathPatterns("/mi-perfil/**");
 
+        // Zona exclusiva del USUARIO_OVI (gestionar sus solicitudes de AP)
+        registry.addInterceptor(new RolInterceptor("USUARIO_OVI"))
+                .addPathPatterns("/solicitudes/**");
+
         // Zonas que solo requieren estar autenticado (cualquier rol)
         registry.addInterceptor(new IdentificacionInterceptor())
-                .addPathPatterns("/solicitudes/**")
                 .addPathPatterns("/contratos/**")
                 .addPathPatterns("/comunicaciones/**")
                 .addPathPatterns("/asistentes/**");
