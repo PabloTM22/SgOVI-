@@ -44,7 +44,8 @@ public class CandidatoController {
     @PostMapping("/registro")
     public String registrarCandidatoSubmit(@ModelAttribute("candidato") @Valid Candidato candidato,
                                            BindingResult bindingResult,
-                                           @RequestParam("contrasena") String contrasena) {
+                                           @RequestParam("contrasena") String contrasena,
+                                           Model model) {
         if (contrasena == null || contrasena.isBlank()) {
             bindingResult.rejectValue("dni", "required.contrasena",
                     "La contraseña es obligatoria.");
@@ -52,7 +53,12 @@ public class CandidatoController {
         if (bindingResult.hasErrors()) {
             return "candidato/registro";
         }
-        candidatoService.registrarCandidato(candidato, contrasena);
+        try {
+            candidatoService.registrarCandidato(candidato, contrasena);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("message", "Ya existe un candidato con ese DNI/NIE.");
+            return "candidato/registro";
+        }
         return "redirect:/";
     }
 

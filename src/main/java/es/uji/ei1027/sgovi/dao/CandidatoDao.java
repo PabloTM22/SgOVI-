@@ -118,11 +118,11 @@ public class CandidatoDao {
     //FILTRO DINÁMICO PARA BUSCAR CANDIDATOS COMO USUARIO
 
     public List<Candidato> buscar(String tipo,
-                                 String texto,
-                                 String disponibilidad,
-                                 String orden,
-                                 double latRef,
-                                 double lngRef) {
+                                  String texto,
+                                  String disponibilidad,
+                                  String orden,
+                                  double latRef,
+                                  double lngRef) {
 
         StringBuilder sql = new StringBuilder(
                 "SELECT * FROM AsistentePersonal " +
@@ -187,4 +187,12 @@ public class CandidatoDao {
 
 
 
+
+    public boolean existeDni(String dni) {
+        Integer n = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM AsistentePersonal WHERE dni = ?",
+                Integer.class, dni
+        );
+        return n != null && n > 0;
+    }
 }

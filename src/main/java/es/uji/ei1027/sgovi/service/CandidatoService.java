@@ -23,6 +23,10 @@ public class CandidatoService {
     }
 
     public void registrarCandidato(Candidato candidato, String contrasenaClaro) {
+        if (candidatoDao.existeDni(candidato.getDni())) {
+            throw new org.springframework.dao.DataIntegrityViolationException(
+                    "Ya existe un candidato con ese DNI/NIE.");
+        }
         String idAp = "ap_" + UUID.randomUUID().toString().substring(0, 8);
         candidato.setIdAp(idAp);
         candidato.setEstado("pendiente");
