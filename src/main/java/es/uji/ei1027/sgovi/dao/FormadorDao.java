@@ -61,4 +61,12 @@ public class FormadorDao {
     public void deleteFormador(String idFormador) {
         jdbcTemplate.update("DELETE FROM formador WHERE id_formador = ?", idFormador);
     }
+
+    public boolean existeDni(String dni) {
+        Integer n = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM formador WHERE dni = ?",
+                Integer.class, dni
+        );
+        return n != null && n > 0;
+    }
 }

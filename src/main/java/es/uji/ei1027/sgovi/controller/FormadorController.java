@@ -104,7 +104,8 @@ public class FormadorController {
     @PostMapping("/alta")
     public String altaSubmit(@ModelAttribute("formador") @Valid Formador formador,
                              BindingResult bindingResult,
-                             @RequestParam("contrasena") String contrasena) {
+                             @RequestParam("contrasena") String contrasena,
+                             Model model) {
         if (contrasena == null || contrasena.isBlank()) {
             bindingResult.rejectValue("dni", "required.contrasena",
                     "La contraseña es obligatoria.");
@@ -112,7 +113,12 @@ public class FormadorController {
         if (bindingResult.hasErrors()) {
             return "formador/alta";
         }
-        formadorService.registrarFormador(formador, contrasena);
+        try {
+            formadorService.registrarFormador(formador, contrasena);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("message", "Ya existe un formador con ese DNI/NIE.");
+            return "formador/alta";
+        }
         return "redirect:/formadores";
     }
 

@@ -23,6 +23,10 @@ public class FormadorService {
     }
 
     public void registrarFormador(Formador formador, String contrasenaClaro) {
+        if (formadorDao.existeDni(formador.getDni())) {
+            throw new org.springframework.dao.DataIntegrityViolationException(
+                    "Ya existe un formador con ese DNI/NIE.");
+        }
         String idFormador = "frm_" + UUID.randomUUID().toString().substring(0, 8);
         formador.setIdFormador(idFormador);
 
