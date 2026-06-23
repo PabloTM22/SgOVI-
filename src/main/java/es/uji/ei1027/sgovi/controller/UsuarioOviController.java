@@ -113,7 +113,8 @@ public class UsuarioOviController {
     @PostMapping("/alta")
     public String altaSubmit(@ModelAttribute("usuario") @Valid UsuarioOvi usuario,
                              BindingResult bindingResult,
-                             @RequestParam("contrasena") String contrasena) {
+                             @RequestParam("contrasena") String contrasena,
+                             Model model) {
         if (contrasena == null || contrasena.isBlank()) {
             bindingResult.rejectValue("dni", "required.contrasena",
                     "La contraseña es obligatoria.");
@@ -121,7 +122,12 @@ public class UsuarioOviController {
         if (bindingResult.hasErrors()) {
             return "usuario/alta";
         }
-        usuarioOviService.registrarUsuario(usuario, contrasena);
+        try {
+            usuarioOviService.registrarUsuario(usuario, contrasena);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("message", "Ya existe un usuario con ese DNI/NIE.");
+            return "usuario/alta";
+        }
         return "redirect:/usuarios";
     }
 

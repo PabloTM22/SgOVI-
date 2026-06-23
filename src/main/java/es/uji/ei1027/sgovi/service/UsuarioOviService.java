@@ -23,6 +23,10 @@ public class UsuarioOviService {
     }
 
     public void registrarUsuario(UsuarioOvi usuarioOvi, String contrasenaClaro) {
+        if (usuarioOviDao.existeDni(usuarioOvi.getDni())) {
+            throw new org.springframework.dao.DataIntegrityViolationException(
+                    "Ya existe un usuario con ese DNI/NIE.");
+        }
         String idUsuario = "usr_" + UUID.randomUUID().toString().substring(0, 8);
         usuarioOvi.setIdUsuario(idUsuario);
         usuarioOvi.setEstado("pendiente");

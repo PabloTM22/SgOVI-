@@ -100,4 +100,12 @@ public class UsuarioOviDao {
                 idUsuario
         );
     }
+
+    public boolean existeDni(String dni) {
+        Integer n = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM UsuarioOVI WHERE dni = ?",
+                Integer.class, dni
+        );
+        return n != null && n > 0;
+    }
 }
