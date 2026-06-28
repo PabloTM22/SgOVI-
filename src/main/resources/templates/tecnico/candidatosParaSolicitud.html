@@ -83,6 +83,8 @@
             <td th:text="${c.disponibilidad}"></td>
             <td th:text="${c.formacion}"></td>
             <td>
+                <a th:href="@{/tecnico/solicitudes/{idS}/candidatos/{idAp}(idS=${solicitud.idSolicitud},idAp=${c.idAp})}"
+                   class="btn btn-sm btn-outline-secondary mb-1">Ver detalles</a>
                 <span th:if="${idsYaSeleccionados.contains(c.idAp)}"
                       class="badge bg-success">Ya propuesto</span>
                 <form th:unless="${idsYaSeleccionados.contains(c.idAp)}"

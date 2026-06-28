@@ -191,6 +191,23 @@ public class TecnicoController {
         return "tecnico/candidatosParaSolicitud";
     }
 
+    @GetMapping("/solicitudes/{idSolicitud}/candidatos/{idAp}")
+    public String detalleCandidato(@PathVariable int idSolicitud,
+                                   @PathVariable String idAp,
+                                   Model model) {
+        SolicitudServicioAP solicitud = solicitudDao.getSolicitud(idSolicitud);
+        if (solicitud == null) {
+            return "redirect:/tecnico/solicitudes";
+        }
+        Candidato candidato = candidatoDao.getCandidato(idAp);
+        if (candidato == null) {
+            return "redirect:/tecnico/solicitudes/" + idSolicitud + "/candidatos";
+        }
+        model.addAttribute("solicitud", solicitud);
+        model.addAttribute("candidato", candidato);
+        return "tecnico/detalleCandidato";
+    }
+
     @PostMapping("/solicitudes/{idSolicitud}/seleccionar/{idAp}")
     public String seleccionarCandidato(@PathVariable int idSolicitud,
                                        @PathVariable String idAp,
